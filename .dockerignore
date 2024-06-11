@@ -1,0 +1,7 @@
+.angular/
+.docs/
+.server/
+.vscode/
+dist/
+node_modules/
+.editorconfig

@@ -23,7 +23,6 @@ function compileEnv(o: Record<string, any>) {
   }, {} as Record<string, any>);
   // Provides an environment variables that is accessible
   // in browser environment
-  // { 'process.env': JSON.stringify(e) }
   return { 'process.env': JSON.stringify(e) };
 }
 
@@ -34,8 +33,6 @@ const envPlugin: Plugin = {
       (build.initialOptions.define ??= {}),
       compileEnv(process.env)
     );
-
-    console.log('Define: ', JSON.stringify(define));
     build.initialOptions.define = define;
   },
 };

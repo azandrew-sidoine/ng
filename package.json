@@ -6,7 +6,6 @@
     "start": "ng serve --port 23096",
     "start:aot": "ng serve --configuration production --port 23096",
     "build": "ng build --configuration production",
-    "build:server": "ng run app:build-server:production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:ng": "node dist/ng/server/server.mjs"

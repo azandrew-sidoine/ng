@@ -1,0 +1,44 @@
+:host ::ng-deep .ngx-modal-content {
+  margin: 32px;
+}
+
+.ngx-modal-description {
+  display: block;
+  padding: 0rem 2rem;
+  line-height: 1.4rem;
+}
+
+:host ::ng-deep span.error,
+span.error {
+  color: var(--error-text-color, #f13232);
+}
+
+.custom-actions {
+  display: inline-block;
+}
+
+.toggle-icons {
+  margin-right: var(--ngx-modal-icon-margin-right, 12px);
+  width: var(--ngx-modal-icon-width, 20px);
+  height: var(--ngx-modal-icon-width, 20px);
+  cursor: pointer;
+}
+
+.toggle-icons.shrink {
+  width: var(--ngx-modal-icon-shrink-width, 21px);
+  height: var(--ngx-modal-icon-shrink-width, 21px);
+}
+
+.toggle-icons path {
+  fill: var(--ngx-modal-icon-color, #aaaaaa);
+  color: var(--ngx-modal-icon-color, #aaaaaa);
+  background-color: var(--ngx-modal-icon-color, #aaaaaa);
+}
+
+.toggle-icons:hover path,
+.toggle-icons:focus {
+  fill: var(--ngx-modal-icon-hover-color, #000);
+  color: var(--ngx-modal-icon-hover-color, #000);
+  text-decoration: none;
+  cursor: pointer;
+}

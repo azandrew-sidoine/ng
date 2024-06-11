@@ -1,0 +1,1 @@
+export { AlertTypePipe } from './alert-type.pipe';

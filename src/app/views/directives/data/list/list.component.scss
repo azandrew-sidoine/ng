@@ -1,0 +1,38 @@
+button svg {
+  width: var(--clr-btn-appearance-standard-icon-size, 0.8rem);
+  height: var(--clr-btn-appearance-standard-icon-size, 0.8rem);
+  font-weight: 500;
+  color: var(--clr-btn-primary-color, hsl(198, 0%, 100%));
+  fill: var(--clr-btn-primary-color, hsl(198, 0%, 100%));
+  margin-right: 0.15rem;
+  padding-top: 0rem;
+}
+
+.btn-group .btn,
+.btn-group .btn:not(:first-child),
+.btn {
+  border-radius: 0;
+}
+
+.loading {
+  padding: 0.5rem 0.8rem;
+}
+.loading clr-spinner,
+.loading span {
+  display: inline-block;
+  font-size: var(--dg-loading-font-size, 0.7rem);
+}
+
+.loading clr-spinner {
+  margin-right: 0.2rem;
+}
+
+:host ::ng-deep .datagrid .datagrid-column {
+  font-size: var(--clr-table-header-cell-font-size, 0.55rem) !important;
+  font-weight: var(--clr-table-header-cell-font-weight, bold) !important;
+}
+
+:host ::ng-deep .datagrid-action-bar {
+  margin: var(--ngx-datagrid-action-bar-margin, 4px 0) !important;
+  padding: var(--ngx-datagrid-action-bar-margin, 0) !important;
+}

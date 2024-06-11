@@ -1,0 +1,9 @@
+<ng-container *ngIf="!state.performingAction && !!state.message && !!state.status && state.status !== 'none'">
+    <div @fadeInOutSlide>
+        <ngx-ui-alert (close)="onCloseAlert()" [closable]="closable" [light]="light" [type]="state.status | alertType"
+            [cssClass]="state.cssClass">
+            <ng-content select="[icon-text]"></ng-content>
+            <span class="alert-text">{{ state.message }}</span>
+        </ngx-ui-alert>
+    </div>
+</ng-container>

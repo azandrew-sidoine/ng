@@ -1,0 +1,46 @@
+<ng-container *ngIf="uiLinks">
+    <clr-vertical-nav [clrVerticalNavCollapsible]="true" class="nav-trigger--bottom">
+        <div *ngIf="!!avatar" class="branding-logo">
+            <img alt="avatar" class="img-fluid" [src]="avatar" />
+        </div>
+        <ng-container *ngFor="let l of uiLinks">
+            <ng-container
+                *ngTemplateOutlet="linkPreview; context: {lk: l, sublk: links|sublinks:l.href}"></ng-container>
+            <ng-template #linkPreview let-sublk="sublk" let-lk="lk">
+                <ng-container *ngIf="sublk.length > 0; else defaultLinkRef">
+                    <clr-vertical-nav-group class="cursor-pointer" [class]="lk.cssClass ?? ''" routerLinkActive="active">
+                        <cds-icon *ngIf="lk.icon" [attr.shape]="lk.icon" clrVerticalNavIcon></cds-icon>
+                        {{ lk.label | uppercase }}
+                        <clr-vertical-nav-group-children>
+                            <ng-container *ngFor="let child of sublk">
+                                <ngx-link [link]="child" [beforeUpdateUrl]="beforeUpdateUrl"
+                                    (linkClick)="linkClick.emit($event)" [linkRef]="linkRef">
+                                    <ng-template #linkRef let-item let-handleClick="handleClick">
+                                        <a clrVerticalNavLink class="cursor-pointer margin-left-12" [class]="item.cssClass ?? ''"
+                                            (click)="handleClick($event, item)" routerLinkActive="active">
+                                            <cds-icon *ngIf="item.icon" [attr.shape]="item.icon"
+                                                clrVerticalNavIcon></cds-icon>
+                                            {{ item.label | uppercase }}
+                                        </a>
+                                    </ng-template>
+                                </ngx-link>
+                            </ng-container>
+                        </clr-vertical-nav-group-children>
+                    </clr-vertical-nav-group>
+                </ng-container>
+                <ng-template #defaultLinkRef>
+                    <ngx-link [link]="lk" [beforeUpdateUrl]="beforeUpdateUrl" (linkClick)="linkClick.emit($event)"
+                        [linkRef]="linkRef">
+                        <ng-template #linkRef let-item let-handleClick="handleClick">
+                            <a clrVerticalNavLink class="cursor-pointer" [class]="item.cssClass ?? ''"
+                                (click)="handleClick($event, item)" routerLinkActive="active">
+                                <cds-icon *ngIf="item.icon" [attr.shape]="item.icon" clrVerticalNavIcon></cds-icon>
+                                {{ item.label | uppercase }}
+                            </a>
+                        </ng-template>
+                    </ngx-link>
+                </ng-template>
+            </ng-template>
+        </ng-container>
+    </clr-vertical-nav>
+</ng-container>

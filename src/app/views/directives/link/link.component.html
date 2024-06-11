@@ -1,0 +1,9 @@
+<ng-container
+    *ngTemplateOutlet="linkRef ?? viewRef ?? defaultLinkRef; context: {$implicit: link, link, handleClick: handleClick.bind(this)}">
+</ng-container>
+<!-- Default Link Template -->
+<ng-template #defaultLinkRef let-item let-handleClick="handleClick">
+    <a (click)="handleClick($event, item)" [class]="item.cssClass ?? ''">
+        <span>{{ item.label | uppercase }}</span>
+    </a>
+</ng-template>

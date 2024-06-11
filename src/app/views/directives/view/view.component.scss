@@ -1,0 +1,12 @@
+:host ::ng-deep .main-container .content-container .content-area,
+.main-container .content-container .content-area {
+  padding: var(--content-area-padding, 0) !important;
+}
+
+:host ::ng-deep .main-container,
+.clr-vertical-nav,
+.main-container,
+.clr-vertical-nav {
+  background-color: var(--main-app-bg-color, transparent);
+  background: var(--main-app-background, transparent);
+}

@@ -12,28 +12,58 @@ import {
   FormConfigInterface,
   InputConfigInterface,
 } from '@azlabsjs/smart-form-core';
-import { Intercept } from '../types';
-import { ReactiveFormComponentInterface } from '@azlabsjs/ngx-smart-form';
+import {
+  FORM_DIRECTIVES,
+  ReactiveFormComponentInterface,
+} from '@azlabsjs/ngx-smart-form';
 import { Observable, ObservableInput, firstValueFrom, tap, timer } from 'rxjs';
 import { AsyncValidatorFn, ValidatorFn, AbstractControl } from '@angular/forms';
-import { ControlsStateMap } from '@azlabsjs/ngx-smart-form/lib/angular/types';
+import { COMMON_PIPES } from '@azlabsjs/ngx-common';
+import { CLR_FORM_CONTROL_DIRECTIVES } from '@azlabsjs/ngx-clr-form-control';
+import { CommonModule } from '@angular/common';
+
+/** @internal */
+type InputStateHashMap = {
+  [index: string]:
+    | {
+        onlySelf: boolean;
+        emitEvent: boolean;
+      }
+    | undefined;
+};
+
+/** @internal */
+export type NextCallback<T, R> = (source: T) => Observable<R>;
+
+/** @internal */
+type Intercept<T = unknown, R = unknown> = (
+  traveler: T,
+  next$: NextCallback<T, R>
+) => ReturnType<typeof next$>;
 
 @Component({
+  standalone: true,
+  imports: [
+    CommonModule,
+    ...COMMON_PIPES,
+    ...FORM_DIRECTIVES,
+    ...CLR_FORM_CONTROL_DIRECTIVES,
+  ],
   selector: 'ngx-data-form',
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss'],
 })
-export class DataFormComponent
+export class FormComponent
   implements AfterViewInit, OnChanges, ReactiveFormComponentInterface
 {
   // #region Component inputs
   @Input() form!: FormConfigInterface;
   @Input() submitable: boolean = true;
-  @Input('no-grid-layout') noGridLayout = false;
+  @Input({ alias: 'no-grid-layout' }) noGridLayout = false;
   @Input() intercept: Intercept<any, any> | undefined;
-  @Input('submit-text') submitText: string = 'SUBMIT';
-  @Input('cancel-text') cancelText: string = 'BACK';
-  @Input('edit-text') editText: string = 'UPDATE';
+  @Input({ alias: 'submit-text' }) submitText: string = 'SUBMIT';
+  @Input({ alias: 'cancel-text' }) cancelText: string = 'BACK';
+  @Input({ alias: 'edit-text' }) editText: string = 'UPDATE';
   @Input() value!: unknown;
   @Input() autoupload: boolean = true;
   // #endregion Component inputs
@@ -129,11 +159,11 @@ export class DataFormComponent
     this.formComponent$?.setControlValue(control, value);
   }
 
-  disableControls(values: ControlsStateMap): void {
+  disableControls(values: InputStateHashMap): void {
     this.formComponent$?.disableControls(values);
   }
 
-  enableControls(values: ControlsStateMap): void {
+  enableControls(values: InputStateHashMap): void {
     this.formComponent$?.enableControls(values);
   }
 

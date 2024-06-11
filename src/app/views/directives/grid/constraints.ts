@@ -1,6 +1,4 @@
-/**
- * Creates a constraint function that fails when provided value is null, undefined or empty string
- */
+/** @description Creates a constraint function that fails when provided value is null, undefined or empty string */
 export function useRequired() {
   return (value: unknown) =>
     typeof value === 'undefined' ||
@@ -10,9 +8,7 @@ export function useRequired() {
       : undefined;
 }
 
-/**
- * Creates a constraint function that fails when string length is greater than `length`
- */
+/** @description Creates a constraint function that fails when string length is greater than `length` */
 export function useMaxLength(length: number) {
   return (value: unknown) =>
     String(value).length > length
@@ -20,9 +16,7 @@ export function useMaxLength(length: number) {
       : undefined;
 }
 
-/**
- * Creates a constraint function that fails when string length is less than `length`
- */
+/** @description Creates a constraint function that fails when string length is less than `length` */
 export function useMinLength(length: number) {
   return (value: unknown) =>
     String(value).length >= length
@@ -30,9 +24,7 @@ export function useMinLength(length: number) {
       : undefined;
 }
 
-/**
- * Creates a constraint function that fails number is less than `size`
- */
+/** @description Creates a constraint function that fails number is less than `size` */
 export function useMin(size: number) {
   return (value: unknown) =>
     Number(value) < size
@@ -40,9 +32,7 @@ export function useMin(size: number) {
       : undefined;
 }
 
-/**
- * Creates a constraint function that fails number is greater than `size`
- */
+/** @description Creates a constraint function that fails number is greater than `size` */
 export function useMax(size: number) {
   return (value: unknown) =>
     Number(value) > size

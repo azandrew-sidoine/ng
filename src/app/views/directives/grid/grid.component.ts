@@ -26,11 +26,11 @@ import {
 import { ClarityModule } from '@clr/angular';
 import { CellModeType, SelectionChangeType } from './cell';
 import { CommonModule } from '@angular/common';
-import { NgxCommonModule } from '@azlabsjs/ngx-common';
 import PIPES from './pipes';
 import CELL_DIRECTIVES from './cell';
 import { validateCell } from './validation';
 import { isEmpty, remove, resizeRecords } from './helpers';
+import { COMMON_PIPES } from '@azlabsjs/ngx-common';
 
 /**
  * Set state argument type declaration
@@ -41,7 +41,7 @@ type SetStateArg<T> = Partial<T> | ((s: T) => T);
   standalone: true,
   imports: [
     CommonModule,
-    NgxCommonModule,
+    ...COMMON_PIPES,
     ClarityModule,
     ...CELL_DIRECTIVES,
     ...PIPES,

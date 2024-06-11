@@ -1,6 +1,4 @@
-/**
- * Modal component type reference
- */
+/** @description Modal component type reference */
 export type ModalElement = {
   /**
    * Manually closes the modal.
@@ -13,8 +11,5 @@ export type ModalElement = {
   open(): void;
 };
 
-
-/**
- * Modal size type declaration
- */
+/** @description Modal size type declaration */
 export type SizeType = 'sm' | 'lg' | 'xl' | 'full';

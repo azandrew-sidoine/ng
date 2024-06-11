@@ -1,13 +1,17 @@
-export { DataListComponent } from './list/list.component';
-export { DataFormComponent } from './form/form.component';
-export { DataComponent } from './data.component';
-export { DataComponentModule } from './data.module';
-export { actionPipeline$ } from './rx';
+import { DataComponent } from './base';
+import { FormComponent } from './form';
+import { ListComponent } from './list';
+import { ViewComponent } from './view';
+export { ListComponent } from './list';
+export { FormComponent } from './form';
+export { DataComponent } from './base';
+export { ViewComponent } from './view';
+export {} from './rx';
+export { canDeactivateComponent } from './guards';
 export {
-  DetailColumnType,
-  DetailColumnTypes,
-  DataDetailModule,
-} from './detail';
+  GridDetailColumnType,
+  GridDetailColumnTypes,
+} from '@azlabsjs/ngx-clr-smart-grid';
 export {
   ConfigType,
   ActionsConfigType,
@@ -24,8 +28,8 @@ export {
   CreateActionPayload,
   UpdateActionPayload,
   DeleteActionPayload,
-} from './types';
-export {
+  actionPipeline$,
+  buildRessouceUrl,
   mapInto,
   createBuiltTypeDataConfig,
   createDataConfig,
@@ -36,24 +40,20 @@ export {
   DataConfigArgType,
   BuiltTypeArgType,
   ArgType,
-} from './config-builder';
+} from './core';
 
-// Export resource builder
-export { buildRessouceUrl } from './helpers';
-
-// Export guards
-export { canDeactivateComponent } from './guards';
-
-// Export providers
 export {
-  provideCreateActionHandler,
-  provideDeleteActionHandler,
-  providerUpdateActionHandler,
-} from './providers';
+  provideViewConfigs,
+  provideRoutesViewConfigs,
+  provideConfigResolver,
+  provideUrlConfigResolver,
+  createRoutes,
+} from './view';
 
-// Export required tokens
-export {
-  CREATE_ACTION_HANDLER,
-  UPDATE_ACTION_HANDLER,
-  DELETE_ACTION_HANDLER,
-} from './tokens';
+/** Exported standalone directives */
+export const DIRECTIVES = [
+  ListComponent,
+  DataComponent,
+  FormComponent,
+  ViewComponent,
+] as const;

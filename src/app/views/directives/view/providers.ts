@@ -6,9 +6,7 @@ import {
   ViewLayout,
 } from './types';
 
-/**
- * Angular provider for global configuration on the view layout
- */
+/** @description Angular provider for global configuration on the view layout */
 export function provideViewLayout(
   layout: ViewLayout | ((injector: Injector) => ViewLayout)
 ) {
@@ -23,9 +21,7 @@ export function provideViewLayout(
   } as Provider;
 }
 
-/**
- * Angular provider for Application metadata like, name and branding
- */
+/** @description Angular provider for Application metadata like, name and branding */
 export function provideAppMetadata(
   metadata: AppMetadataType | ((injector: Injector) => AppMetadataType)
 ) {

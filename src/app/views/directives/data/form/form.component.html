@@ -9,11 +9,9 @@
         </ng-template>
         <ng-template #submitButton let-handler>
             <button class="btn btn-primary" (click)="handler($event)">
-                <!-- TODO: Add a submit action icon -->
                 {{ submitText }}
             </button>
             <button class="btn btn-primary btn-danger" (click)="handleCancel($event)">
-                <!-- TODO: Add a cancel action icon -->
                 {{ cancelText }}
             </button>
         </ng-template>

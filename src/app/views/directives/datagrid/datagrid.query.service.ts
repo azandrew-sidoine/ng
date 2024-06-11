@@ -5,8 +5,7 @@ import {
   ProjectPaginateQueryParamType,
   QueryFiltersType,
 } from '@azlabsjs/ngx-clr-smart-grid';
-import { ProvidesQuery } from '@azlabsjs/ngx-query';
-import { QueryProviderType } from '@azlabsjs/rx-query';
+import { QueryProviderType, ProvidesQuery } from '@azlabsjs/rx-query';
 import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
 import { createDateQueryParamPipe, projectPaginateQuery } from './helpers';
 import { DATAGRID_CONFIG } from './tokens';

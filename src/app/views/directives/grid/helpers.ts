@@ -1,13 +1,6 @@
-import { RecordType } from "./types";
+import { RecordType } from './types';
 
-/**
- * Removed provided key from the list of object properties
- *
- * @internal
- *
- * @param _object
- * @param key
- */
+/** @internal Removed provided key from the list of object properties */
 export function remove<T extends Record<string, unknown>>(
   _object: T,
   ...keys: (keyof T)[]
@@ -46,9 +39,7 @@ export function isEmpty(value: Record<string, unknown> | null | undefined) {
   return result;
 }
 
-/**
- * @internal
- */
+/** @internal */
 export function resizeRecords(records: RecordType[], max: number) {
   const length = records.length;
   let result: RecordType[] = [...records];

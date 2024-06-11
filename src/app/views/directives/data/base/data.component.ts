@@ -28,7 +28,7 @@ import {
   UIActionConfigType,
   UIActionEventArgType,
   ViewStateType,
-} from './types';
+} from '../core';
 import {
   CreateQueryActionHandler,
   DeleteQueryActionHandler,
@@ -56,8 +56,8 @@ import {
   transition,
   // ...
 } from '@angular/animations';
-import { DIALOG, Dialog } from '../dialog';
-import { QueryState } from '@azlabsjs/rx-query';
+import { DIALOG, Dialog } from '../../dialog';
+import { QueryStateType as QueryState } from '@azlabsjs/rx-query';
 import {
   CustomActionHTTPHandler,
   DataComponentService,
@@ -70,31 +70,53 @@ import {
   refreshCachedQueries,
   updateCachedQueries,
 } from './helpers';
-import { DataGridStateType, DATAGRID_CONFIG } from '../datagrid';
-import {} from '../datagrid';
-import { SizeType } from '../modal';
+import { DataGridStateType, DATAGRID_CONFIG } from '../../datagrid';
+import {} from '../../datagrid';
+import { SizeType } from '../../modal';
 import { FormConfigInterface } from '@azlabsjs/smart-form-core';
+import {
+  CREATE_ACTION_HANDLER,
+  DELETE_ACTION_HANDLER,
+  REQUEST_CLIENT,
+  UPDATE_ACTION_HANDLER,
+} from './tokens';
+import { NgHttpRequestClient } from './http-client';
+import { CommonModule } from '@angular/common';
+import { COMMON_PIPES } from '@azlabsjs/ngx-common';
+import { FORM_MODAL_DIRECTIVES } from '../../forms';
+import { LIST_DIRECTIVES } from '../list';
+import { DETAIL_DIRECTIVES } from '../detail';
+import { FORM_DIRECTIVES } from '../form';
 
-type ActionErrorArgType = {
-  type: string;
-  err: unknown;
-};
+/** @internal */
+type ActionErrorArgType = { type: string; err: unknown };
 
-type ActionArgResultType = {
-  type: string;
-  payload: unknown;
-};
+/** @internal */
+type ActionArgResultType = { type: string; payload: unknown };
 
 @Component({
+  standalone: true,
+  imports: [
+    CommonModule,
+    ...COMMON_PIPES,
+    ...FORM_MODAL_DIRECTIVES,
+    ...LIST_DIRECTIVES,
+    ...DETAIL_DIRECTIVES,
+    ...FORM_DIRECTIVES,
+  ],
   selector: 'ngx-data',
   templateUrl: './data.component.html',
-  styleUrls: ['./data.component.css'],
+  styleUrls: ['./data.component.scss'],
   providers: [
     DeleteQueryActionHandler,
     CreateQueryActionHandler,
     UpdateQueryActionHandler,
     DataComponentService,
     CustomActionHTTPHandler,
+    { provide: REQUEST_CLIENT, useClass: NgHttpRequestClient },
+    { provide: DELETE_ACTION_HANDLER, useClass: DeleteQueryActionHandler },
+    { provide: UPDATE_ACTION_HANDLER, useClass: UpdateQueryActionHandler },
+    { provide: CREATE_ACTION_HANDLER, useClass: CreateQueryActionHandler },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
@@ -227,7 +249,10 @@ export class DataComponent
       (excluded: string[] = [], notRequired: string[] = []) =>
         createFormConfig(f, excluded ?? [], notRequired ?? []);
 
-    if ('id' in this.config.form && (this.config.form as AssetFormConfigType)?.id) {
+    if (
+      'id' in this.config.form &&
+      (this.config.form as AssetFormConfigType)?.id
+    ) {
       const { id } = this.config.form as AssetFormConfigType;
       const subscription = this.client
         .get(id)
@@ -239,7 +264,10 @@ export class DataComponent
       this.subscriptions.push(subscription);
     }
 
-    if ('value' in this.config.form && (this.config.form as JsFormConfigType)?.value) {
+    if (
+      'value' in this.config.form &&
+      (this.config.form as JsFormConfigType)?.value
+    ) {
       const { value } = this.config.form as JsFormConfigType;
       this.setState({ formBuilder: builderFactory(value) });
     }
@@ -503,9 +531,7 @@ export class DataComponent
     this.setState({ view });
   }
 
-  /**
-   * Handles datagrid cached queries event
-   */
+  /** @description Handles datagrid cached queries event */
   onCachedQuery(query: QueryState) {
     // Cached queries is implemented as a LIFO data structure
     // because latest cached queries are to be refeteched an old queries are to be invalidated
@@ -517,16 +543,12 @@ export class DataComponent
     });
   }
 
-  /**
-   * Provides a handler implementation for datagrid state changes events
-   */
+  /** @description Provides a handler implementation for datagrid state changes events */
   onDgStateChanges(event: unknown) {
     this.setState({ dgState: event });
   }
 
-  /**
-   * Provides a handler implementation for datagrid refresh events
-   */
+  /** @description Provides a handler implementation for datagrid refresh events */
   onRefreshDatagrid(event: boolean) {
     if (event) {
       refreshCachedQueries(this._state.cachedQueries, (queries) => {
@@ -535,9 +557,7 @@ export class DataComponent
     }
   }
 
-  /**
-   * Handles actions coming from user interaction with the UI
-   */
+  /** @description Handles actions coming from user interaction with the UI */
   handleAction(event: UIActionEventArgType, config: ConfigType) {
     const { payload, action } = event;
     const { name } = action as { name: ActionType };
@@ -610,9 +630,7 @@ export class DataComponent
     return _fallback();
   }
 
-  /**
-   * Handles search component events
-   */
+  /** @description Handles search component events */
   handleSearch(event: Event) {
     this._searchSubject$.next((event.target as HTMLInputElement).value);
   }
@@ -692,9 +710,7 @@ export class DataComponent
     );
   }
 
-  /**
-   * Control or change component local state object
-   */
+  /** @description Control or change component local state object */
   private setState(
     _partial: Partial<StateType> | ((_state: StateType) => StateType)
   ) {

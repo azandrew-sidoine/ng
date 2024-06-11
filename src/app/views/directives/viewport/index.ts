@@ -1,2 +1,6 @@
+import { ViewPortComponent } from './viewport.component';
+
 export { ViewPortComponent } from './viewport.component';
-export { ViewportModule } from './viewport.module';
+
+/** Exported standalone component */
+export const VIEWPORT_DIRECTIVES = [ViewPortComponent] as const;

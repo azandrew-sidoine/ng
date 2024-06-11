@@ -1,3 +1,7 @@
-export { DataDetailModule } from './detail.module';
-export { DataDetailComponent } from './detail.component';
-export { DetailColumnType, DetailColumnTypes } from './types';
+import { DetailComponent } from './detail.component';
+
+/** Exported standalone components */
+export { DetailComponent } from './detail.component';
+
+/** Exported directives */
+export const DETAIL_DIRECTIVES = [DetailComponent] as const;

@@ -3,7 +3,7 @@ import {
   DATAGRID_VIEW_CHANGES,
   DataGridViewChanges,
   DataGridViewChangesHandler,
-} from './view-changes';
+} from './changes';
 import { DOCUMENT } from '@angular/common';
 
 /**

@@ -1,15 +1,9 @@
 import { Injector } from '@angular/core';
 
-/**
- * Navigation link property type declaration
- *
- * @internal
- */
+/** @internal Navigation link property type declaration */
 export type HRefType = string | ((injector: Injector) => void | Promise<void>);
 
-/**
- * UI Link type declaration
- */
+/** @description UI Link type declaration */
 export type UILink = {
   label: string;
   href: HRefType;
@@ -17,9 +11,7 @@ export type UILink = {
   cssClass?: string;
 };
 
-/**
- * Application navigation links type declaration
- */
+/** @description Application navigation links type declaration */
 export type Link = {
   label: string;
   href: HRefType;

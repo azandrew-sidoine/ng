@@ -6,9 +6,7 @@ import {
 } from '@azlabsjs/ngx-clr-smart-grid';
 import { DataGridStateType } from './types';
 
-/**
- * Query operators supported
- */
+/** @internal Query operators supported */
 const QUERY_OPERATORS = ['>=', '<=', '<', '>', '<>', '=like', '=='];
 
 /**

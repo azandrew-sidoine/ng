@@ -14,11 +14,11 @@ import {
   TemplateRef,
 } from '@angular/core';
 import {
-  NgxClrSmartGridModule,
+  DIRECTIVES,
   PaginateResult,
   ProjectPaginateQueryParamType,
+  SearchableGridColumnType,
 } from '@azlabsjs/ngx-clr-smart-grid';
-import { useQuery } from '@azlabsjs/ngx-query';
 import {
   catchError,
   debounceTime,
@@ -32,27 +32,37 @@ import {
 } from 'rxjs';
 import { GridDataQueryProvider } from './datagrid.query.service';
 import { defaultPaginateQuery } from './defaults';
-import {
-  DataGridStateType,
-  PipeTransformType,
-  RestQueryType,
-  SearchableGridColumnType,
-} from './types';
+import { DataGridStateType, PipeTransformType, RestQueryType } from './types';
 import { Intercept, NextCallback, usePaginateActionPipeline$ } from './rx';
 import { DATAGRID_CONFIG } from './tokens';
-import { QueryState, queryResult } from '@azlabsjs/rx-query';
+import {
+  QueryStateType as QueryState,
+  queryResult,
+  useQuery,
+} from '@azlabsjs/rx-query';
 import { remove, parseSearchDateValue, replace } from './helpers';
 import { CommonModule } from '@angular/common';
 
+/** @internal */
 const _defaultState = {
   placeholder: undefined as string | undefined,
 };
+
+/** @internal */
+const NOT_FOUND = "We couldn't load data due to request error ...";
+
+/** @internal */
+const LOADING = 'Loading data, please wait ...';
+
+/** @internal */
 type StateType = typeof _defaultState;
+
+/** @internal */
 type SetStateParamType<T> = ((state: T) => T) | Partial<T>;
 
 @Component({
   standalone: true,
-  imports: [CommonModule, NgxClrSmartGridModule],
+  imports: [CommonModule, ...DIRECTIVES],
   providers: [GridDataQueryProvider],
   selector: 'ngx-datagrid',
   templateUrl: './datagrid.component.html',
@@ -72,13 +82,12 @@ export class DatagridComponent implements OnInit, OnDestroy, OnChanges {
   // #region Component inputs
   @Input('page-size-options') sizeOptions = this.gridConfig
     ?.pageSizeOptions ?? [10, 20, 50, 100, 150];
-  @Input('page-size') pageSize = this.gridConfig?.pageSize ?? 10;
-  @Input('overflow') overflowRef!: TemplateRef<any> | undefined;
-  @Input('action-bar') actionBarRef!: TemplateRef<any> | undefined;
-  @Input('detail-pane') detailPaneRef!: TemplateRef<any> | undefined;
-  @Input('loading-text') loadingtext = 'Loading data, please wait ...';
-  @Input('error-text') errorText =
-    "We couldn't load data due to request error ...";
+  @Input({ alias: 'page-size' }) pageSize = this.gridConfig?.pageSize ?? 10;
+  @Input({ alias: 'overflow' }) overflowRef!: TemplateRef<any> | undefined;
+  @Input({ alias: 'action-bar' }) actionBarRef!: TemplateRef<any> | undefined;
+  @Input({ alias: 'detail-pane' }) detailPaneRef!: TemplateRef<any> | undefined;
+  @Input({ alias: 'loading-text' }) loadingtext = LOADING;
+  @Input({ alias: 'error-text' }) errorText = NOT_FOUND;
   @Input() placeholder = "We couldn't find any data!";
   @Input() url!: string;
   @Input() columns: SearchableGridColumnType[] = [];
@@ -88,15 +97,15 @@ export class DatagridComponent implements OnInit, OnDestroy, OnChanges {
     | Intercept<ProjectPaginateQueryParamType, PaginateResult<unknown>>
     | undefined;
   @Input() loading!: boolean;
-  @Input('state') dgState: ProjectPaginateQueryParamType = defaultPaginateQuery;
-  @Input('search-value') search!: string | null | undefined;
-  @Input('column-title-transform') transformColumnTitle!:
+  @Input({alias: 'state'}) dgState: ProjectPaginateQueryParamType = defaultPaginateQuery;
+  @Input({alias: 'search-value'}) search!: string | null | undefined;
+  @Input({alias: 'column-title-transform'}) transformColumnTitle!:
     | PipeTransformType
     | PipeTransformType[];
   @Input() selectable!: boolean;
-  @Input('class') cssClass?: string;
-  @Input('single-selection') singleSelection!: boolean;
-  @Input('row-class') rowClass!: string | ((element: any) => string);
+  @Input({alias: 'class'}) cssClass?: string;
+  @Input({alias: 'single-selection'}) singleSelection!: boolean;
+  @Input({alias: 'row-class'}) rowClass!: string | ((element: any) => string);
   // #endregion Component inputs
 
   // #region Component outputs
@@ -154,7 +163,11 @@ export class DatagridComponent implements OnInit, OnDestroy, OnChanges {
             ? this.columns
                 .filter((column) => true === Boolean(column.searcheable))
                 .map((column) => ({
-                  property: column.field ?? column.label,
+                  // TODO: review implementation to use property field
+                  property:
+                    column.field ??
+                    (column as any).label ??
+                    (column as any).property,
                   value: encodeURI(value),
                 }))
             : []
@@ -259,7 +272,7 @@ export class DatagridComponent implements OnInit, OnDestroy, OnChanges {
     );
   }
 
-  // Listen for changes to trigger request
+  /** @description  Listen for changes to trigger request */
   ngOnChanges(changes: SimpleChanges): void {
     if ('url' in changes || 'query' in changes || 'filters' in changes) {
       this.onDgRefresh();
@@ -310,19 +323,18 @@ export class DatagridComponent implements OnInit, OnDestroy, OnChanges {
         };
   }
 
-  /**
-   * Prepares search query filters
-   */
+  /** @description Prepares search query filters */
   private prepareSearchFilters(
     queries: { property: string; value: unknown }[]
   ) {
     const queryFilters: { property: string; value: unknown }[] = [];
     for (const query of queries) {
       const { value, property } = query;
-      const column = this.columns.find(
-        (value) =>
-          value.field === query.property || value.label === query.property
-      );
+      const column = this.columns.find((value) => {
+        const k: string =
+          value.field ?? (value as any).label ?? (value as any).property;
+        return k === query.property;
+      });
       if (!column) {
         queryFilters.push(query);
         continue;

@@ -22,9 +22,7 @@ import {
 } from '@angular/core';
 import { SizeType } from './types';
 
-/**
- * @internal
- */
+/** @internal */
 type StateType = {
   opened: boolean;
   size: SizeType;

@@ -74,7 +74,8 @@
         </ng-container>
         <ng-container *ngIf="performingAction">
             <div class="loading">
-                <clr-spinner clrInline></clr-spinner>
+                <!-- TODO: Use clr-spinner component if required -->
+                <span class="spinner spinner-inline">Loading...</span>
                 <span>Actualisation...</span>
             </div>
         </ng-container>

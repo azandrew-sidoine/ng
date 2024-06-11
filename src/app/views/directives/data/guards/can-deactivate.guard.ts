@@ -1,5 +1,5 @@
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { ViewStateComponentType } from '../types';
+import { ViewStateComponentType } from '../core';
 
 /**
  * Data components can deactivate guard.

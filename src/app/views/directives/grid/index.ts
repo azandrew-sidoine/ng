@@ -21,7 +21,7 @@ export {
   DATAGRID_VIEW_CHANGES_HANDLER,
   DataGridViewChangesType,
   DataGridViewChangesHandler,
-} from './view-changes';
+} from './changes';
 
 // Export providers
 export { provideDataGridViewChanges } from './providers';

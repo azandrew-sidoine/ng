@@ -15,12 +15,11 @@ import {
 import {
   ActionType,
   ConfigType,
-  DataComponentModule,
   DataComponentType,
   StateType,
   ViewStateComponentType,
-} from '../data';
-import { UIStateControllerType, UI_STATE_CONTROLLER } from '../ui-action';
+} from '..';
+import { UIStateControllerType, UI_STATE_CONTROLLER } from '../../ui-action';
 import {
   Observable,
   Subscription,
@@ -29,29 +28,25 @@ import {
   tap,
 } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { APP_LINKS } from '../main-nav';
+import { APP_LINKS } from '../../main-nav';
 import { CommonModule } from '@angular/common';
-import { ViewportModule } from '../viewport';
-import { VIEW_DIRECTIVES } from '../view';
-import { Link } from '../link';
+import { ViewportModule } from '../../viewport';
+import { VIEW_DIRECTIVES } from '../../view';
+import { Link } from '../../link';
+import { DATA_DIRECTIVES } from '../base';
+import { COMMON_PIPES } from '@azlabsjs/ngx-common';
 
-/**
- * @internal
- */
+/**  @internal */
 type NullableEntityType = { id: string | number } | undefined | null;
 
-/**
- * @internal
- */
+/** @internal */
 type ActionResultType = {
   type: ActionType | string;
   payload: unknown;
   message?: string;
 };
 
-/**
- * @internal
- */
+/** @internal */
 type ActionErrorType = {
   type: ActionType | string;
   err: unknown;
@@ -62,22 +57,23 @@ type ActionErrorType = {
   standalone: true,
   imports: [
     CommonModule,
-    DataComponentModule,
     ViewportModule,
-    ...VIEW_DIRECTIVES
+    ...COMMON_PIPES,
+    ...VIEW_DIRECTIVES,
+    ...DATA_DIRECTIVES,
   ],
   selector: 'ngx-data-view',
-  templateUrl: './data-view.component.html',
+  templateUrl: './view.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DataViewComponent
+export class ViewComponent
   implements ViewStateComponentType, OnDestroy, AfterViewInit
 {
   // #region Component inputs
   @Input() path!: string;
   @Input() noPadding: boolean = true;
   @Input() noHeader: boolean = false;
-  @Input() noLogout: boolean = this.route.snapshot.data['noLogout']  ?? false;
+  @Input() noLogout: boolean = this.route.snapshot.data['noLogout'] ?? false;
   @Input() searchable: boolean = this.route.snapshot.data['searchable'] ?? true;
   @Input() branding: string = this.route.snapshot.data['branding'];
   @Input() name: string = this.route.snapshot.data['name'];

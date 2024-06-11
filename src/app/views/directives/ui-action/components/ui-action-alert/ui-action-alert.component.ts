@@ -21,7 +21,7 @@ import { AlertTypePipe } from './pipes';
   imports: [CommonModule, UIAlertComponent, AlertTypePipe],
   selector: 'ngx-action-alert',
   templateUrl: './ui-action-alert.component.html',
-  styleUrls: ['./ui-action-alert.component.css'],
+  styleUrls: ['./ui-action-alert.component.scss'],
   animations: [
     trigger('fadeInOutSlide', [
       transition(':enter', [
@@ -44,7 +44,7 @@ export class UIActionAlertComponent implements OnDestroy {
   //#region Component input properties
   @Input() closable: boolean = true;
   @Input() light: boolean = false;
-  @Input('app-level') appLevel = true;
+  @Input({alias: 'app-level'}) appLevel = true;
   //#endregion Component input properties
 
   // #region Component properties

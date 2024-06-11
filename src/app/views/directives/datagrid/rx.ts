@@ -4,22 +4,17 @@ import {
   ProjectPaginateQueryParamType,
 } from '@azlabsjs/ngx-clr-smart-grid';
 
-/**
- * @internal
- */
+/**  @internal */
 export type NextCallback<T, R> = (source: T) => Observable<R>;
 
-/**
- * @internal
- */
+
+/**  @internal */
 export type Intercept<T = unknown, R = unknown> = (
   traveler: T,
   next$: NextCallback<T, R>
 ) => ReturnType<typeof next$>;
 
-/**
- * `actionPipeline` generic operator specification for datagrid pagination
- */
+/** @description `actionPipeline` generic operator specification for datagrid pagination */
 export function usePaginateActionPipeline$<T>(
   intercept: Intercept<ProjectPaginateQueryParamType, PaginateResult<T>>,
   next$: (input: ProjectPaginateQueryParamType) => Observable<PaginateResult<T>>

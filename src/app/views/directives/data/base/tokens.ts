@@ -5,7 +5,7 @@ import {
   DeleteActionPayload,
   RequestClient,
   UpdateActionPayload,
-} from './types';
+} from '../core';
 
 /**
  * Request client provider token

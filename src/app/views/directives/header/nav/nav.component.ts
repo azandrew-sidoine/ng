@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, TemplateRef } from '@angular/core';
 import { HeaderNavLinkComponent } from './nav-link.component';
 import { CommonModule } from '@angular/common';
 import { Link } from '../../link';
@@ -15,6 +15,7 @@ import { COMMON_PIPES } from '../pipes';
   standalone: true,
   selector: 'ngx-header-nav',
   templateUrl: './nav.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderNavComponent {
   //#region Component inputs

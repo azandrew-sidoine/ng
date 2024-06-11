@@ -13,9 +13,7 @@ import {
 import { NAVIGATE_HANDLER_FACTORY, URL_CHANGES_FACTORY } from './tokens';
 import { filter, map } from 'rxjs';
 
-/**
- * Provides navigate handler implementation for angular default Router
- */
+/** @description Provides navigate handler implementation for angular default Router */
 export function provideRouterNavigate() {
   return {
     provide: NAVIGATE_HANDLER_FACTORY,
@@ -37,9 +35,7 @@ export function provideRouterNavigate() {
   } as Provider;
 }
 
-/**
- * Provides url change based on angular router events changes
- */
+/** @description Provides url change based on angular router events changes */
 export function provideRouterChanges() {
   return {
     provide: URL_CHANGES_FACTORY,

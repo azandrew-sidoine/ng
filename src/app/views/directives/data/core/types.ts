@@ -1,10 +1,20 @@
-import { RestQueryType, SearchableGridColumnType } from '../datagrid';
 import { Observable, ObservableInput } from 'rxjs';
 import { FormConfigInterface } from '@azlabsjs/smart-form-core';
-import { QueryState } from '@azlabsjs/rx-query';
-import { DetailColumnType } from './detail';
+import { QueryStateType as QueryState } from '@azlabsjs/rx-query';
 import { ReactiveFormComponentInterface } from '@azlabsjs/ngx-smart-form';
 import { Injector } from '@angular/core';
+import {
+  GridDetailColumnType,
+  SearchableGridColumnType,
+} from '@azlabsjs/ngx-clr-smart-grid';
+
+/** @internal */
+type RestQueryType = {
+  _columns?: string[];
+  _excepts?: string[];
+  _filters?: { property: string; value: unknown }[];
+  _query?: { [k: string]: any };
+};
 
 type FormEventType = {
   /**
@@ -37,71 +47,45 @@ type FormEventType = {
   error: (event: unknown) => unknown;
 };
 
-/**
- * @internal
- *
- * Type declaration for form configuration that is loaded from the project assets
- */
+/** @internal Type declaration for form configuration that is loaded from the project assets */
 export type AssetFormConfigType = {
   id: string | number;
   url: string;
 } & FormEventType;
 
-/**
- * @internal
- *
- * Type declaration for form configuration
- */
+/** @internal Type declaration for form configuration */
 export type JsFormConfigType = {
   value: FormConfigInterface;
   url: string;
 } & FormEventType;
 
-/**
- * @internal
- */
+/** @internal */
 export type InjectorFnOr<T> = T | ((injector?: Injector | null) => T);
 
-/**
- * Type constructor that convert a basic type a union of the basic type or an observable of the basic type
- * @internal
- */
+/** @internal Type constructor that convert a basic type a union of the basic type or an observable of the basic type */
 export type OrObservable<T> = T | Observable<T>;
 
-/**
- * @internal
- */
+/** @internal */
 export type ViewStateComponentType = {
   dataViewRef: DataComponentType | null;
 };
 
-/**
- * @internal
- */
+/** @internal */
 export type NextCallback<T, R> = (source: T) => Observable<R>;
 
-/**
- * @internal
- */
+/** @internal */
 type PipeTransformType = string | ((value: any) => any) | undefined;
 
-/**
- * @internal
- */
+/** @internal */
 export type Intercept<T = unknown, R = unknown> = (
   traveler: T,
   next$: NextCallback<T, R>
 ) => ReturnType<typeof next$>;
 
-/**
- * Position enumerable type declaration
- * @internal
- */
+/** @internal Position enumerable type declaration */
 export type ActionUIPositionType = 'overflow' | 'action-bar';
 
-/**
- * @internal
- */
+/** @internal */
 export type HTTPMethodsType =
   | 'POST'
   | 'post'
@@ -114,11 +98,7 @@ export type HTTPMethodsType =
   | 'DELETE'
   | 'delete';
 
-/**
- * @internal
- *
- * Action configuration type declaration
- */
+/**  @internal Action configuration type declaration */
 export type UIActionConfigType = {
   /**
    * UI action name
@@ -147,11 +127,7 @@ export type UIActionConfigType = {
   disabled?: boolean | ((value: unknown) => boolean);
 };
 
-/**
- * @internal
- *
- * Type declaration for single row action
- */
+/** @internal Type declaration for single row action */
 export type UIActionEventArgType<T = unknown> = {
   payload: T;
   action: UIActionConfigType;
@@ -168,26 +144,16 @@ export type ActionType = 'delete' | 'create' | 'update' | 'list';
  * handle data action on user interaction
  */
 export type BaseActionConfigType = {
-  /**
-   * Case the remove function return true, the action
-   * will not be added to the view
-   */
+  /** @description Case the remove function return true, the action will not be added to the view */
   remove?: (value: unknown) => boolean;
 
-  /**
-   * Function to disbale the action element based on criteria
-   */
+  /** @description Function to disbale the action element based on criteria */
   disabled?: boolean | ((value: unknown) => boolean);
 
-  /**
-   * URL where request are sent to. If not provided, we assume the intercept
-   * will handle the /DELETE request on it own
-   */
+  /** @description URL where request are sent to. If not provided, we assume the intercept will handle the /DELETE request on it own */
   url?: string;
 
-  /**
-   * Intercept function for handling request send from UI components
-   */
+  /** @description Intercept function for handling request send from UI components */
   intercept?: (
     traveler: any,
     next$: NextCallback<any, any>
@@ -200,9 +166,7 @@ export type BaseActionConfigType = {
   before?: <T, R>(traveler: T) => R | Observable<R>;
 };
 
-/**
- * Type declaration for ui configuration of an action
- */
+/** @description Type declaration for ui configuration of an action */
 export type ActionUIConfigType = {
   /**
    * Case the remove function return true, the action
@@ -232,9 +196,7 @@ export type ActionUIConfigType = {
   cssClass?: string | string[];
 };
 
-/**
- * @internal Action configuration type declaration
- */
+/** @internal Action configuration type declaration */
 export type ActionConfigType = BaseActionConfigType &
   ActionUIConfigType & {
     /**
@@ -248,9 +210,7 @@ export type ActionConfigType = BaseActionConfigType &
     notRequiredInput?: string[];
   };
 
-/**
- * Custom action configuration type declaration
- */
+/** @description Custom action configuration type declaration */
 export type CustomActionConfigType = ActionConfigType & {
   prepareUrl: <T = unknown, TUrl extends string = string>(
     url: TUrl,
@@ -259,23 +219,17 @@ export type CustomActionConfigType = ActionConfigType & {
   method: HTTPMethodsType;
 };
 
-/**
- * Action handler type provides a more generic approach to handle custom user action
- */
+/** @description Action handler type provides a more generic approach to handle custom user action */
 export type ActionHandlerType = {
   handle(...args: any): void | Promise<void>;
 } & ActionUIConfigType;
 
-/**
- * Action type type declaration
- */
+/** @description Action type type declaration */
 export type ActionsConfigType<TActions extends string = ActionType> =
   | Partial<Record<TActions, ActionConfigType>> &
       Partial<{ [prop: string]: CustomActionConfigType | ActionHandlerType }>;
 
-/**
- * Partial action config type declaration
- */
+/** @description Partial action config type declaration */
 export type PartialActionConfigType<TActions extends string = ActionType> =
   | Partial<Record<TActions, Partial<ActionConfigType>>> &
       Partial<{
@@ -335,46 +289,36 @@ export type ConfigType<TActionType extends ActionType = ActionType> = {
      * Datagrid detail view configuration
      */
     detail?: InjectorFnOr<
-      OrObservable<(DetailColumnType & { editable?: boolean })[]>
+      OrObservable<(GridDetailColumnType & { editable?: boolean })[]>
     >;
   };
 };
 
-/**
- * REST requests payload base type declaration
- */
+/** @description REST requests payload base type declaration */
 export type RestActionPayload = {
   url: string;
 };
 
-/**
- * REST /POST request payload type declaration
- */
+/** @description REST /POST request payload type declaration */
 export type CreateActionPayload<TBody = unknown> = {
   body: TBody;
   params?: Record<string, unknown>;
 } & RestActionPayload;
 
-/**
- * REST interface /PUT request payload type declaration
- */
+/** @description REST interface /PUT request payload type declaration */
 export type UpdateActionPayload<TBody = unknown> = {
   body: TBody;
   params?: Record<string, unknown>;
   id: string | number;
 } & RestActionPayload;
 
-/**
- * REST interface /DELETE request payload type declaration
- */
+/** @description REST interface /DELETE request payload type declaration */
 export type DeleteActionPayload = {
   params?: Record<string, unknown>;
   id: string | number;
 } & RestActionPayload;
 
-/**
- * Generic action handlers type declarations
- */
+/** @description Generic action handlers type declarations */
 export type ActionHandler<T, R> = {
   handle(arg: T): R;
 };
@@ -398,9 +342,7 @@ export type RequestMethod =
   | 'put'
   | 'patch';
 
-/**
- * @internal
- */
+/** @internal */
 export type RequestOptions = {
   headers?: HeadersInit;
   responseType?: 'arraybuffer' | 'text' | 'blob' | 'json';
@@ -424,19 +366,13 @@ export interface RequestClient {
   ): ObservableInput<T>;
 }
 
-/**
- * Entity base type declaration
- */
+/** @description Entity base type declaration */
 export type EntityBaseType = { id: string | number };
 
-/**
- * Data UI view state type
- */
+/** @description Data UI view state type */
 export type ViewStateType = 'gridView' | 'listView' | 'createView' | 'editView';
 
-/**
- * Component state type declaration
- */
+/** @description Component state type declaration */
 export type StateType = {
   // performingAction: boolean;
   view: ViewStateType;
@@ -452,10 +388,7 @@ export type StateType = {
 };
 
 // #region Common strings
-/**
- * Type declaration for string required as common string for
- * data components
- */
+/** @description Type declaration for string required as common string for data components */
 export type CommonStringsType = Partial<
   Record<
     string,
@@ -480,53 +413,40 @@ export type ActionsCommonStringsType = {
 // #endregion Common strings
 
 // #region Data component type declarations
-/**
- * @internal
- */
+
+/** @internal */
 type UpdatePayload<T> = {
   event: T;
   config: ConfigType;
   id: string | number;
 };
 
-/**
- * @internal
- */
+/** @internal */
 type DeletePayload = {
   id: string | number;
   config: ConfigType;
 };
 
-/**
- * @internal
- */
+/** @internal */
 type CreatePayload<T> = {
   event: T;
   config: ConfigType;
 };
 
-/**
- * Type declaration of data component update method
- */
+/** @description Type declaration of data component update method */
 export type DataUpdateHandler<T = unknown> = (
   payload: UpdatePayload<T>
 ) => Promise<unknown>;
 
-/**
- * Type declaration of data component create method
- */
+/** @description Type declaration of data component create method */
 export type DataCreateHandler<T = unknown> = (
   payload: CreatePayload<T>
 ) => Promise<unknown>;
 
-/**
- * Type declaration of data component delete method
- */
+/** @description Type declaration of data component delete method */
 export type DataDeleteHandler = (payload: DeletePayload) => Promise<unknown>;
 
-/**
- * Data component type declaration
- */
+/** @description Data component type declaration */
 export type DataComponentType = {
   /**
    * Form component reference. Should check if value is null or undefined

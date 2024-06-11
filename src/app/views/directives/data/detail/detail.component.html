@@ -13,9 +13,10 @@
                         </ng-template>
                     </ng-container>
                 </th>
-                <td *ngFor="let item of (data | array)" class="right" [ngStyle]="column.style?.styles" [class]="column.style?.cssClass ?? ''">
+                <td *ngFor="let item of (data | array)" class="right" [ngStyle]="column.style?.styles"
+                    [class]="column.style?.cssClass ?? ''">
                     <ng-container
-                        *ngIf="(item | propValue: column.field) | transform: column.transform | pipeResult as result">
+                        *ngIf="(item | propValue: column.property) | transform: column.transform | pipeResult as result">
                         <ng-container *ngIf="result.value | isAsync; else noAsyncRef">
                             <ng-container
                                 *ngTemplateOutlet="preview ?? defaultPreview; context: {$implicit: result.value | async, column}"></ng-container>
@@ -48,8 +49,9 @@
         </thead>
         <tbody>
             <tr *ngFor="let item of (data | array)">
-                <td *ngFor="let column of columns" class="left" [ngStyle]="column.style?.styles" [class]="column.style?.cssClass ?? ''">
-                    <ng-container *ngIf="(item | propValue: column.field) | transform:
+                <td *ngFor="let column of columns" class="left" [ngStyle]="column.style?.styles"
+                    [class]="column.style?.cssClass ?? ''">
+                    <ng-container *ngIf="(item | propValue: column.property) | transform:
                     column.transform | pipeResult as result">
                         <ng-container *ngIf="result.value | isAsync; else noAsyncRef">
                             <ng-container

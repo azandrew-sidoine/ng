@@ -1,6 +1,7 @@
 :host ::ng-deep .main-container .content-container .content-area,
 .main-container .content-container .content-area {
   padding: var(--content-area-padding, 0) !important;
+  overflow-x: hidden;
 }
 
 :host ::ng-deep .main-container,

@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ContentChild,
   Inject,
@@ -10,14 +11,15 @@ import {
 import { HeaderAction } from './types';
 import { NAVIGATE_HANDLER_FACTORY, NavigateHandlerFactory } from '../../router';
 import { CommonModule } from '@angular/common';
-import { DropdownModule } from '@azlabsjs/ngx-dropdown';
+import { DROPDOWN_DIRECTIVES } from '@azlabsjs/ngx-dropdown';
 
 @Component({
-  imports: [CommonModule, DropdownModule],
+  imports: [CommonModule, ...DROPDOWN_DIRECTIVES],
   standalone: true,
   selector: 'ngx-header-actions',
   templateUrl: './actions.component.html',
-  styleUrls: ['./actions.component.scss']
+  styleUrls: ['./actions.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderActionsComponent {
   // #region Component inputs

@@ -1,18 +1,14 @@
 import { isEmpty, remove } from './helpers';
 import { ConstraintFn, ErrorType, GridColumnType, RecordType } from './types';
 
-/**
- * @internal
- */
+/** @internal */
 function useRootErrors(): Record<string, { name: string; errors: any[] }[]> {
   return {
     '-1': [{ name: 'root$', errors: [{ message: 'constraints.not_empty' }] }],
   };
 }
 
-/**
- * Validates grid cell's value
- */
+/** @description Validates grid cell's value */
 export function validateCell<T extends ErrorType = ErrorType>(
   constraints: ConstraintFn[],
   value: unknown,
@@ -27,9 +23,7 @@ export function validateCell<T extends ErrorType = ErrorType>(
   }, [] as T[]);
 }
 
-/**
- * Validates grid view state and return the list of errors if validation fails
- */
+/** @description Validates grid view state and return the list of errors if validation fails */
 export function validateGridView(
   records: RecordType[],
   columns: GridColumnType[]

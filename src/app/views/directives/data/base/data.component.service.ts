@@ -7,7 +7,6 @@ import {
   of,
   throwError,
 } from 'rxjs';
-import { actionPipeline$ } from './rx';
 import {
   ActionConfigType,
   ActionHandler,
@@ -16,7 +15,8 @@ import {
   DeleteActionPayload,
   RequestClient,
   UpdateActionPayload,
-} from './types';
+  actionPipeline$,
+} from '../core';
 import {
   CREATE_ACTION_HANDLER,
   DELETE_ACTION_HANDLER,
@@ -26,14 +26,10 @@ import {
 
 @Injectable()
 export class CustomActionHTTPHandler {
-  /**
-   * Class constructor
-   */
+  /** @description Class constructor */
   public constructor(@Inject(REQUEST_CLIENT) private http: RequestClient) {}
 
-  /**
-   * Handle custom action http handler
-   */
+  /** @description Handle custom action http handler */
   handle(
     url: string,
     event: unknown,

@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ContentChild,
   EventEmitter,
@@ -18,6 +19,7 @@ import { UILink } from './types';
   imports: [CommonModule],
   selector: 'ngx-link',
   templateUrl: './link.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LinkComponent {
   // #region Component inputs
@@ -28,7 +30,7 @@ export class LinkComponent {
    */
   @Input() beforeUpdateUrl!: (value: UILink) => boolean;
   @Input() linkRef!: TemplateRef<any>;
-  @ContentChild('view') viewRef!: TemplateRef<any>|null;
+  @ContentChild('view') viewRef!: TemplateRef<any> | null;
   // #endregion Component inputs
 
   // #region Component output
@@ -46,7 +48,7 @@ export class LinkComponent {
     private document?: Document
   ) {}
 
-  // 
+  //
   handleClick(event: Event, value: UILink) {
     event?.preventDefault();
 

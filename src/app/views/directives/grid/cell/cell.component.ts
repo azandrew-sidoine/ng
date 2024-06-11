@@ -16,11 +16,11 @@ import { ConstraintFn, ErrorType, GridCellType, RecordType } from '../types';
 import { FormsModule } from '@angular/forms';
 import { CellModeType, NavigationDirectionType } from './types';
 import PIPES from '../pipes';
-import { NgxCommonModule } from '@azlabsjs/ngx-common';
+import { COMMON_PIPES } from '@azlabsjs/ngx-common';
 
 @Component({
   standalone: true,
-  imports: [FormsModule, CommonModule, NgxCommonModule, ...PIPES],
+  imports: [FormsModule, CommonModule, ...COMMON_PIPES, ...PIPES],
   selector: 'ngx-grid-cell',
   templateUrl: './cell.component.html',
   styleUrls: ['./cell.component.scss'],

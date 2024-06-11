@@ -1,11 +1,13 @@
-import { QueryState, invalidateQuery, refetchQuery } from '@azlabsjs/rx-query';
+import {
+  QueryStateType as QueryState,
+  invalidateQuery,
+  refetchQuery,
+} from '@azlabsjs/rx-query';
 import { FormConfigInterface } from '@azlabsjs/smart-form-core';
-import { ActionsConfigType, EntityBaseType, UIActionConfigType } from './types';
+import { ActionsConfigType, EntityBaseType, UIActionConfigType } from '../core';
 import { Observable, firstValueFrom, from, isObservable, of } from 'rxjs';
 
-/**
- * Check is value is a promise instance variable
- */
+/** @description Check is value is a promise instance variable */
 function isPromise(value: unknown): value is Promise<unknown> {
   return (
     typeof value === 'object' &&
@@ -14,9 +16,7 @@ function isPromise(value: unknown): value is Promise<unknown> {
   );
 }
 
-/**
- * Refresh data grid cached queries by invalidating old paged query and fetching the latest query
- */
+/** @description Refresh data grid cached queries by invalidating old paged query and fetching the latest query */
 export function refreshCachedQueries(
   queries: QueryState[],
   thenCallback?: (queries: QueryState[]) => void
@@ -35,9 +35,7 @@ export function refreshCachedQueries(
   }
 }
 
-/**
- * Add or replace the provided query to the top of cached queries
- */
+/** @description  Add or replace the provided query to the top of cached queries */
 export function updateCachedQueries(queries: QueryState[], query: QueryState) {
   const _index = queries.findIndex((query) => query.id === query.id);
   if (_index !== -1) {
@@ -46,10 +44,7 @@ export function updateCachedQueries(queries: QueryState[], query: QueryState) {
   return [query, ...queries];
 }
 
-/**
- * This function takes a value and internally calls the {_callback} on the value.
- * To support
- */
+/** @description  This function takes a value and internally calls the {_callback} on the value. */
 export async function mapIntoAsync<T = unknown, TReturn = T>(
   _value: T,
   callback: (value: T) => TReturn
@@ -65,10 +60,7 @@ export async function mapIntoAsync<T = unknown, TReturn = T>(
   return await firstValueFrom(_observable$);
 }
 
-/**
- * Create form configuration from blueprint object by excluding excluded input and
- * removing required flag on non required inputs
- */
+/** @description Create form configuration from blueprint object by excluding excluded input and removing required flag on non required inputs */
 export function createFormConfig(
   form: FormConfigInterface,
   excludedInputs: string[] = [],
@@ -106,9 +98,7 @@ export function createFormConfig(
   return _form;
 }
 
-/**
- * Creates a UI action configuration instance
- */
+/** @description Creates a UI action configuration instance */
 export function createActionConfigType(actions: ActionsConfigType) {
   const _actionConfigs: UIActionConfigType[] = [];
 
@@ -131,14 +121,4 @@ export function createActionConfigType(actions: ActionsConfigType) {
     });
   }
   return _actionConfigs;
-}
-
-/**
- * Build a resource url by appending resource id as path variable to original url
- */
-export function buildRessouceUrl(url: string, id: string | number) {
-  const _url = `${
-    url.endsWith('/') ? url.substring(0, url.length - 1) : url
-  }/${id}`;
-  return _url;
 }

@@ -8,9 +8,9 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { DropdownModule } from '@azlabsjs/ngx-dropdown';
 import { Router, RouterModule } from '@angular/router';
 import { UILink } from '../../link';
+import { DROPDOWN_DIRECTIVES } from '@azlabsjs/ngx-dropdown';
 
 /** @internal */
 function isValidURL(url: string) {
@@ -23,7 +23,7 @@ function isValidURL(url: string) {
 }
 
 @Component({
-  imports: [CommonModule, DropdownModule, RouterModule],
+  imports: [CommonModule, ...DROPDOWN_DIRECTIVES, RouterModule],
   standalone: true,
   selector: 'ngx-header-nav-link',
   templateUrl: './nav-link.component.html',

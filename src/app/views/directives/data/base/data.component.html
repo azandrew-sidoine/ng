@@ -13,7 +13,7 @@
                         let-actions="actions" let-handleAction="handleAction" let-config="config" let-search="search"
                         let-detailPaneChange="detailPaneChange" let-overflow="overflow" let-actionBar="actionBar"
                         let-url="url">
-                        <ngx-clr-data-list
+                        <ngx-data-list
                             [show-detail-pane]="hasDetail || (!!config.datagrid.detail && config.datagrid.detail.length > 0)"
                             [dg-state]="dgState" [url]="url" [config]="config" [refresh-text]="refreshText|commonString"
                             [actions]="actions" [overflow]="overflow" [action-bar]="actionBar"
@@ -21,7 +21,7 @@
                             [search-value]="search" (refresh-grid)="onRefreshDatagrid($event)"
                             (cached-query)="onCachedQuery($event)" (dgStateChange)="onDgStateChanges($event)"
                             (action)="handleAction($event, config)"
-                            (detail-change)="detailPaneChange($event)"></ngx-clr-data-list>
+                            (detail-change)="detailPaneChange($event)"></ngx-data-list>
                     </ng-template>
 
                     <!-- Detail Pane template -->
@@ -37,7 +37,8 @@
             <ng-container *ngIf="state.view === 'createView' || state.view === 'editView'">
                 <ng-container
                     *ngTemplateOutlet="formTemplateRef; context: {cancel: handleCancel.bind(this), form: state.form, selected: state.selected, formTitle, modalSize}"></ng-container>
-                <ng-template #formTemplateRef let-cancel="cancel" let-form="form" let-selected="selected" let-formTitle="formTitle" let-modalSize="modalSize">
+                <ng-template #formTemplateRef let-cancel="cancel" let-form="form" let-selected="selected"
+                    let-formTitle="formTitle" let-modalSize="modalSize">
                     <div class="data-form-container" *ngIf="noModal; else modalTemplateRef">
                         <div @fadeInOut>
                             <ngx-data-form #formRef [value]="selected" [form]="form"
@@ -49,8 +50,7 @@
                         </div>
                     </div>
                     <ng-template #modalTemplateRef>
-                        <ngx-form-modal #formRef [value]="selected" [size]="modalSize" [form]="form"
-                            [title]="formTitle"
+                        <ngx-form-modal #formRef [value]="selected" [size]="modalSize" [form]="form" [title]="formTitle"
                             [opened]="(state.view === 'createView' || state.view === 'editView')"
                             [no-grid-layout]="config.form?.noGridLayout ?? false" [closeable]="true"
                             (changes)="handleFormChanges($event)" (error)="handleFormError($event)"

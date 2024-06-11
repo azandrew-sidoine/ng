@@ -1,6 +1,5 @@
 import { map } from 'rxjs';
-import { RestQueryType, SearchableGridColumnType } from '../datagrid';
-import { DetailColumnType } from './detail';
+import { RestQueryType, SearchableGridColumnType } from '../../datagrid';
 import {
   ActionConfigType,
   ActionHandlerType,
@@ -15,21 +14,17 @@ import {
   OrObservable,
   PartialActionConfigType,
 } from './types';
-import { buildRessouceUrl } from './helpers';
+import { GridDetailColumnType } from '@azlabsjs/ngx-clr-smart-grid';
 
-/**
- * @internal
- */
+/** @internal */
 type PipeTransformType = string | ((value: any) => any) | undefined;
 
-/**
- * @internal
- */
+/** @internal */
 type ActionTitleParamType = string | ((item: any) => string);
 
 /**
+ * @internal
  * Exported from @azlabsjs/built-type types declarations
- *
  * Return type of the type safe parse method
  */
 type SafeParseReturnType = {
@@ -109,9 +104,7 @@ type _ObjectType = _AbstractType<any, any, any> & {
   reverseType: _AbstractType<Record<string, any>, any, any>;
 };
 
-/**
- * @internal
- */
+/** @internal */
 export type ArgType = {
   url: string;
   noGridFormLayout?: boolean;
@@ -132,16 +125,14 @@ export type ArgType = {
     sizeOptions?: number[];
     columns: InjectorFnOr<OrObservable<SearchableGridColumnType[]>>;
     detail?: InjectorFnOr<
-      OrObservable<(DetailColumnType & { editable?: boolean })[]>
+      OrObservable<(GridDetailColumnType & { editable?: boolean })[]>
     >;
   };
   defaultStrings?: { [prop in ActionType]: string };
   excludesActions?: ActionType[];
 };
 
-/**
- * @internal
- */
+/** @internal */
 export type BuiltTypeArgType = ArgType & {
   _type: _ObjectType;
 };
@@ -151,9 +142,15 @@ export type BuiltTypeArgType = ArgType & {
  */
 export type DataConfigArgType = ArgType | BuiltTypeArgType;
 
-/**
- * Projection function that transform items in a collection into the built-type object
- */
+/** @internal Build a resource url by appending resource id as path variable to original url */
+export function buildRessouceUrl(url: string, id: string | number) {
+  const _url = `${
+    url.endsWith('/') ? url.substring(0, url.length - 1) : url
+  }/${id}`;
+  return _url;
+}
+
+/** @description Projection function that transform items in a collection into the built-type object */
 export function mapInto<T extends _AbstractType<any, any, any> = _ObjectType>(
   _type: T,
   values: Record<string, unknown>[],
@@ -171,9 +168,7 @@ export function mapInto<T extends _AbstractType<any, any, any> = _ObjectType>(
   return _values;
 }
 
-/**
- * Creates an ngx-data configuration with built-type instance builder aware
- */
+/** @description Creates an ngx-data configuration with built-type instance builder aware */
 export function createBuiltTypeDataConfig<
   T extends BuiltTypeArgType = BuiltTypeArgType
 >(params: T, excludes: ActionType[] = []) {
@@ -356,9 +351,7 @@ export function createDataConfig<T extends ArgType = ArgType>(
   } as ConfigType;
 }
 
-/**
- * Creates a custom action that is placed on or that act on a datagrid row item
- */
+/** @description Creates a custom action that is placed on or that act on a datagrid row item */
 export function provideOverflowHttpActionHandler(
   title: ActionTitleParamType,
   method: string,
@@ -368,7 +361,7 @@ export function provideOverflowHttpActionHandler(
   ) => ReturnType<typeof next$>,
   removeFn?: (value: any) => boolean,
   disabled?: (value: any) => boolean,
-  cssClass?: string|string[]
+  cssClass?: string | string[]
 ) {
   return {
     title,
@@ -380,13 +373,11 @@ export function provideOverflowHttpActionHandler(
       ((traveler: any, next$: NextCallback<any, any>) => next$(traveler)),
     remove: removeFn,
     disabled,
-    cssClass
+    cssClass,
   };
 }
 
-/**
- * Creates a custom action that is placed on or that act on a datagrid row item
- */
+/** @description Creates a custom action that is placed on or that act on a datagrid row item */
 export function provideActionBarHttpActionHandler(
   title: ActionTitleParamType,
   method: string,
@@ -396,7 +387,7 @@ export function provideActionBarHttpActionHandler(
   ) => ReturnType<typeof next$>,
   removeFn?: (value: any) => boolean,
   disabled?: (value: any) => boolean,
-  cssClass?: string|string[]
+  cssClass?: string | string[]
 ) {
   return {
     title,
@@ -408,19 +399,17 @@ export function provideActionBarHttpActionHandler(
       ((traveler: any, next$: NextCallback<any, any>) => next$(traveler)),
     remove: removeFn,
     disabled,
-    cssClass
+    cssClass,
   };
 }
 
-/**
- * Provides an overflow action configuration for a generic action handler
- */
+/** @description Provides an overflow action configuration for a generic action handler */
 export function provideOverflowActionHandler(
   title: ActionTitleParamType,
   handle: (...args: any) => void | Promise<void>,
   removeFn?: (value: any) => boolean,
   disabled?: (value: any) => boolean,
-  cssClass?: string|string[]
+  cssClass?: string | string[]
 ) {
   return {
     title,
@@ -428,19 +417,17 @@ export function provideOverflowActionHandler(
     handle,
     remove: removeFn,
     disabled,
-    cssClass
+    cssClass,
   } as ActionHandlerType;
 }
 
-/**
- * Provides an action-bar action configuration for a generic action handler
- */
+/** @description Provides an action-bar action configuration for a generic action handler */
 export function provideActionBarActionHandler(
   title: ActionTitleParamType,
   handle: (...args: any) => void | Promise<void>,
   removeFn?: (value: any) => boolean,
   disabled?: (value: any) => boolean,
-  cssClass?: string|string[]
+  cssClass?: string | string[]
 ) {
   return {
     title,
@@ -448,6 +435,6 @@ export function provideActionBarActionHandler(
     handle,
     remove: removeFn,
     disabled,
-    cssClass
+    cssClass,
   } as ActionHandlerType;
 }

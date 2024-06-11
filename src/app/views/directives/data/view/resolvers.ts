@@ -1,13 +1,13 @@
 import { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
-import { ConfigType } from '../data/types';
+import { ConfigType } from '../core';
 import {
   ArgType,
   BuiltTypeArgType,
   createBuiltTypeDataConfig,
   createDataConfig,
-} from '../data/config-builder';
+} from '../core/builders';
 import { inject } from '@angular/core';
-import { PAGE_CONFIGS } from './tokens';
+import { VIEWS_CONFIG } from './tokens';
 import { map } from 'rxjs';
 
 /**
@@ -20,7 +20,7 @@ import { map } from 'rxjs';
  * const routes: Route[] = [
  *      {
  *          path: '/dashboard/examples',
- *          component: NgxDataPageComponent,
+ *          component: ViewComponent,
  *          resolve: {config: configResolver},
  *          data: {
  *              _config: {
@@ -63,7 +63,7 @@ export const configResolver: ResolveFn<ConfigType | null> = (
  * const routes: Route[] = [
  *      {
  *          path: '/dashboard/examples',
- *          component: NgxDataPageComponent,
+ *          component: ViewComponent,
  *          resolve: {
  *                config: provideConfigResolver({
  *                  _type: Example, // Not required if no type builder should be provided
@@ -85,18 +85,15 @@ export const provideConfigResolver =
     if (typeof value === 'undefined' || value === null) {
       return null;
     }
-
-    if ((value as BuiltTypeArgType)._type) {
-      return createBuiltTypeDataConfig(value as BuiltTypeArgType);
-    }
-
-    return createDataConfig(value as ArgType);
+    return (value as BuiltTypeArgType)._type
+      ? createBuiltTypeDataConfig(value as BuiltTypeArgType)
+      : createDataConfig(value as ArgType);
   };
 
 /**
  *
  * Resolve config input for page component using angular router resolver.
- * This resolver assume NgxDataPageModule has been configured with page configurations token.
+ * This resolver assume library has been configured with page configurations using `provideDataViewConfigs(...)`.
  *
  * **Usage**
  *
@@ -116,7 +113,7 @@ export const provideUrlConfigResolver =
   (url?: string): ResolveFn<ConfigType | null> =>
   (_: ActivatedRouteSnapshot) => {
     try {
-      const pageConfigs = inject(PAGE_CONFIGS);
+      const pageConfigs = inject(VIEWS_CONFIG);
       return pageConfigs.pipe(
         map((item) => {
           const _path = _.url.join('/');

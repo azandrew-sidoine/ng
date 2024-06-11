@@ -1,13 +1,13 @@
-<ngx-view [noHeader]="noHeader" [links]="links" [path]="path" [branding]="branding" [name]="'name' | commonString : name">
-    <ngx-data #dataRef [delete-complete-text]="'request.success'|commonString" [searchable]="searchable"
-        [no-padding]="noPadding" [request-complete-text]="'request.success'|commonString"
-        [request-error-text]="'request.error' | commonString" [update-complete-text]="'request.success' | commonString"
-        [create-complete-text]="'request.success'|commonString" [title]="'title' | commonString : name"
-        [description]="'description' | commonString : name" [config]="config" [actions]="['update', 'delete', 'create']"
+<ngx-view [noHeader]="noHeader" [links]="links" [path]="path" [branding]="branding" [name]="'name' | text : name">
+    <ngx-data #dataRef [delete-complete-text]="'request.success'|text" [searchable]="searchable"
+        [no-padding]="noPadding" [request-complete-text]="'request.success'|text"
+        [request-error-text]="'request.error' | text" [update-complete-text]="'request.success' | text"
+        [create-complete-text]="'request.success'|text" [title]="'title' | text : name"
+        [description]="'description' | text : name" [config]="config" [actions]="['update', 'delete', 'create']"
         (action-error)="onActionError($event)" (action-result)="onActionResult($event)"
         (performing-action)="onPerformingAction($event)" (detail-change)="onDetailChange($event)"
         (form-error)="onFormError($event)" (form-changes)="onFormChanges($event)" (form-ready)="onFormReady($event)"
-        [delete-prompt]="'promt.delete' | commonString">
+        [delete-prompt]="'promt.delete' | text">
 
         <!-- Header template reference -->
         <ng-container *ngIf="headerRef">

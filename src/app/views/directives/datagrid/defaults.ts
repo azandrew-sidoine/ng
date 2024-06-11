@@ -1,8 +1,6 @@
 import { ProjectPaginateQueryParamType } from '@azlabsjs/ngx-clr-smart-grid';
 
-/**
- * Default datagrid paginate query state
- */
+/** @description Default datagrid paginate query state */
 export const defaultPaginateQuery: ProjectPaginateQueryParamType = {
     page: {
       size: 50,

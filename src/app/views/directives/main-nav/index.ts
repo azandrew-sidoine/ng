@@ -1,9 +1,7 @@
 import { MainNavComponent } from './main-nav.component';
 
-/**
- * Exported standalone directives of this library
- */
-export const MAIN_NAV_DIRECTIVES = [MainNavComponent];
+/** @description Exported standalone directives of this library */
+export const MAIN_NAV_DIRECTIVES = [MainNavComponent] as const;
 
 /**
  * Exported angular providers

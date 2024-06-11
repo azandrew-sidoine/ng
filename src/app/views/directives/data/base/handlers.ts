@@ -5,13 +5,11 @@ import {
   DeleteActionPayload,
   RequestClient,
   UpdateActionPayload,
-} from './types';
+} from '../types';
 import { Inject, Injectable } from '@angular/core';
 import { REQUEST_CLIENT } from './tokens';
 
-/**
- * Delete Action handler class declaration
- */
+/** @description Delete Action handler class declaration */
 @Injectable()
 export class DeleteQueryActionHandler<TResult>
   implements ActionHandler<DeleteActionPayload, Observable<TResult>>
@@ -29,9 +27,7 @@ export class DeleteQueryActionHandler<TResult>
   }
 }
 
-/**
- * Update Action handler class declaration
- */
+/** @description Update Action handler class declaration */
 @Injectable()
 export class UpdateQueryActionHandler<TResult>
   implements ActionHandler<UpdateActionPayload, Observable<TResult>>
@@ -50,9 +46,7 @@ export class UpdateQueryActionHandler<TResult>
 }
 
 
-/**
- * Create Action handler class declaration
- */
+/** @description Create Action handler class declaration */
 @Injectable()
 export class CreateQueryActionHandler<TResult>
   implements ActionHandler<CreateActionPayload, Observable<TResult>>

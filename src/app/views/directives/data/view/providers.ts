@@ -8,11 +8,9 @@ import {
   map,
   of,
 } from 'rxjs';
-import { PAGE_CONFIGS } from './tokens';
+import { VIEWS_CONFIG } from './tokens';
 
-/**
- * @internal
- */
+/** @internal */
 function isPromise<T>(value: unknown): value is Promise<T> {
   return (
     typeof value === 'object' &&
@@ -22,9 +20,7 @@ function isPromise<T>(value: unknown): value is Promise<T> {
   );
 }
 
-/**
- * @internal
- */
+/** @internal */
 function flattenLinks(links: LinkConfigPair[]) {
   const result: ViewConfig[] = [];
   const _flatten = (_links: LinkConfigPair[]) => {
@@ -46,7 +42,7 @@ function flattenLinks(links: LinkConfigPair[]) {
 }
 
 /** @description Provides injectable page configuration */
-export function provideDataViewConfigs(
+export function provideViewConfigs(
   values:
     | ViewConfig[]
     | ((
@@ -54,7 +50,7 @@ export function provideDataViewConfigs(
       ) => ViewConfig[] | Observable<ViewConfig[]> | Promise<ViewConfig[]>)
 ) {
   return {
-    provide: PAGE_CONFIGS,
+    provide: VIEWS_CONFIG,
     useFactory: (injector: Injector) => {
       const value =
         typeof values === 'function'
@@ -66,8 +62,8 @@ export function provideDataViewConfigs(
   } as Provider;
 }
 
-/** @description Compute page configuration list from a link page definition */
-export function provideDataViewConfigsForLink(
+/** @description Compute view configuration list from a link page definition */
+export function provideRoutesViewConfigs(
   values:
     | LinkConfigPair[]
     | ((
@@ -78,7 +74,7 @@ export function provideDataViewConfigsForLink(
         | Promise<LinkConfigPair[]>)
 ) {
   return {
-    provide: PAGE_CONFIGS,
+    provide: VIEWS_CONFIG,
     useFactory: (injector: Injector) => {
       const value =
         typeof values === 'function'

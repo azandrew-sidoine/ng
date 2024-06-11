@@ -8,21 +8,20 @@ import {
 } from '@angular/core';
 import { Subscription, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { DropdownModule } from '@azlabsjs/ngx-dropdown';
 import { LINK_DIRECTIVE, UILink } from '../link';
 import { URLChanges } from '../router';
+import { DROPDOWN_DIRECTIVES } from '@azlabsjs/ngx-dropdown';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, DropdownModule, ...LINK_DIRECTIVE],
+  imports: [CommonModule, ...DROPDOWN_DIRECTIVES, ...LINK_DIRECTIVE],
   selector: 'ngx-main-nav',
   templateUrl: './main-nav.component.html',
   styleUrls: ['./main-nav.component.scss'],
 })
 export class MainNavComponent implements OnDestroy, AfterViewInit {
   // #region Component inputs
-  @Input('icon-height') height: number = 36;
-  @Input('icon-width') width: number = 36;
+  @Input({alias: 'icon-size'}) iconSize: number = 36;
   @Input() links: UILink[] = [];
   /**
    * Before update url function controls wether the url should be updated by the internal router

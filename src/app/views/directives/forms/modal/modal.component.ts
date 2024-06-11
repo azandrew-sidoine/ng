@@ -15,8 +15,8 @@ import {
 import {
   FormsClient,
   FORM_CLIENT,
-  NgxSmartFormModule,
   ReactiveFormComponentInterface,
+  FORM_DIRECTIVES,
 } from '@azlabsjs/ngx-smart-form';
 import {
   FormConfigInterface,
@@ -32,10 +32,9 @@ import {
   tap,
   timer,
 } from 'rxjs';
-import { NgxClrFormControlModule } from '@azlabsjs/ngx-clr-form-control';
+import { CLR_FORM_CONTROL_DIRECTIVES } from '@azlabsjs/ngx-clr-form-control';
 import { CommonModule } from '@angular/common';
 import { FormModalElement } from '../types';
-import { NgxCommonModule } from '@azlabsjs/ngx-common';
 import {
   FormGroup,
   AsyncValidatorFn,
@@ -48,9 +47,8 @@ import { ControlsStateMap } from '@azlabsjs/ngx-smart-form/lib/angular/types';
   standalone: true,
   imports: [
     CommonModule,
-    NgxSmartFormModule,
-    NgxClrFormControlModule,
-    NgxCommonModule,
+    ...FORM_DIRECTIVES,
+    ...CLR_FORM_CONTROL_DIRECTIVES,
     ...MODAL_DIRECTIVES,
   ],
   selector: 'ngx-form-modal',
@@ -76,10 +74,10 @@ export class ModalComponent
   @Input() form!: FormConfigInterface | null;
   @Input() value!: unknown;
   @Input() disabled: boolean = false;
-  @Input('no-grid-layout') noGridLayout!: boolean;
-  @Input('form-id') formId!: string | number;
-  @Input('submit-text') submitText!: string;
-  @Input('cancel-text') cancelText!: string;
+  @Input({ alias: 'no-grid-layout' }) noGridLayout!: boolean;
+  @Input({ alias: 'form-id' }) formId!: string | number;
+  @Input({ alias: 'submit-text' }) submitText!: string;
+  @Input({ alias: 'cancel-text' }) cancelText!: string;
   // #enregion Component inputs
 
   @ViewChild('modal', { static: false }) modalRef!: ModalElement | null;

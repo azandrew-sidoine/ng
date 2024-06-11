@@ -2,11 +2,7 @@ import { Provider } from '@angular/core';
 import { DataGridStateType } from './types';
 import { DATAGRID_CONFIG } from './tokens';
 
-/**
- * Datagrid configuration angular provider
- * 
- * @param gridConfig 
- */
+/** @description Datagrid configuration angular provider */
 export function provideDatagridConfig(gridConfig: DataGridStateType) {
   return {
     provide: DATAGRID_CONFIG,

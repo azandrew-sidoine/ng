@@ -1,9 +1,6 @@
-import { ActionType } from './types';
+import { ActionType } from '../types';
 
-/**
- * @internal
- * Default action definition
- */
+/** @internal Default action definition */
 export const defaultActions: ActionType[] = [
   'list',
   'create',
@@ -11,10 +8,7 @@ export const defaultActions: ActionType[] = [
   'delete',
 ];
 
-/**
- * @internal
- * Default datagrid refresh state
- */
+/** @internal Default datagrid refresh state */
 export const defaultDgState = {
   page: {
     size: 20,

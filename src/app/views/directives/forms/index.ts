@@ -1,9 +1,7 @@
 import { ModalComponent } from './modal/modal.component';
 
 // Export standalone directives
-export const FORM_MODAL_DIRECTIVES = [ModalComponent];
+export const FORM_MODAL_DIRECTIVES = [ModalComponent] as const;
 
-/**
- * Exported type declarations
- */
+/** @description Exported type declarations */
 export { FormModalElement } from './types';

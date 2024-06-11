@@ -8,16 +8,22 @@ import {
   Output,
   TemplateRef,
 } from '@angular/core';
-import { UIActionEventArgType, ConfigType, UIActionConfigType } from '../types';
-import { QueryState } from '@azlabsjs/rx-query';
+import { UIActionEventArgType, ConfigType, UIActionConfigType } from '../core';
+import { QueryStateType as QueryState } from '@azlabsjs/rx-query';
+import { DATAGRID_DIRECTIVES } from '../../datagrid';
+import { COMMON_PIPES } from '@azlabsjs/ngx-common';
+import { CommonModule } from '@angular/common';
+import { PIPES } from './pipes';
 
 @Component({
-  selector: 'ngx-clr-data-list',
+  standalone: true,
+  imports: [CommonModule, ...COMMON_PIPES, ...DATAGRID_DIRECTIVES, ...PIPES],
+  selector: 'ngx-data-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DataListComponent {
+export class ListComponent {
   // #region Component Inputs
   @Input('refresh-css-class') refreshCssClass = 'btn-warning';
   @Input('refresh-text') refreshText: string = 'refresh';

@@ -2,15 +2,12 @@ declare var process: {
   env: Record<string, any>;
 };
 
-
-console.log('Logging: ', process.env);
 /**
  * Returns an e environment variable value
  *
  * @param name
  */
 export const env = (name: string, _default: unknown = undefined) => {
-  console.log(process.env);
   const value = process.env[name];
   // When environment variable is not set resolver might return empty string
   // Therefore we fallback to the default value whenever an empty string is returned

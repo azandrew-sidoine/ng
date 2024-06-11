@@ -1,4 +1,5 @@
 import type { Plugin, PluginBuild } from 'esbuild';
+import 'dotenv/config';
 
 /** @description Sanitizes environment variables for production */
 function compileEnv(o: Record<string, any>) {
@@ -22,6 +23,7 @@ function compileEnv(o: Record<string, any>) {
   }, {} as Record<string, any>);
   // Provides an environment variables that is accessible
   // in browser environment
+  // { 'process.env': JSON.stringify(e) }
   return { 'process.env': JSON.stringify(e) };
 }
 
@@ -33,7 +35,7 @@ const envPlugin: Plugin = {
       compileEnv(process.env)
     );
 
-    console.log('Define: ', define)
+    console.log('Define: ', JSON.stringify(define));
     build.initialOptions.define = define;
   },
 };

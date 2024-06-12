@@ -45,17 +45,20 @@ export class HeaderNavLinkComponent {
   ) {}
 
   onNavigate(event: Event, value: UILink) {
+    event?.preventDefault();
+
     if (typeof value.href === 'function') {
       return value.href(this.injector);
     }
 
-    if (isValidURL(value.href as string)) {
-      const { defaultView } = this.document ?? {};
-      const _window = defaultView ?? window;
-      _window.location.href = value.href;
-    } else {
+    if (!isValidURL(value.href as string)) {
       this.router.navigateByUrl(value.href);
+
     }
-    event?.preventDefault();
+    const { defaultView } = this.document ?? {};
+    if (!defaultView) {
+      throw new Error('window instance is not defined');
+    }
+    defaultView.location.href = value.href;
   }
 }

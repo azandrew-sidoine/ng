@@ -30,7 +30,6 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { APP_LINKS } from '../../main-nav';
 import { CommonModule } from '@angular/common';
-import { ViewportModule } from '../../viewport';
 import { VIEW_DIRECTIVES } from '../../view';
 import { Link } from '../../link';
 import { DATA_DIRECTIVES } from '../base';
@@ -57,7 +56,6 @@ type ActionErrorType = {
   standalone: true,
   imports: [
     CommonModule,
-    ViewportModule,
     ...COMMON_PIPES,
     ...VIEW_DIRECTIVES,
     ...DATA_DIRECTIVES,
@@ -75,8 +73,8 @@ export class ViewComponent
   @Input() noHeader: boolean = false;
   @Input() noLogout: boolean = this.route.snapshot.data['noLogout'] ?? false;
   @Input() searchable: boolean = this.route.snapshot.data['searchable'] ?? true;
-  @Input() branding: string = this.route.snapshot.data['branding'];
   @Input() name: string = this.route.snapshot.data['name'];
+  @Input() module: string = this.route.snapshot.data['module'];
   // We resolve pages configuration from router resolve or data
   @Input() config: ConfigType = this.route.snapshot.data['config'];
   @Input() links: Link[] = this.route.snapshot.data['links'];

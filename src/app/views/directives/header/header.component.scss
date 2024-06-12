@@ -1,6 +1,6 @@
 /* Basic tags styles */
 a {
-    touch-action: manipulation;
+  touch-action: manipulation;
 }
 /*! Basic tags styles */
 
@@ -9,46 +9,46 @@ a {
 header,
 :host ::ng-deep .header,
 .header {
-    display: flex;
-    white-space: nowrap;
-    color: var(--header-font-color, #fafafa);
-    background-color: var(--header-bg-color, #333);
-    height: var(--header-height, 3rem);
+  display: flex;
+  white-space: nowrap;
+  color: var(--header-font-color, #fafafa);
+  background-color: var(--header-bg-color, #333);
+  height: var(--header-height, 3rem);
 }
 
 :host ::ng-deep header.header-basic,
 header.header-basic,
 :host ::ng-deep .header.header-basic .header.header-basic {
-    background-color: var(--header-basic-bg-color, #00364d);
+  background-color: var(--header-basic-bg-color, #00364d);
 }
 
 /*! Header container styles */
 .module {
-    margin-left: 1rem;
+  margin-left: 1rem;
 }
 
 .dropdown-toggle {
-    display: inline;
+  display: inline;
 }
 
 /* Header navigation links */
 :host ::ng-deep .nav-link,
 .nav-link {
-    font-size: .8rem !important;
+  font-size: 0.8rem !important;
 }
 
 :host ::ng-deep .links__nav-link,
 .links__nav-link {
-    position: relative;
-    padding: .9rem 1.2rem;
-    color: var(--header-nav-link-font-color, #fff);
-    text-decoration: none;
-    font-weight: 500;
+  position: relative;
+  padding: 0.9rem 1.2rem;
+  color: var(--header-nav-link-font-color, #fff);
+  text-decoration: none;
+  font-weight: 500;
 }
 
 .links__nav-link,
 :host ::ng-deep .links__nav-link .ngx-azl-dropdown-header {
-    opacity: var(--header-nav-link-opacity, 1);
+  opacity: var(--header-nav-link-opacity, 1);
 }
 
 /*! Header navigation links*/
@@ -56,53 +56,88 @@ header.header-basic,
 /* Dropdown menu and dropdown menu items */
 :host ::ng-deep .ngx-azl-dropdown-menu,
 .ngx-azl-dropdown-menu {
-    background: var(--dropdown-nav-bg-color, #fff) !important;
-    border-radius: var(--dropdown-border-radius, 0) !important;
-    margin-top: 0;
-    min-height: 4.2rem;
-    margin-left: -1.2rem;
+  background: var(--dropdown-nav-bg-color, #fff) !important;
+  border-radius: var(--dropdown-border-radius, 0) !important;
+  margin-top: 0;
+  min-height: 4.2rem;
+  margin-left: -1.2rem;
 }
 
 :host ::ng-deep .ngx-azl-dropdown-text,
 .ngx-azl-dropdown-text {
-    border-bottom: none !important;
+  border-bottom: none !important;
 }
-
 
 .ngx-azl-dropdown-text .icon,
 .ngx-azl-dropdown-text svg {
-    margin-left: .5rem;
+  margin-left: 0.5rem;
 }
 
 /*! Dropdown menu and dropdown menu items */
 
 :host ::ng-deep header *[main-nav],
 header *[main-nav] {
-    margin-top: var(---header-icon-margin-top, .5rem);
-    margin-left: var(---header-icon-margin-left, .5rem);
+  margin-top: var(---header-icon-margin-top, 0.5rem);
+  margin-left: var(---header-icon-margin-left, 0.5rem);
 }
 
 :host ::ng-deep .ngx-azl-dropdown.menu .ngx-azl-dropdown-menu,
 :host ::ng-deep .ngx-azl-dropdown-menu.right {
-    margin-top: var(---header-icon-dropdown-margin-top, .4rem);
+  margin-top: var(---header-icon-dropdown-margin-top, 0.4rem);
 }
 
 :host ::ng-deep .ngx-azl-dropdown-menu.right {
-    right: var(--dropdown-menu-right-offset, 0.5rem) !important;
-    left: auto !important;
+  right: var(--dropdown-menu-right-offset, 0.5rem) !important;
+  left: auto !important;
 }
 
 :host ::ng-deep .header-action-dropdown .ngx-azl-dropdown-menu {
-    min-width: 7rem;
-    max-width: 18rem;
-    margin-top: var(--header-action-dropdown-menu-margin-top, .9rem);
+  min-width: 7rem;
+  max-width: 18rem;
+  margin-top: var(--header-action-dropdown-menu-margin-top, 0.9rem);
 }
 
 :host ::ng-deep .ngx-azl-dropdown-menu {
-    padding: var(--header-action-dropdown-menu-padding, .6rem 0);
-    min-height: auto;
+  padding: var(--header-action-dropdown-menu-padding, 0.6rem 0);
+  min-height: auto;
 }
 
 .header-actions-content {
-    display: flex;
+  display: flex;
+}
+
+.branding {
+  display: flex !important;
+  flex: 0 0 auto !important;
+  min-width: var(--header-branding-min-width, 10.2rem) !important;
+  padding: var(--header-branding-padding, 0 1.2rem) !important;
+  height: var(--header-height, 3rem) !important;
+}
+
+.branding .title {
+  color: var(--header-title-color, hsl(198, 0%, 98%));
+  font-weight: var(--clr-header-title-font-weight, bold);
+  font-family: var(
+    --header-title-font-family,
+    Metropolis,
+    "Avenir Next",
+    "Helvetica Neue",
+    Arial,
+    sans-serif
+  );
+  font-size: var(--header-title-font-size, 0.8rem);
+  letter-spacing: var(--header-title-letter-spacing, 0.01em);
+  line-height: var(--header-title-line-height, 3rem);
+  text-decoration: none;
+}
+
+header .header-nav:before {
+  display: inline-block !important;
+  position: absolute !important;
+  content: "";
+  background-color: var(--header-divider-color, hsl(198, 14%, 36%)) !important;
+  height: var(--header-nav-height, calc(36 * calc((1rem / 20) * 1))) !important;
+  width: var(--header-nav-width, calc(1 * (1rem / 20))) !important;
+  top: var(--header-nav-top, calc(12 * calc((1rem / 20) * 1))) !important;
+  left: 0;
 }

@@ -61,10 +61,11 @@ export class HeaderComponent {
     private injector: Injector,
     @Optional()
     @Inject(HEADER_ACTIONS_FACTORY)
-    private headerActions?: HeaderActionsFactory
+    factory?: HeaderActionsFactory
   ) {
-    this.actions$ = this.headerActions
-      ? this.headerActions(this.injector)
-      : of([]);
+    this.actions$ =
+      factory && typeof factory === 'function'
+        ? factory(this.injector)
+        : of([]);
   }
 }

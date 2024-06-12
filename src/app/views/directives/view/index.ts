@@ -1,6 +1,6 @@
 import { ViewComponent } from './view.component';
 
-/** @descriptionView directives */
+/** @descriptionView Exported standalone directives */
 export const VIEW_DIRECTIVES = [ViewComponent] as const;
 
 /** @description Exported angular providers */

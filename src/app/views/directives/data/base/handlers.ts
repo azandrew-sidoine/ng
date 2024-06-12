@@ -5,7 +5,7 @@ import {
   DeleteActionPayload,
   RequestClient,
   UpdateActionPayload,
-} from '../types';
+} from '../core';
 import { Inject, Injectable } from '@angular/core';
 import { REQUEST_CLIENT } from './tokens';
 
@@ -44,7 +44,6 @@ export class UpdateQueryActionHandler<TResult>
     ) as Observable<TResult>;
   }
 }
-
 
 /** @description Create Action handler class declaration */
 @Injectable()

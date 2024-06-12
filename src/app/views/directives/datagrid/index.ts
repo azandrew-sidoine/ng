@@ -4,6 +4,7 @@ export { defaultPaginateQuery } from './defaults';
 export { createDateQueryParamPipe, projectPaginateQuery } from './helpers';
 export { RestQueryType, GridConfigType, DataGridStateType } from './types';
 export { provideDatagridConfig } from './providers';
+export { DATAGRID_CONFIG } from './tokens';
 
 /** Exported standalone directives */
 export const DATAGRID_DIRECTIVES = [DatagridComponent] as const;

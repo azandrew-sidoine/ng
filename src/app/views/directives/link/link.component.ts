@@ -67,8 +67,10 @@ export class LinkComponent {
 
     if (isValidURL(value.href as string)) {
       const { defaultView } = this.document ?? {};
-      const _window = defaultView ?? window;
-      _window.location.href = value.href;
+      if (!defaultView) {
+        throw new Error('window instance is not defined');
+      }
+      defaultView.location.href = value.href;
       return;
     }
 

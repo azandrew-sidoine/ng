@@ -1,27 +1,22 @@
 import { Routes } from '@angular/router';
 import { createAppRoutes } from './views/directives/main-nav';
 import { LINKS } from './routes';
-import { provideUrlConfigResolver } from './views/directives/data';
 
 export const routes: Routes = [
   // Default routes
   {
     path: '',
-    redirectTo: 'dashboard',
+    redirectTo: 'dashboard/home',
     pathMatch: 'full',
   },
 
   // Application routes
-  ...createAppRoutes(
-    LINKS,
-    './views/directives/data/view/routes',
-    provideUrlConfigResolver()
-  ),
+  ...createAppRoutes(LINKS),
 
   // Fallback route
   {
     path: '**',
-    redirectTo: 'dashboard',
+    redirectTo: 'dashboard/home',
     pathMatch: 'full',
   },
 ];

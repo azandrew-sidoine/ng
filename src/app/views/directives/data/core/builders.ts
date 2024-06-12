@@ -1,5 +1,5 @@
 import { map } from 'rxjs';
-import { RestQueryType, SearchableGridColumnType } from '../../datagrid';
+import { RestQueryType } from '../../datagrid';
 import {
   ActionConfigType,
   ActionHandlerType,
@@ -14,7 +14,10 @@ import {
   OrObservable,
   PartialActionConfigType,
 } from './types';
-import { GridDetailColumnType } from '@azlabsjs/ngx-clr-smart-grid';
+import {
+  GridDetailColumnType,
+  SearchableGridColumnType,
+} from '@azlabsjs/ngx-clr-smart-grid';
 
 /** @internal */
 type PipeTransformType = string | ((value: any) => any) | undefined;

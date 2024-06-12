@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { VIEW_DIRECTIVES } from '../../directives/view';
 
 @Component({
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ...VIEW_DIRECTIVES],
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],

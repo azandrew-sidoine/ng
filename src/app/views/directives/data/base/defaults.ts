@@ -1,4 +1,4 @@
-import { ActionType } from '../types';
+import { ActionType } from '../core';
 
 /** @internal Default action definition */
 export const defaultActions: ActionType[] = [

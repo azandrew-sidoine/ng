@@ -5,7 +5,7 @@ import { AppLinks } from './views/directives/main-nav';
 /** @description Application routes definition */
 export const LINKS: AppLinks<DataConfigArgType> = [
   {
-    label: 'app.links.dashboard',
+    label: 'Tableau de board',
     href: '/dashboard/home',
     cssClass: '',
     routeConfig: {
@@ -18,8 +18,8 @@ export const LINKS: AppLinks<DataConfigArgType> = [
     },
   },
   {
-    label: 'app.links.examples',
-    href: '/dashboard/users',
+    label: 'Examples',
+    href: '/dashboard/examples',
     cssClass: '',
     routeConfig: {
       implicit: false,

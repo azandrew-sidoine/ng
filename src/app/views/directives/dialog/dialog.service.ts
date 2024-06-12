@@ -6,22 +6,22 @@ import { DOCUMENT } from '@angular/common';
   providedIn: 'root',
 })
 export class BrowSerDialog implements Dialog {
-  private _defaultView!: Window;
+  private view!: Window;
 
   // class constructor
   constructor(@Inject(DOCUMENT) @Optional() document?: Document) {
     const { defaultView } = document ?? {};
-    this._defaultView = defaultView as Window & typeof globalThis;
+    this.view = defaultView as Window & typeof globalThis;
   }
 
   // confirm implementation
   confirm(message: string): Promise<boolean> {
     if (
-      typeof this._defaultView !== 'undefined' &&
-      this._defaultView !== null
+      typeof this.view !== 'undefined' &&
+      this.view !== null
     ) {
       return new Promise((resolve) => {
-        resolve(this._defaultView.confirm(message));
+        resolve(this.view.confirm(message));
       });
     }
 

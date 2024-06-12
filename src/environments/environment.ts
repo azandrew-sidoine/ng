@@ -35,6 +35,16 @@ export const environment = {
     endpoints: {},
   },
 
+  // TODO: Uncomment the code below to add form configuration values
+  // form: {
+  //   assets: `${env('FORM_ASSETS', '/assets/forms.json')}`
+  // },
+
+  // TODO: Uncomment the code below to provide upload url configuration
+  // upload: {
+  //   url: `${env('UPLOAD_URL')}`
+  // },
+
   // TODO: Uncomment the code below to change the view ui layout
   ui: {
     layout: `${env('UI_LAYOUT', 'default')}`,

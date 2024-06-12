@@ -14,7 +14,6 @@ type SaveAsType = (
   popup?: Window | null
 ) => void;
 
-
 // The one and only way of getting global scope in all environments
 // https://stackoverflow.com/q/3277182/1008999
 const _global: typeof globalThis | Window | undefined =
@@ -262,8 +261,8 @@ function useSaveAs(): SaveAsType {
   };
 }
 
-/** Exporta a default object that provides a `saveAs` method for downloading file resources */
-export default {
+/** @description Export a default object that provides a `saveAs` method for downloading file resources */
+export const SaveAsModule = {
   saveAs: (
     blob: string | Blob | File,
     name: string,

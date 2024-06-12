@@ -1,9 +1,9 @@
-<ngx-view [noHeader]="noHeader" [links]="links" [path]="path" [branding]="branding" [name]="'name' | text : name">
+<ngx-view [noHeader]="noHeader" [links]="links" [path]="path" [name]="name" [name]="'name' | text : module">
     <ngx-data #dataRef [delete-complete-text]="'request.success'|text" [searchable]="searchable"
         [no-padding]="noPadding" [request-complete-text]="'request.success'|text"
         [request-error-text]="'request.error' | text" [update-complete-text]="'request.success' | text"
-        [create-complete-text]="'request.success'|text" [title]="'title' | text : name"
-        [description]="'description' | text : name" [config]="config" [actions]="['update', 'delete', 'create']"
+        [create-complete-text]="'request.success'|text" [title]="'title' | text : module"
+        [description]="'description' | text : module" [config]="config" [actions]="['update', 'delete', 'create']"
         (action-error)="onActionError($event)" (action-result)="onActionResult($event)"
         (performing-action)="onPerformingAction($event)" (detail-change)="onDetailChange($event)"
         (form-error)="onFormError($event)" (form-changes)="onFormChanges($event)" (form-ready)="onFormReady($event)"

@@ -1,36 +1,35 @@
-<ngx-viewport>
-    <clr-main-container [class]="cssClass">
-        <ngx-header *ngIf="!noHeader" [links]="links | sublinks:path" [company]="branding" [module]="name">
-            <ngx-main-nav *ngIf="layout === 'default'" [links]="links | uiLinks" main-nav
-                (urlChange)="onUrlChange($event)"></ngx-main-nav>
-            <ng-template #actions let-actions>
-                <ng-container
-                    *ngTemplateOutlet="actionsRef ?? defaultActionRef; context: {$implicit: actions}"></ng-container>
-            </ng-template>
-            <ng-template #defaultActionRef let-actions>
-                <div class="custom-header-actions">
-                    <ng-content select="[customActions]"></ng-content>
-                </div>
-                <!-- Default view action reference -->
-                <ngx-header-actions [actions]="actions">
-                </ngx-header-actions>
-                <!--\ Default view action reference -->
-            </ng-template>
-        </ngx-header>
-        <div class="content-container">
-            <ng-container *ngIf="layout === 'sidenav'">
-                <ng-container
-                    *ngTemplateOutlet="sidenav ?? defaultSidenavRef; context: {$implicit: (links | uiLinks), ls: (links | uiLinks)}">
-                </ng-container>
-                <ng-template #defaultSidenavRef let-ls="ls">
-                    <ngx-clr-sidenav [avatar]="logo" [uiLinks]="ls" [links]="links" (urlChange)="onUrlChange($event)"></ngx-clr-sidenav>
-                </ng-template>
+<clr-main-container [class]="cssClass">
+    <ngx-header *ngIf="!noHeader" [links]="links | sublinks:path" [name]="name" [module]="module">
+        <ngx-nav *ngIf="layout === 'default'" [links]="links | uiLinks" main-nav
+            (urlChange)="onUrlChange($event)"></ngx-nav>
+        <ng-template #actions let-actions>
+            <ng-container
+                *ngTemplateOutlet="actionsRef ?? defaultActionRef; context: {$implicit: actions}"></ng-container>
+        </ng-template>
+        <ng-template #defaultActionRef let-actions>
+            <div class="custom-header-actions">
+                <ng-content select="[customActions]"></ng-content>
+            </div>
+            <!-- Default view action reference -->
+            <ngx-header-actions [actions]="actions">
+            </ngx-header-actions>
+            <!--\ Default view action reference -->
+        </ng-template>
+    </ngx-header>
+    <div class="content-container">
+        <ng-container *ngIf="layout === 'sidenav'">
+            <ng-container
+                *ngTemplateOutlet="sidenav ?? defaultSidenavRef; context: {$implicit: (links | uiLinks), ls: (links | uiLinks)}">
             </ng-container>
-            <main class="content-area">
-                <div class="viewport-content">
-                    <ng-content></ng-content>
-                </div>
-            </main>
-        </div>
-    </clr-main-container>
-</ngx-viewport>
+            <ng-template #defaultSidenavRef let-ls="ls">
+                <ngx-clr-sidenav [avatar]="logo" [uiLinks]="ls" [links]="links"
+                    (urlChange)="onUrlChange($event)"></ngx-clr-sidenav>
+            </ng-template>
+        </ng-container>
+        <main class="content-area">
+            <div class="viewport-content">
+                <ng-content></ng-content>
+            </div>
+        </main>
+    </div>
+</clr-main-container>

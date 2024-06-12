@@ -44,10 +44,10 @@ export class HeaderComponent {
   // #endregion Component projected contents
 
   // #region Component inputs
-  @Input({ alias: 'branding' }) brandingRef!: TemplateRef<unknown>;
+  @Input({ alias: 'branding' }) branding!: TemplateRef<unknown>;
   @Input() links: Link[] | null = [];
   @Input({ alias: 'class' }) cssClass!: string | undefined;
-  @Input({ alias: 'company' }) company!: string | undefined | null;
+  @Input() name!: string | null;
   @Input({ alias: 'module' }) module!: string;
   @Input() actions: HeaderAction[] = [];
   // #endregion Component inputs

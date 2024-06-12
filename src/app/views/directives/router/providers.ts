@@ -12,6 +12,7 @@ import {
 } from '@angular/router';
 import { NAVIGATE_HANDLER_FACTORY, URL_CHANGES_FACTORY } from './tokens';
 import { filter, map } from 'rxjs';
+import { RouterEventsListener } from './router-events';
 
 /** @description Provides navigate handler implementation for angular default Router */
 export function provideRouterNavigate() {
@@ -76,5 +77,13 @@ export function provideRouterChanges() {
         );
     },
     deps: [],
+  } as Provider;
+}
+
+/** @description Provides angular router events */
+export function provideRouterEvents() {
+  return {
+    provide: RouterEventsListener,
+    useClass: RouterEventsListener,
   } as Provider;
 }

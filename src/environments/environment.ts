@@ -35,6 +35,11 @@ export const environment = {
     endpoints: {},
   },
 
+  // TODO: Uncomment the code below to change the view ui layout
+  ui: {
+    layout: `${env('UI_LAYOUT', 'default')}`,
+  },
+
   // #TODO: Add authentication configuration if required
   // auth: {
   //   local: {

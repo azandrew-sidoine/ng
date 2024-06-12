@@ -6,12 +6,7 @@ export { ListComponent } from './list';
 export { FormComponent } from './form';
 export { DataComponent } from './base';
 export { ViewComponent } from './view';
-export {} from './rx';
 export { canDeactivateComponent } from './guards';
-export {
-  GridDetailColumnType,
-  GridDetailColumnTypes,
-} from '@azlabsjs/ngx-clr-smart-grid';
 export {
   ConfigType,
   ActionsConfigType,
@@ -40,7 +35,15 @@ export {
   DataConfigArgType,
   BuiltTypeArgType,
   ArgType,
+  columsTranslatorFactory,
 } from './core';
+
+export {
+  /** @deprecated use `GridDetailColumnType` from `@azlabsjs/ngx-clr-smart-grid` */
+  GridDetailColumnType,
+  /** @deprecated use `GridDetailColumnTypes` from `@azlabsjs/ngx-clr-smart-grid` */
+  GridDetailColumnTypes,
+} from '@azlabsjs/ngx-clr-smart-grid';
 
 export {
   provideViewConfigs,

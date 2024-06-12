@@ -15,7 +15,7 @@ import { DROPDOWN_DIRECTIVES } from '@azlabsjs/ngx-dropdown';
 @Component({
   standalone: true,
   imports: [CommonModule, ...DROPDOWN_DIRECTIVES, ...LINK_DIRECTIVE],
-  selector: 'ngx-main-nav',
+  selector: 'ngx-nav',
   templateUrl: './main-nav.component.html',
   styleUrls: ['./main-nav.component.scss'],
 })

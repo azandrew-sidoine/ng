@@ -5,6 +5,7 @@ import {
   ChangeDetectorRef,
   Component,
   ContentChild,
+  HostBinding,
   Inject,
   Input,
   OnDestroy,
@@ -14,7 +15,6 @@ import {
 import { HEADER_DIRECTIVES } from '../header';
 import { APP_LINKS, MAIN_NAV_DIRECTIVES } from '../main-nav';
 import { HEADER_ACTIONS_DIRECTIVES } from '../header/actions';
-import { ViewportModule } from '../viewport';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import {
   Observable,
@@ -36,7 +36,6 @@ import { LINK_DIRECTIVE, Link } from '../link';
 @Component({
   imports: [
     CommonModule,
-    ViewportModule,
     ClarityModule,
     RouterModule,
     ...HEADER_ACTIONS_DIRECTIVES,
@@ -53,10 +52,18 @@ import { LINK_DIRECTIVE, Link } from '../link';
 })
 export class ViewComponent implements AfterViewInit, OnDestroy {
   // #region Component children
+  @HostBinding('class.viewport') viewport = true;
   @ContentChild('actions') actionsRef!: TemplateRef<unknown>;
   // #endregion List component children
 
   // #region Component inputs
+  @Input() name = this.appMetadata?.name ?? null;
+  @Input() logo = this.appMetadata?.logo;
+  @Input() module: string = this.route.snapshot.data['module'];
+  @Input() noHeader: boolean = false;
+  @Input() links: Link[] = this.route.snapshot.data['links'];
+  @Input() cssClass: string = '';
+  @Input() sidenav!: TemplateRef<any> | null;
   private _path!: string;
   @Input() set path(value: string) {
     this._path = value;
@@ -64,13 +71,6 @@ export class ViewComponent implements AfterViewInit, OnDestroy {
   get path() {
     return this._path;
   }
-  @Input() branding = this.appMetadata?.branding;
-  @Input() logo = this.appMetadata?.logo;
-  @Input() name: string = this.route.snapshot.data['name'];
-  @Input() noHeader: boolean = false;
-  @Input() links: Link[] = this.route.snapshot.data['links'];
-  @Input() cssClass: string = '';
-  @Input() sidenav!: TemplateRef<any> | null;
   // #endregion Component inputs
 
   // #region Component internal properties

@@ -1,3 +1,21 @@
+:host(.viewport) {
+  display: block;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  flex: 1 1 auto;
+  background: var(--viewport-background, #fff);
+}
+
+:host(.viewport) clr-main-container {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  min-height: 0.05rem;
+}
+
 :host ::ng-deep .main-container .content-container .content-area,
 .main-container .content-container .content-area {
   padding: var(--content-area-padding, 0) !important;

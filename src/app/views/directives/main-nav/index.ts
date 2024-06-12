@@ -6,19 +6,13 @@ export const MAIN_NAV_DIRECTIVES = [MainNavComponent] as const;
 /**
  * Exported angular providers
  */
-export {
-  /** @deprecated */
-  provideAppLinks as provideHeaderLinks,
-  provideAppLinks,
-} from './providers';
+export { provideAppLinks } from './providers';
 
 /**
  * Exported type declarations
  */
 export {
-  Link,
   ScopedLink,
-  UILink,
   /** @deprecated */
   AppLink as HeaderLink,
   /**@deprecated */
@@ -29,3 +23,6 @@ export {
 } from './types';
 
 export { APP_LINKS } from './tokens';
+
+/** Factory function for creating application routes */
+export { createAppRoutes } from './helpers';

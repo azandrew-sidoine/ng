@@ -43,3 +43,4 @@ export {
   ArgType,
 } from './builders';
 export { actionPipeline$ } from './rx';
+export { columsTranslatorFactory } from './helpers';

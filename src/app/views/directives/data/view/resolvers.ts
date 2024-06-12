@@ -113,8 +113,8 @@ export const provideUrlConfigResolver =
   (url?: string): ResolveFn<ConfigType | null> =>
   (_: ActivatedRouteSnapshot) => {
     try {
-      const pageConfigs = inject(VIEWS_CONFIG);
-      return pageConfigs.pipe(
+      const observable$ = inject(VIEWS_CONFIG);
+      return observable$.pipe(
         map((item) => {
           const _path = _.url.join('/');
 

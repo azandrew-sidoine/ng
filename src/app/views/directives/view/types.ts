@@ -18,7 +18,7 @@ export const VIEW_LAYOUT = new InjectionToken<ViewLayout>(
 export type AppMetadataType = {
   logo?: string;
   primaryColor?: string;
-  branding?: string;
+  name?: string;
   version?: string;
 };
 

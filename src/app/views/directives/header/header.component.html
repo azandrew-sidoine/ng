@@ -1,7 +1,7 @@
 <header [class]="cssClass ?? 'header-basic'">
     <ng-content select="[main-nav]"></ng-content>
     <div class="branding">
-        <ng-container *ngTemplateOutlet="brandingRef ?? defaultBrandingRef"></ng-container>
+        <ng-container *ngTemplateOutlet="branding ?? defaultBrandingRef"></ng-container>
     </div>
     <div class="header-nav">
         <ng-container *ngTemplateOutlet="navRef ?? defaultNavRef"></ng-container>
@@ -21,7 +21,7 @@
 </header>
 
 <ng-template #defaultBrandingRef>
-    <span *ngIf="company" class="company title">{{ company }}</span>
+    <span *ngIf="name" class="company title">{{ name }}</span>
     <span *ngIf="module" class="module title"> {{ module }}</span>
 </ng-template>
 

@@ -1,21 +1,12 @@
 import { Injector } from '@angular/core';
 import { Route } from '@angular/router';
-import { Link as BaseLink, UILink as BaseUILink} from '../link';
+import { Observable } from 'rxjs';
 
 /**
  * Navigation link property type declaration
  * @internal
  */
 export type HRefType = string | ((injector: Injector) => void | Promise<void>);
-
-/**
- * @deprecated
- * 
- * @internal
- * 
- * Top bar links type declarations
- */
-export type Link =  BaseLink;
 
 /**
  * @internal
@@ -29,13 +20,6 @@ export type ScopedLink = {
   cssClass?: string;
   links?: ScopedLink[];
 };
-
-/**
- * @deprecated
- * 
- * @internal
- */
-export type UILink = BaseUILink;
 
 /**
  * Header link type declaration for link
@@ -53,7 +37,17 @@ export type AppLink<T = { [prop: string]: unknown }> = {
   };
 };
 
-/**
- * Type declaration for header links
- */
+/** @description Type declaration for header links */
 export type AppLinks<T = { [prop: string]: unknown }> = AppLink<T>[];
+
+/** @internal */
+export type AuthFactory = (injector: Injector) => {
+  signInState$: Observable<{
+    scopes: string[];
+  }>;
+};
+
+/** @internal */
+export type TranslationFactory = (injector: Injector) => {
+  get: (p: string | string[]) => Observable<{ [prop: string]: any }>;
+};

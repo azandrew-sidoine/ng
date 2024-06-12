@@ -3,7 +3,7 @@ import { HeaderComponent } from './header.component';
 import { HeaderNavLinkComponent } from './nav/nav-link.component';
 import { HeaderNavComponent } from './nav/nav.component';
 
-// Export standalone directives
+/** Exported standalone directives */
 export const HEADER_DIRECTIVES = [
   HeaderComponent,
   HeaderActionsComponent,
@@ -11,5 +11,5 @@ export const HEADER_DIRECTIVES = [
   HeaderNavLinkComponent,
 ] as const;
 
-// Exported providers
-export { provideHeaderActions } from './actions';
+/** Exported angular providers */
+export { provideHeaderActions } from './providers';

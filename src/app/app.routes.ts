@@ -16,15 +16,6 @@ export const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () => import('./views/login/ui/routes'),
-    data: {
-      path: (injector: Injector) => {
-        // Passed in as second parameter
-        // _: SignInResultInterface
-        // TODO: update the code is dashboard might change based on user's privileges
-        return injector.get(Router).navigateByUrl('/dashboard/home');
-      },
-      moduleName: environment.name,
-    },
   },
 
   // Application routes

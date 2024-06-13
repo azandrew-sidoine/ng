@@ -82,6 +82,7 @@ import {
 } from './views/login';
 import { DOCUMENT_SESSION_STORAGE, StorageModule } from '@azlabsjs/ngx-storage';
 import { UI_STATE_CONTROLLER } from './views/directives/ui-action';
+import { provideUIMetadata } from './views/login/ui';
 // TODO: Uncomment the code below to import query library HTTP client provider
 // import { provideQueryClient } from './views/helpers';
 
@@ -321,5 +322,18 @@ export const PROVIDERS = [
       // authClientConfigProvider: () => ({ ...environment.auth.local.clients }),
     })
   ),
+  provideUIMetadata({
+    dashboard: (injector: Injector) => {
+      // Passed in as second parameter
+      // _: SignInResultInterface
+      // TODO: update the code is dashboard might change based on user's privileges
+      return injector.get(Router).navigateByUrl('/dashboard/home');
+    },
+    name: environment.name,
+    company: 'LIKSOFT',
+    remember: false,
+    logo: 'assets/media/logo.png',
+    description: ''
+  }),
   provideRedirectUrl(environment.auth.redirect.url ?? '/auth/login'),
 ];

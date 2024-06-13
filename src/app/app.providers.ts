@@ -1,8 +1,27 @@
-import { Injector, LOCALE_ID, inject } from '@angular/core';
+import {
+  Injector,
+  LOCALE_ID,
+  importProvidersFrom,
+  inject,
+} from '@angular/core';
 import { provideHeaderActions } from './views/directives/header';
 import { DIALOG, provideDialog } from './views/directives/dialog';
 import { Router } from '@angular/router';
-import { firstValueFrom, lastValueFrom } from 'rxjs';
+import {
+  BehaviorSubject,
+  Subject,
+  filter,
+  finalize,
+  first,
+  firstValueFrom,
+  lastValueFrom,
+  map,
+  mergeMap,
+  of,
+  take,
+  takeUntil,
+  tap,
+} from 'rxjs';
 import {
   providePreferredCountries,
   provideSupportedCountries,
@@ -26,7 +45,11 @@ import {
   provideTranslations,
   useOptionsInterceptor,
 } from '@azlabsjs/ngx-clr-form-control';
-import { provideCommonStrings, providePipes } from '@azlabsjs/ngx-common';
+import {
+  CommonTextPipe,
+  provideCommonStrings,
+  providePipes,
+} from '@azlabsjs/ngx-common';
 import {
   provideFormsInitialization,
   provideFormsLoader,
@@ -37,11 +60,28 @@ import {
   provideCacheConfig,
   provideQueryClient,
 } from '@azlabsjs/ngx-options-input';
+import {
+  TranslateLoader,
+  TranslateModule,
+  TranslateService,
+  TranslationChangeEvent,
+} from '@ngx-translate/core';
+import {
+  HttpClient,
+  provideHttpClient as ngProvideHttpClient,
+} from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { JSObject } from '@azlabsjs/js-object';
+import { useTranslationsFactory } from './translations';
 // TODO: Uncomment the code below to import query library HTTP client provider
 // import { provideQueryClient } from './views/helpers';
 
 /** @internal */
 type AuthHandlerType = { signOut: (revoke: boolean) => any };
+
+export function createTranslateLoader() {
+  return new TranslateHttpLoader(inject(HttpClient), './assets/i18n/', '.json');
+}
 
 /** Exported list of application level providers */
 export const PROVIDERS = [
@@ -52,6 +92,20 @@ export const PROVIDERS = [
       return defaultView ? defaultView.navigator.language : 'fr-FR';
     },
   },
+
+  // Register translation library providers
+  importProvidersFrom(
+    TranslateModule.forRoot({
+      defaultLanguage: 'fr',
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+      },
+    })
+  ),
+
+  // Provides tokens from Ng HTTP library
+  ngProvideHttpClient(),
 
   /** provides injection tokens for navigation handler */
   provideRouterNavigate(),
@@ -125,9 +179,11 @@ export const PROVIDERS = [
   provideDialog(),
 
   // TODO: Uncomment the code below to add custom pipes used in transform pipe
-  // providePipes({
-  //   pipes: {},
-  // }),
+  providePipes({
+    pipes: {
+      text: CommonTextPipe,
+    },
+  }),
 
   // Forms API providers
   provideFormsLoader(),
@@ -168,30 +224,19 @@ export const PROVIDERS = [
   ),
 
   // TODO: Add ngx-common module application texts loader
-  provideCommonStrings({}),
+  provideCommonStrings(
+    useTranslationsFactory((values) => {
+      return { ...(values['app'] ?? {}), auth: values['auth'] ?? {} };
+    })
+  ),
 
   // TODO: Uncomment the code below to override default input validation message
-  // provideTranslations({
-  //   loadingText: 'Chargement en cours...',
-  //   validation: {
-  //     minlength:
-  //       'La longueur minimal du champ est de {{requiredLength}}',
-  //     maxlength:
-  //       'La longueur maximale du champ est de {{requiredLength}}',
-  //     maxLength: 'La longueur maximale du champ est de {{value}}',
-  //     minLength: 'La longueur minimal du champ est de {{value}}',
-  //     invalid: 'La valeur du champ est invalide',
-  //     required: 'Le champ est requis',
-  //     unique: 'La valeur de ce champ est déja existante',
-  //     email: 'La valeur de ce champ doit être un adresse mail valid [example@email.com]',
-  //     pattern: 'La valeur du champ est invalide',
-  //     min: 'La valeur minimal du champ est de {{value}}',
-  //     max: 'La valeur maximal du champ est de {{value}}',
-  //     phone: 'Veuillez saisir un numéro de téléphone valid',
-  //     minDate: 'Veuillez saisir une date ultérieure à la date du {{date}}',
-  //     maxDate: 'Veuillez saisir une date antérieure à la date du {{date}}',
-  //     exists: 'La valeur du champ n\'existe pas dans la dans la base de données',
-  //     equals: 'La valeur du champ {{value}} ne correspond pas à la valeur saisie',
-  //   },
-  // })
+  provideTranslations(
+    useTranslationsFactory((values) => {
+      return {
+        validation: JSObject.getProperty(values, 'app.validation'),
+        loadingText: JSObject.getProperty(values, 'app.events.loading'),
+      };
+    })
+  ),
 ];

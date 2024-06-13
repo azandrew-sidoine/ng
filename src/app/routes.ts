@@ -5,7 +5,7 @@ import { AppLinks } from './views/directives/main-nav';
 /** @description Application routes definition */
 export const LINKS: AppLinks<DataConfigArgType> = [
   {
-    label: 'Tableau de board',
+    label: 'links.dashboard',
     href: '/dashboard/home',
     cssClass: '',
     routeConfig: {
@@ -13,12 +13,11 @@ export const LINKS: AppLinks<DataConfigArgType> = [
       loadChildren: () => import('./views/modules/dashboard/routes'),
       data: {
         name: environment.name,
-      },
-      providers: [],
+      }
     },
   },
   {
-    label: 'Examples',
+    label: 'links.examples',
     href: '/dashboard/examples',
     cssClass: '',
     routeConfig: {
@@ -26,8 +25,7 @@ export const LINKS: AppLinks<DataConfigArgType> = [
       loadChildren: () => import('./views/modules/example/routes'),
       data: {
         name: environment.name,
-      },
-      providers: [],
+      }
     },
   },
 ];

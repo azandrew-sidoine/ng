@@ -1,0 +1,95 @@
+{
+    "app": {
+        "actions": {
+            "refresh": "Actualiser",
+            "create": "Nouveau",
+            "update": "Modifier",
+            "delete": "Supprimer",
+            "back": "Retour",
+            "submit": "Soumettre",
+            "deactivate": "Désactiver",
+            "activate": "Activer",
+            "logout": "Se Déconnecter",
+            "detail": "Détail",
+            "export": "Exporter",
+            "validate": "Valider",
+            "reject": "Rejeter",
+            "download": "Télécharger",
+            "synchronize": "Synchronizer"
+        },
+        "prompt": {
+            "logout": "Vous êtes sur le point de vous déconnecter, veuillez confirmer pour poursuivre...",
+            "delete": "Veuillez confirmer la suppression pour poursuivre",
+            "confirm": "Veuillez cliquer sur le button de confirmation pour poursuivre"
+        },
+        "datagrid": {
+            "placeholder": "Nous n'avons touver aucune données!",
+            "loading": "Chargement en cours, veuillez patienter ...",
+            "error": "Erreur de chargement des données ..."
+        },
+        "constraints": {
+            "gte": "La valeur saisie doit être supérieure ou égale à [value]",
+            "lte": "La valeur saisie doit être inférieure ou égale à [value]",
+            "gt": "La valeur saisie doit être supérieure à [value]",
+            "lt": "La valeur saisie doit être inférieure à [value]",
+            "eq": "La valeur saisie doit être égale à [value]",
+            "maxLength": "La longeur maximale du texte doit être de [value]",
+            "minLength": "La longeur minimale du texte doit être de [value]",
+            "required": "Ce champ est requis",
+            "max": "La valeur saisie doit être inférieure ou égale à [value]",
+            "min": "La valeur saisie doit être supérieure ou égale à [value]"
+        },
+        "links": {
+            "dashboard": "Tableau de bord",
+            "examples": "Examples"
+        },
+        "modules": {},
+        "events": {
+            "loading": "Chargement en cours...",
+            "error": "Une erreur est survenue lors de l'exécution de la requête. Veuillez consulter les logs pour en savoir plus.",
+            "ok": "La requête est effectuée avec succès!",
+            "pending": "Chargement des données, veuillez patienter..."
+        },
+        "validation": {
+            "minlength": "La longueur minimal du champ est de {{requiredLength}}",
+            "maxlength": "La longueur maximale du champ est de {{requiredLength}}",
+            "maxLength": "La longueur maximale du champ est de {{value}}",
+            "minLength": "La longueur minimal du champ est de {{value}}",
+            "invalid": "La valeur du champ est invalide",
+            "required": "Le champ est requis",
+            "unique": "La valeur de ce champ est déja existante",
+            "email": "La valeur de ce champ doit être un adresse mail valid [example@email.com]",
+            "pattern": "La valeur du champ est invalide",
+            "min": "La valeur minimal du champ est de {{value}}",
+            "max": "La valeur maximal du champ est de {{value}}",
+            "phone": "Veuillez saisir un numéro de téléphone valid",
+            "minDate": "Veuillez saisir une date ultérieure à la date du {{date}}",
+            "maxDate": "Veuillez saisir une date antérieure à la date du {{date}}",
+            "exists": "La valeur du champ n'existe pas dans la dans la base de données",
+            "equals": "La valeur du champ {{value}} ne correspond pas à la valeur saisie"
+        }
+    },
+    "auth": {
+        "login": {
+            "username": {
+                "label": "Identifiant",
+                "placeholder": "..."
+            },
+            "password": {
+                "label": "Mot de passe",
+                "placeholder": "..."
+            },
+            "remember": {
+                "label": "Se souvenir de moi"
+            },
+            "loginBtnText": "Se Connecter",
+            "authenticationFailed": "L'authentification a échoué, veuillez vérifier vos crédentiels et réessayer.",
+            "authorizationError": "Erreur d'autorisation, Vous avez pas accès a cet application",
+            "authenticating": "Authentification, veuillez patienter...",
+            "loginMaintext": "Bienvenue sur",
+            "loginSubText": "Accédez à votre espace de travail",
+            "successful": "Vous êtes connecté avec succès. Redirection...",
+            "registerBtnText": "Créer un Compte"
+        }
+    }
+}

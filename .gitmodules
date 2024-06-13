@@ -1,3 +1,6 @@
 [submodule "src/app/views/login"]
 	path = src/app/views/login
 	url = git@github.com:azandrew-sidoine/drewlabs-clarity-login-component.git
+[submodule "src/app/views/themes"]
+	path = src/app/views/themes
+	url = git@github.com:liksoft/liksoft-themes.git

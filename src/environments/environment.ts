@@ -30,7 +30,7 @@ export const environment = {
   // Application name environment value
   name: env('APP_NAME', 'Angular App'),
   api: {
-    host: `${env('API_URL')}/api/v2`,
+    host: `${env('API_URL')}`,
     // HTTP API endpoints environment configuration
     endpoints: {},
   },
@@ -45,28 +45,25 @@ export const environment = {
   //   url: `${env('UPLOAD_URL')}`
   // },
 
-  // TODO: Uncomment the code below to change the view ui layout
   ui: {
     layout: `${env('UI_LAYOUT', 'default')}`,
   },
 
-  // #TODO: Add authentication configuration if required
-  // auth: {
-  //   local: {
-  //     host: `${env('AUTH_URL')}`,
-  //     clients: {
-  //       id: `${env('AUTH_CLIENT')}`,
-  //       secret: `${env('AUTH_CLIENT_TOKEN')}`,
-  //     },
-  //   },
-  //   redirect: {
-  //     url: `${env('REDIRECT_URL', '/auth/login')}`,
-  //   },
-  // },
+  auth: {
+    local: {
+      host: `${env('AUTH_URL', 'http://127.0.0.1:3000')}`,
+      clients: {
+        id: `${env('AUTH_CLIENT')}`,
+        secret: `${env('AUTH_CLIENT_TOKEN')}`,
+      },
+    },
+    redirect: {
+      url: `${env('REDIRECT_URL', '/auth/login')}`,
+    },
+  },
 
-  // #TODO: Uncomment code below to add configuration for secure storage module
-  // storage: {
-  //   secret: `${env('STORAGE_SECRET')}`,
-  //   prefix: `${env('STORAGE_PREFIX')}`,
-  // },
+  storage: {
+    secret: `${env('STORAGE_SECRET', 'MySecret')}`,
+    prefix: `${env('STORAGE_PREFIX', 'App')}`,
+  },
 };

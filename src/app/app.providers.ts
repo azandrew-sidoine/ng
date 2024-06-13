@@ -73,6 +73,15 @@ import {
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { JSObject } from '@azlabsjs/js-object';
 import { useTranslationsFactory } from './translations';
+import {
+  AUTH_SERVICE,
+  AuthStrategies,
+  LoginModule,
+  provideRedirectUrl,
+  useLocalStrategy,
+} from './views/login';
+import { DOCUMENT_SESSION_STORAGE, StorageModule } from '@azlabsjs/ngx-storage';
+import { UI_STATE_CONTROLLER } from './views/directives/ui-action';
 // TODO: Uncomment the code below to import query library HTTP client provider
 // import { provideQueryClient } from './views/helpers';
 
@@ -151,8 +160,7 @@ export const PROVIDERS = [
             return;
           }
 
-          // TODO: Provide integration of Auth service module
-          let auth!: AuthHandlerType | null; // i.get(AUTH_SERVICE)
+          let auth: AuthHandlerType | null | undefined = i?.get(AUTH_SERVICE);
           // Logout application user
           if (auth) {
             await lastValueFrom(auth.signOut(true));
@@ -239,4 +247,77 @@ export const PROVIDERS = [
       };
     })
   ),
+
+  // Storage
+  importProvidersFrom(StorageModule.forRoot({
+    prefix: environment.storage.prefix,
+    secret: environment.storage.secret
+  })),
+
+  // Login
+  importProvidersFrom(
+    LoginModule.forRoot({
+      handleActions: (injector: Injector) => {
+        return {
+          success: async () => {
+            // const message = await firstValueFrom(
+            //   injector
+            //     .get(COMMON_STRINGS)
+            //     .pipe(map((state) => state.successful))
+            // );
+            // injector.get(UI_STATE_CONTROLLER).endAction(message, 'success');
+          },
+          failure: async () => {
+            // const message = await firstValueFrom(
+            //   injector
+            //     .get(COMMON_STRINGS)
+            //     .pipe(map((state) => state.authenticationFailed))
+            // );
+            // injector.get(UI_STATE_CONTROLLER).endAction(message, 'bad-request');
+          },
+          error: async (err: unknown) => {
+            injector
+              .get(UI_STATE_CONTROLLER)
+              .endAction('Request Error!', 'request-error');
+          },
+          // performingAction: () => {},
+          logout: (injector: Injector) => {
+            // TODO: Provide implementation that is called on logout
+          },
+        };
+      },
+      authConfigProvider: (injector: Injector) => {
+        return {
+          strategies: [
+            {
+              id: AuthStrategies.LOCAL,
+              strategy: useLocalStrategy({
+                client: injector.get(HttpClient),
+                host: environment.auth.local.host,
+                storage: injector.get(DOCUMENT_SESSION_STORAGE),
+                endpoints: {
+                  users: 'api/v2/user',
+                  signIn: 'api/v2/login',
+                  signOut: 'api/v2/logout',
+                },
+                // TODO: Provide an authentication driver if required
+                // driver: 'legacy',
+                // TODO: Provide auth result callback if required
+                // authResultCallback: (
+                //   result: Partial<SignInResultInterface>
+                // ) => {
+                //   // TODO: Provide a sign in state interceptor implementation
+                //   // The interceptor must return true for the sign in to continue
+                //   return true;
+                // },
+              }),
+            },
+          ],
+          autoLogin: true,
+        };
+      },
+      // authClientConfigProvider: () => ({ ...environment.auth.local.clients }),
+    })
+  ),
+  provideRedirectUrl(environment.auth.redirect.url ?? '/auth/login'),
 ];

@@ -82,7 +82,9 @@
             "remember": {
                 "label": "Se souvenir de moi"
             },
-            "loginBtnText": "Se Connecter",
+            "submit": {
+                "text": "Se Connecter"
+            },
             "authenticationFailed": "L'authentification a échoué, veuillez vérifier vos crédentiels et réessayer.",
             "authorizationError": "Erreur d'autorisation, Vous avez pas accès a cet application",
             "authenticating": "Authentification, veuillez patienter...",

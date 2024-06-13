@@ -33,6 +33,7 @@
     "@azlabsjs/ngx-intl-tel-input": "^0.17.0",
     "@azlabsjs/ngx-options-input": "^0.17.0",
     "@azlabsjs/ngx-smart-form": "^0.17.0",
+    "@azlabsjs/ngx-storage": "^0.17.4",
     "@azlabsjs/requests": "^0.2.4",
     "@azlabsjs/rx-query": "^0.2.13",
     "@azlabsjs/smart-form-core": "^0.2.19",

@@ -234,7 +234,7 @@ export const PROVIDERS = [
   // TODO: Add ngx-common module application texts loader
   provideCommonStrings(
     useTranslationsFactory((values) => {
-      return { ...(values['app'] ?? {}), auth: values['auth'] ?? {} };
+      return { ...(values['app'] ?? {}), ...(values['auth'] ?? {}) };
     })
   ),
 
@@ -249,10 +249,12 @@ export const PROVIDERS = [
   ),
 
   // Storage
-  importProvidersFrom(StorageModule.forRoot({
-    prefix: environment.storage.prefix,
-    secret: environment.storage.secret
-  })),
+  importProvidersFrom(
+    StorageModule.forRoot({
+      prefix: environment.storage.prefix,
+      secret: environment.storage.secret,
+    })
+  ),
 
   // Login
   importProvidersFrom(

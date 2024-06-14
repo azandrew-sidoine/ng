@@ -9,7 +9,7 @@
                 <ng-template #linkRef let-item let-handleClick="handleClick">
                     <a (click)="handleClick($event, item)" [class]="item.cssClass ?? ''"
                         class="dropdown__nav-link_item">
-                        <span>{{ item.label | uppercase }}</span>
+                        <span>{{ item.label | text | uppercase }}</span>
                     </a>
                 </ng-template>
             </ngx-link>

@@ -11,17 +11,23 @@ import { CommonModule } from '@angular/common';
 import { LINK_DIRECTIVE, UILink } from '../link';
 import { URLChanges } from '../router';
 import { DROPDOWN_DIRECTIVES } from '@azlabsjs/ngx-dropdown';
+import { COMMON_PIPES } from '@azlabsjs/ngx-common';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, ...DROPDOWN_DIRECTIVES, ...LINK_DIRECTIVE],
+  imports: [
+    CommonModule,
+    ...COMMON_PIPES,
+    ...DROPDOWN_DIRECTIVES,
+    ...LINK_DIRECTIVE,
+  ],
   selector: 'ngx-nav',
   templateUrl: './main-nav.component.html',
   styleUrls: ['./main-nav.component.scss'],
 })
 export class MainNavComponent implements OnDestroy, AfterViewInit {
   // #region Component inputs
-  @Input({alias: 'icon-size'}) iconSize: number = 36;
+  @Input({ alias: 'icon-size' }) iconSize: number = 36;
   @Input() links: UILink[] = [];
   /**
    * Before update url function controls wether the url should be updated by the internal router

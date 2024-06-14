@@ -85,7 +85,7 @@
             "submit": {
                 "text": "Se Connecter"
             },
-            "authenticationFailed": "L'authentification a échoué, veuillez vérifier vos crédentiels et réessayer.",
+            "failed": "L'authentification a échoué, veuillez vérifier vos crédentiels et réessayer.",
             "authorizationError": "Erreur d'autorisation, Vous avez pas accès a cet application",
             "authenticating": "Authentification, veuillez patienter...",
             "loginMaintext": "Bienvenue sur",

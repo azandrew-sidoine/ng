@@ -2,7 +2,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { ReactiveUIStateControllerType, UIActionState, UIState } from './types';
 import { Injectable } from '@angular/core';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ReactiveUIStateController
   implements ReactiveUIStateControllerType<UIActionState>
 {

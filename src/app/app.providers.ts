@@ -9,6 +9,7 @@ import { DIALOG, provideDialog } from './views/directives/dialog';
 import { Router } from '@angular/router';
 import {
   BehaviorSubject,
+  Observable,
   Subject,
   filter,
   finalize,
@@ -46,6 +47,7 @@ import {
   useOptionsInterceptor,
 } from '@azlabsjs/ngx-clr-form-control';
 import {
+  COMMON_STRINGS,
   CommonTextPipe,
   provideCommonStrings,
   providePipes,
@@ -81,7 +83,10 @@ import {
   useLocalStrategy,
 } from './views/login';
 import { DOCUMENT_SESSION_STORAGE, StorageModule } from '@azlabsjs/ngx-storage';
-import { UI_STATE_CONTROLLER } from './views/directives/ui-action';
+import {
+  UI_STATE_CONTROLLER,
+  provideUIStateControllers,
+} from './views/directives/ui-action';
 import { provideUIMetadata } from './views/login/ui';
 // TODO: Uncomment the code below to import query library HTTP client provider
 // import { provideQueryClient } from './views/helpers';
@@ -102,6 +107,9 @@ export const PROVIDERS = [
       return defaultView ? defaultView.navigator.language : 'fr-FR';
     },
   },
+
+  // UI state
+  provideUIStateControllers(),
 
   // Register translation library providers
   importProvidersFrom(
@@ -263,20 +271,41 @@ export const PROVIDERS = [
       handleActions: (injector: Injector) => {
         return {
           success: async () => {
-            // const message = await firstValueFrom(
-            //   injector
-            //     .get(COMMON_STRINGS)
-            //     .pipe(map((state) => state.successful))
-            // );
-            // injector.get(UI_STATE_CONTROLLER).endAction(message, 'success');
+            const SIGNED_IN_TEXT =
+              'Vous êtes connecté avec succès. Redirection...';
+            const message = await firstValueFrom(
+              injector
+                .get(COMMON_STRINGS)
+                .pipe(
+                  map(
+                    (state) =>
+                      JSObject.getProperty(
+                        state,
+                        'auth.login.successful'
+                      ) as string
+                  )
+                )
+            );
+            injector
+              .get(UI_STATE_CONTROLLER)
+              .endAction(message ?? SIGNED_IN_TEXT, 'success');
           },
           failure: async () => {
-            // const message = await firstValueFrom(
-            //   injector
-            //     .get(COMMON_STRINGS)
-            //     .pipe(map((state) => state.authenticationFailed))
-            // );
-            // injector.get(UI_STATE_CONTROLLER).endAction(message, 'bad-request');
+            const FAILED_SIGNED_IN_TEXT =
+              "L'authentification a échoué, veuillez vérifier vos crédentiels et réessayer.";
+            const message = await firstValueFrom(
+              injector
+                .get(COMMON_STRINGS)
+                .pipe(
+                  map(
+                    (state) =>
+                      JSObject.getProperty(state, 'auth.login.failed') as string
+                  )
+                )
+            );
+            injector
+              .get(UI_STATE_CONTROLLER)
+              .endAction(message ?? FAILED_SIGNED_IN_TEXT, 'bad-request');
           },
           error: async (err: unknown) => {
             injector
@@ -330,10 +359,10 @@ export const PROVIDERS = [
       return injector.get(Router).navigateByUrl('/dashboard/home');
     },
     name: environment.name,
-    company: 'LIKSOFT',
+    company: 'CNSS - TOGO',
     remember: false,
     logo: 'assets/media/logo.png',
-    description: ''
+    description: '',
   }),
   provideRedirectUrl(environment.auth.redirect.url ?? '/auth/login'),
 ];

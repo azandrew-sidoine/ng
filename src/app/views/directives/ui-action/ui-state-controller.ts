@@ -6,7 +6,9 @@ import {
   UIStateControllerType,
 } from './types';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class UIStateController
   implements UIStateControllerType<UIActionState>, OnDestroy
 {

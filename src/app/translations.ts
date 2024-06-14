@@ -64,8 +64,7 @@ export function useTranslationsFactory<TReturn>(
     onLang = onLang ?? ((v) => v as TReturn);
     return subject$.asObservable().pipe(
       finalize(() => destroy$.next()),
-      map(onLang),
-      tap((v) => console.log(v))
+      map(onLang)
     );
   };
 }

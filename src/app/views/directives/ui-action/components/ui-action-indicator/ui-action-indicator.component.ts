@@ -39,7 +39,7 @@ export class UIActionIndicatorComponent implements OnDestroy {
   constructor(
     @Inject(UI_STATE_CONTROLLER)
     public readonly controller: UIStateControllerType,
-    @Optional() private _detectorRef?: ChangeDetectorRef
+    @Optional() private cdRef?: ChangeDetectorRef
   ) {
     this.controller.addListener(this.setState.bind(this));
   }
@@ -47,7 +47,7 @@ export class UIActionIndicatorComponent implements OnDestroy {
   // Set component state
   setState(state: UIState<UIActionState>) {
     this._uiState = state;
-    this._detectorRef?.markForCheck();
+    this.cdRef?.markForCheck();
   }
 
   // Component destructor

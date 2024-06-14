@@ -1,9 +1,7 @@
 import { InjectionToken } from '@angular/core';
 import { ReactiveUIStateControllerType, UIStateControllerType } from './types';
 
-/**
- * UI state controller injection token
- */
+/** @description UI state controller injection token */
 export const UI_STATE_CONTROLLER = new InjectionToken<UIStateControllerType>(
   'UI state controller provider type definition'
 );

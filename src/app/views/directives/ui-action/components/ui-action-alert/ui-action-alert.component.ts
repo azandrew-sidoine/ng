@@ -65,14 +65,12 @@ export class UIActionAlertComponent implements OnDestroy {
   constructor(
     @Inject(UI_STATE_CONTROLLER)
     public readonly controller: UIStateControllerType,
-    @Optional() private _detectorRef?: ChangeDetectorRef
+    @Optional() private cdRef?: ChangeDetectorRef
   ) {
     this.controller.addListener(this.setState.bind(this));
   }
 
-  /**
-   * Set ui state property value
-   */
+  /** @description Set ui state property value */
   setState(state: UIState<UIActionState>) {
     // Case the state changes, we stop the timer that closes the alert component
     this._destroyTimer$.next();
@@ -98,7 +96,7 @@ export class UIActionAlertComponent implements OnDestroy {
         .subscribe(() => this.onCloseAlert());
     }
 
-    this._detectorRef?.markForCheck();
+    this.cdRef?.markForCheck();
   }
 
   onCloseAlert(event?: Event) {

@@ -13,11 +13,14 @@
 }
 
 .login-wrapper {
-    background-image: url("assets/media/login-bg.jpg");
+  background-image: url("assets/media/login-bg.jpg");
 }
 
+.body {  
+  background: #dedede;
+}
 
-.otp-input-container {
+.fex-center {
   display: flex;
   width: 100vw;
   height: 100vh;

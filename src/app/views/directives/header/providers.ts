@@ -13,8 +13,8 @@ type LogoutActionFactory = (i: Injector | null) => {
 
 /** @internal */
 type TranslationsType = {
-  'app.prompt.logout': string;
-  'app.actions.logout': string;
+  'prompt.logout': string;
+  'actions.logout': string;
 } & {
   [prop: string]: any;
 };
@@ -53,29 +53,33 @@ export function provideHeaderActions(p: {
   actions?: HeaderAction[];
   logout?: LogoutActionFactory;
   translator?: TranslatorFactory;
-  signedIn?: (i: Injector) => { invoke: () => Observable<boolean> };
+  signedInFactory?: (i: Injector) => {
+    invoke: () => boolean | Observable<boolean>;
+  };
 }) {
   return {
     provide: HEADER_ACTIONS_FACTORY,
     useFactory: () => {
-      const { actions, logout, translator: translations, signedIn } = p;
+      const { actions, logout, translator: translations, signedInFactory } = p;
       const _actions = actions ?? [];
       return (injector: Injector) => {
-        const s = signedIn
-          ? signedIn(injector)?.invoke() ?? of(false)
+        const signedIn = signedInFactory
+          ? signedInFactory(injector)?.invoke() ?? of(false)
           : of(false);
-        const items = ['app.actions.logout', 'app.prompt.logout'].concat(
+        const items = ['actions.logout', 'prompt.logout'].concat(
           ..._actions.map((a) => a.label)
         );
         const t = translations
           ? translations(injector)(items)
           : of({} as TranslationsType);
         const observable$ = isObservable(t) ? from(t) : of(t);
+        const signedIn$ = isObservable(signedIn)
+          ? from(signedIn)
+          : of(signedIn);
         return observable$.pipe(
-          withLatestFrom(s),
+          withLatestFrom(signedIn$),
           map(([values, signedIn]) => {
             const a = [] as HeaderAction[];
-
             // Add list of user actions
             for (const action of _actions) {
               a.push({
@@ -87,11 +91,11 @@ export function provideHeaderActions(p: {
             // Add a logout action if required
             if (signedIn && logout) {
               a.push({
-                label: values['app.actions.logout'] ?? 'Logout',
+                label: values['actions.logout'] ?? 'Logout',
                 fn: (i: Injector | null) => {
                   if (i) {
                     return logout(i)?.invoke(
-                      values['app.prompt.logout'] ?? LOGOUT_PROMPT
+                      values['prompt.logout'] ?? LOGOUT_PROMPT
                     );
                   }
                   throw new Error(ERR_NO_INJECTOR);

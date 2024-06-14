@@ -71,6 +71,8 @@ import {
 import {
   HttpClient,
   provideHttpClient as ngProvideHttpClient,
+  withFetch,
+  withInterceptors,
 } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { JSObject } from '@azlabsjs/js-object';
@@ -79,14 +81,13 @@ import {
   AUTH_SERVICE,
   AuthStrategies,
   LoginModule,
+  authClientInterceporFactory,
+  bearerTokenInterceptorFactory,
   provideRedirectUrl,
   useLocalStrategy,
 } from './views/login';
 import { DOCUMENT_SESSION_STORAGE, StorageModule } from '@azlabsjs/ngx-storage';
-import {
-  UI_STATE_CONTROLLER,
-  provideUIStateControllers,
-} from './views/directives/ui-action';
+import { UI_STATE_CONTROLLER } from './views/directives/ui-events';
 import { provideUIMetadata } from './views/login/ui';
 // TODO: Uncomment the code below to import query library HTTP client provider
 // import { provideQueryClient } from './views/helpers';
@@ -108,9 +109,6 @@ export const PROVIDERS = [
     },
   },
 
-  // UI state
-  provideUIStateControllers(),
-
   // Register translation library providers
   importProvidersFrom(
     TranslateModule.forRoot({
@@ -123,7 +121,16 @@ export const PROVIDERS = [
   ),
 
   // Provides tokens from Ng HTTP library
-  ngProvideHttpClient(),
+  ngProvideHttpClient(
+    withInterceptors([
+      authClientInterceporFactory(
+        JSObject.getProperty(environment, 'auth.local.clients.id'),
+        JSObject.getProperty(environment, 'auth.local.clients.secret')
+      ),
+      bearerTokenInterceptorFactory(AUTH_SERVICE),
+    ]),
+    withFetch()
+  ),
 
   /** provides injection tokens for navigation handler */
   provideRouterNavigate(),
@@ -155,8 +162,42 @@ export const PROVIDERS = [
       descending: 'desc',
     },
   }),
+
+
+  // Provide dropdown with UI actions at the right side of the application header component
   provideHeaderActions({
     actions: [],
+    signedInFactory: (i: Injector) => {
+      return {
+        invoke: () => {
+          const auth = i.get(AUTH_SERVICE);
+          return (
+            typeof auth.authToken !== 'undefined' && auth.authToken !== null
+          );
+        },
+      };
+    },
+    translator: (i: Injector | null) => (p: string | string[]) => {
+      const LOGOUT_MESSAGE =
+        'Vous êtes sur le point de vous déconnecter, veuillez confirmer pour poursuivre...';
+      p = Array.isArray(p) ? p : [p];
+      const translations = i?.get(COMMON_STRINGS);
+      if (!translations) {
+        return of({
+          'prompt.logout': LOGOUT_MESSAGE,
+          'actions.logout': 'Se Déconnecter',
+        });
+      }
+      return translations.pipe(
+        map((state) => {
+          const result: Record<string, any> = {};
+          for (const k of p) {
+            JSObject.setProperty(result, k, JSObject.getProperty(state, k));
+          }
+          return JSObject.flatten(result) as any;
+        })
+      );
+    },
     logout: (i: Injector | null) => {
       return {
         invoke: async (prompt: string) => {

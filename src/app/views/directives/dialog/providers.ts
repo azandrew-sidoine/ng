@@ -13,12 +13,10 @@ export function provideDialog(
       const dialog = inject(BrowSerDialog);
       const injector = inject(Injector);
       return factory
-        ? () =>
-            typeof factory === 'function' && factory !== null
-              ? factory(injector)
-              : factory
-        : () => dialog;
+        ? typeof factory === 'function' && factory !== null
+          ? factory(injector)
+          : factory
+        : dialog;
     },
-    deps: [Injector],
   } as Provider;
 }

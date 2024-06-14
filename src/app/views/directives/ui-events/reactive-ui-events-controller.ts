@@ -1,18 +1,18 @@
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ReactiveUIStateControllerType, UIActionState, UIState } from './types';
+import { ReactiveUIEventsControllerType, UIEventState, UIEvent } from './types';
 import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ReactiveUIStateController
-  implements ReactiveUIStateControllerType<UIActionState>
+export class ReactiveUIEventsController
+  implements ReactiveUIEventsControllerType<UIEventState>
 {
   // #region class properties
-  private _uiState$ = new BehaviorSubject<UIState<UIActionState>>({
+  private _uiState$ = new BehaviorSubject<UIEvent<UIEventState>>({
     performingAction: false,
   });
-  public readonly uiState$: Observable<UIState<UIActionState>> =
+  public readonly uiState$: Observable<UIEvent<UIEventState>> =
     this._uiState$.asObservable();
   // #enregion class properties
 
@@ -26,7 +26,7 @@ export class ReactiveUIStateController
   }
 
   //
-  endAction(message?: string, state?: UIActionState): void {
+  endAction(message?: string, state?: UIEventState): void {
     this._uiState$.next({ performingAction: false, message, state });
   }
 }

@@ -7,10 +7,11 @@ import {
   OnDestroy,
   Optional,
 } from '@angular/core';
-import { UI_STATE_CONTROLLER } from '../../tokens';
-import { UIActionState, UIState, UIStateControllerType } from '../../types';
+import { UI_EVENTS_CONTROLLER } from '../../tokens';
+import { UIEventState, UIEvent, UIEventsControllerType } from '../../types';
 import { CommonModule } from '@angular/common';
 import SPINNER_DIRECTIVES from '../../../spinner';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
   standalone: true,
@@ -22,7 +23,7 @@ import SPINNER_DIRECTIVES from '../../../spinner';
 })
 export class UIActionIndicatorComponent implements OnDestroy {
   // #region Component properties
-  private _uiState: UIState<UIActionState> = {
+  private _uiState: UIEvent<UIEventState> = {
     performingAction: false,
   };
   get uiState() {
@@ -37,15 +38,15 @@ export class UIActionIndicatorComponent implements OnDestroy {
 
   // Class constructor
   constructor(
-    @Inject(UI_STATE_CONTROLLER)
-    public readonly controller: UIStateControllerType,
+    @Inject(UI_EVENTS_CONTROLLER)
+    public readonly controller: UIEventsControllerType,
     @Optional() private cdRef?: ChangeDetectorRef
   ) {
     this.controller.addListener(this.setState.bind(this));
   }
 
   // Set component state
-  setState(state: UIState<UIActionState>) {
+  setState(state: UIEvent<UIEventState>) {
     this._uiState = state;
     this.cdRef?.markForCheck();
   }

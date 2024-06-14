@@ -1,21 +1,21 @@
 import { Injector, ModuleWithProviders, NgModule } from '@angular/core';
-import { ReactiveUIStateControllerType, UIStateControllerType } from './types';
-import { UIStateController } from './ui-state-controller';
-import { ReactiveUIStateController } from './reactive-ui-state-controller';
+import { ReactiveUIEventsControllerType, UIEventsControllerType } from './types';
+import { UIEventsController } from './ui-events-controller';
+import { ReactiveUIEventsController } from './reactive-ui-events-controller';
 import {
   UIActionAlertComponent,
   UIActionIndicatorComponent,
 } from './components';
 import {
-  provideReactiveUIStateController,
-  provideUIStateControllers,
+  provideReactiveUIEventsController,
+  provideUIEventsController,
 } from './providers';
 
 type ConfigType = {
-  provideStateController?: (injector: Injector) => UIStateControllerType;
+  provideStateController?: (injector: Injector) => UIEventsControllerType;
   provideReactiveStateController?: (
     injector: Injector
-  ) => ReactiveUIStateControllerType;
+  ) => ReactiveUIEventsControllerType;
 };
 
 @NgModule({
@@ -28,17 +28,17 @@ export class UIStateModule {
       config ?? {};
     const _controller =
       provideStateController ??
-      ((injector: Injector) => injector.get(UIStateController));
+      ((injector: Injector) => injector.get(UIEventsController));
 
     const _reactiveController =
       provideReactiveStateController ??
-      ((injector: Injector) => injector.get(ReactiveUIStateController));
+      ((injector: Injector) => injector.get(ReactiveUIEventsController));
 
     return {
       ngModule: UIStateModule,
       providers: [
-        provideUIStateControllers(_controller),
-        provideReactiveUIStateController(_reactiveController),
+        provideUIEventsController(_controller),
+        provideReactiveUIEventsController(_reactiveController),
       ],
     };
   }

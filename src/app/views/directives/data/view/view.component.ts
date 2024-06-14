@@ -19,7 +19,7 @@ import {
   StateType,
   ViewStateComponentType,
 } from '..';
-import { UIStateControllerType, UI_STATE_CONTROLLER } from '../../ui-action';
+import { UIStateControllerType, UI_STATE_CONTROLLER } from '../../ui-events';
 import {
   Observable,
   Subscription,

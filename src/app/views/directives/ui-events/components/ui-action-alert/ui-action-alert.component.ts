@@ -9,12 +9,13 @@ import {
   OnDestroy,
   Optional,
 } from '@angular/core';
-import { UI_STATE_CONTROLLER } from '../../tokens';
-import { UIActionState, UIState, UIStateControllerType } from '../../types';
+import { UI_EVENTS_CONTROLLER } from '../../tokens';
+import { UIEventState, UIEvent, UIEventsControllerType } from '../../types';
 import { Subject, takeUntil, timer } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { UIAlertComponent } from '../ui-alert';
+import { UIAlertComponent } from '../alert';
 import { AlertTypePipe } from './pipes';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
   standalone: true,
@@ -55,7 +56,7 @@ export class UIActionAlertComponent implements OnDestroy {
     performingAction: false as boolean,
     message: undefined as string | undefined,
     cssClass: {} as Record<string, boolean>,
-    status: undefined as undefined | UIActionState,
+    status: undefined as undefined | UIEventState,
   };
 
   get state() {
@@ -63,15 +64,15 @@ export class UIActionAlertComponent implements OnDestroy {
   }
 
   constructor(
-    @Inject(UI_STATE_CONTROLLER)
-    public readonly controller: UIStateControllerType,
+    @Inject(UI_EVENTS_CONTROLLER)
+    public readonly controller: UIEventsControllerType,
     @Optional() private cdRef?: ChangeDetectorRef
   ) {
     this.controller.addListener(this.setState.bind(this));
   }
 
   /** @description Set ui state property value */
-  setState(state: UIState<UIActionState>) {
+  setState(state: UIEvent<UIEventState>) {
     // Case the state changes, we stop the timer that closes the alert component
     this._destroyTimer$.next();
     this._state = {

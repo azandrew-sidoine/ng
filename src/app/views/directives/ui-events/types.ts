@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 
-export type UIActionState =
+export type UIEventState =
   | 'error'
   | 'success'
   | 'request-error'
@@ -8,30 +8,23 @@ export type UIActionState =
   | 'exception'
   | 'none';
 
-/**
- * A generic
- */
-export type UIState<T> = {
+/** @internal */
+export type UIEvent<T> = {
   performingAction: boolean;
   message?: string;
   error?: unknown;
   state?: T;
 };
 
-/**
- * @internal
- */
-export type StateChangesListener<T> = (state: UIState<T>) => void;
+/** @internal */
+export type StateChangesListener<T> = (state: UIEvent<T>) => void;
 
-/**
- * @internal
- */
+
+/** @internal */
 export type Callback = (...args: any) => unknown;
 
-/**
- * Base UI state controller type declaration
- */
-export type UIStateControllerBase<T extends UIActionState = UIActionState> = {
+/** @description Base UI state controller type declaration */
+export type UIEventsControllerBase<T extends UIEventState = UIEventState> = {
   /**
    * Trigger the ui to an indicator of an ongoing action
    */
@@ -43,11 +36,9 @@ export type UIStateControllerBase<T extends UIActionState = UIActionState> = {
   endAction(message?: string, state?: T): void;
 };
 
-/**
- * UI state controller type declaration
- */
-export type UIStateControllerType<T extends UIActionState = UIActionState> =
-  UIStateControllerBase<T> & {
+/** @description  UI state controller type declaration */
+export type UIEventsControllerType<T extends UIEventState = UIEventState> =
+  UIEventsControllerBase<T> & {
     /**
      * Add a listener that is executed when the ui controller changes state.
      *
@@ -61,14 +52,12 @@ export type UIStateControllerType<T extends UIActionState = UIActionState> =
     removeListener(listener: StateChangesListener<T>): void;
   };
 
-/**
- * Reactive UI state controller that emit a stream of ui state changes
- */
-export type ReactiveUIStateControllerType<
-  T extends UIActionState = UIActionState
-> = UIStateControllerBase<T> & {
+/** @description Reactive UI state controller that emit a stream of ui state changes */
+export type ReactiveUIEventsControllerType<
+  T extends UIEventState = UIEventState
+> = UIEventsControllerBase<T> & {
   /**
    * UI state reactive property
    */
-  uiState$: Observable<UIState<T>>;
+  uiState$: Observable<UIEvent<T>>;
 };

@@ -1,6 +1,7 @@
 import { environment } from '../environments/environment';
 import { DataConfigArgType } from './views/directives/data';
 import { AppLinks } from './views/directives/main-nav';
+import { canActivateChild } from './views/login/guards';
 
 /** @description Application routes definition */
 export const LINKS: AppLinks<DataConfigArgType> = [
@@ -13,7 +14,8 @@ export const LINKS: AppLinks<DataConfigArgType> = [
       loadChildren: () => import('./views/modules/dashboard/routes'),
       data: {
         name: environment.name,
-      }
+      },
+      canActivateChild: [canActivateChild],
     },
   },
   {
@@ -25,7 +27,8 @@ export const LINKS: AppLinks<DataConfigArgType> = [
       loadChildren: () => import('./views/modules/example/routes'),
       data: {
         name: environment.name,
-      }
+      },
+      canActivateChild: [canActivateChild],
     },
   },
 ];

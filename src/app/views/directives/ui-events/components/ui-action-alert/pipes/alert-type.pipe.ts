@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { UIActionState } from '../../../types';
+import { UIEventState } from '../../../types';
 import { ALERT_TYPES } from './types';
 
 @Pipe({
@@ -9,7 +9,7 @@ import { ALERT_TYPES } from './types';
 })
 export class AlertTypePipe implements PipeTransform {
   //
-  transform(value: UIActionState) {
+  transform(value: UIEventState) {
     return ALERT_TYPES[value ?? 'none'] ?? 'default';
   }
 }

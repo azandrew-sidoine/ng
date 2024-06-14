@@ -1,34 +1,34 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import {
   StateChangesListener,
-  UIActionState,
-  UIState,
-  UIStateControllerType,
+  UIEventState,
+  UIEvent,
+  UIEventsControllerType,
 } from './types';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UIStateController
-  implements UIStateControllerType<UIActionState>, OnDestroy
+export class UIEventsController
+  implements UIEventsControllerType<UIEventState>, OnDestroy
 {
-  private _uiState: UIState<UIActionState> = {
+  private _uiState: UIEvent<UIEventState> = {
     performingAction: false,
   };
-  private _listeners: StateChangesListener<UIActionState>[] = [];
+  private _listeners: StateChangesListener<UIEventState>[] = [];
   get uiState() {
     return this._uiState;
   }
 
   private setState(
     value:
-      | Partial<UIState<UIActionState>>
-      | ((state: UIState<UIActionState>) => UIState<UIActionState>)
+      | Partial<UIEvent<UIEventState>>
+      | ((state: UIEvent<UIEventState>) => UIEvent<UIEventState>)
   ) {
     const _setState =
       typeof value === 'function' && value !== null
         ? value
-        : (state: UIState<UIActionState>) => ({ ...state, ...value });
+        : (state: UIEvent<UIEventState>) => ({ ...state, ...value });
 
     // Update the UI state object
     this._uiState = _setState(this._uiState);
@@ -41,11 +41,11 @@ export class UIStateController
     }
   }
 
-  addListener(listener: StateChangesListener<UIActionState>): void {
+  addListener(listener: StateChangesListener<UIEventState>): void {
     this._listeners.push(listener);
   }
 
-  removeListener(listener: StateChangesListener<UIActionState>): void {
+  removeListener(listener: StateChangesListener<UIEventState>): void {
     const _index = this._listeners.findIndex(
       (_listener) => _listener === listener
     );
@@ -60,7 +60,7 @@ export class UIStateController
   }
 
   //
-  endAction(message?: string, state?: UIActionState): void {
+  endAction(message?: string, state?: UIEventState): void {
     this.setState({ performingAction: false, message, state });
   }
 

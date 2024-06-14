@@ -1,10 +1,10 @@
-import { UIActionState } from '../../../types';
+import { UIEventState } from '../../../types';
 
 /**
  * @const
  */
 export const ALERT_TYPES: Partial<
-  Record<UIActionState, 'warning' | 'success' | 'danger' | 'default'>
+  Record<UIEventState, 'warning' | 'success' | 'danger' | 'default'>
 > = {
   error: 'danger',
   success: 'success',

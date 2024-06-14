@@ -88,7 +88,7 @@ import {
 } from './views/login';
 import { DOCUMENT_SESSION_STORAGE, StorageModule } from '@azlabsjs/ngx-storage';
 import { UI_STATE_CONTROLLER } from './views/directives/ui-events';
-import { provideUIMetadata } from './views/login/ui';
+import { provideAuthMetadata } from './views/login/ui';
 // TODO: Uncomment the code below to import query library HTTP client provider
 // import { provideQueryClient } from './views/helpers';
 
@@ -162,7 +162,6 @@ export const PROVIDERS = [
       descending: 'desc',
     },
   }),
-
 
   // Provide dropdown with UI actions at the right side of the application header component
   provideHeaderActions({
@@ -389,10 +388,9 @@ export const PROVIDERS = [
           autoLogin: true,
         };
       },
-      // authClientConfigProvider: () => ({ ...environment.auth.local.clients }),
     })
   ),
-  provideUIMetadata({
+  provideAuthMetadata({
     dashboard: (injector: Injector) => {
       // Passed in as second parameter
       // _: SignInResultInterface

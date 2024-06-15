@@ -1,5 +1,6 @@
 import {
   animate,
+  keyframes,
   state,
   style,
   transition,
@@ -37,17 +38,62 @@ type StateType = {
   animations: [
     trigger('fadeInOutSlideBottom', [
       transition('close => open', [
-        style({ transform: 'translateY(1000px)', opacity: 0 }),
+        style({ transform: 'translateY(-1000)', opacity: 1 }),
         animate(
-          '200ms ease-in',
+          '0.45s cubic-bezier(0.165, 0.84, 0.44, 1)',
           style({ transform: 'translateY(0)', opacity: 1 })
         ),
       ]),
       transition('open => close', [
         style({ transform: 'translateY(0)', opacity: 1 }),
         animate(
-          '200ms ease',
-          style({ transform: 'translateY(1000px)', opacity: 0 })
+          '0.45s cubic-bezier(0.165, 0.84, 0.44, 1)',
+          style({ transform: 'translateY(-1000)', opacity: 0 })
+        ),
+      ]),
+    ]),
+    trigger('scaleUpDown', [
+      transition('close => open', [
+        style({ transform: 'scale(0)' }),
+        animate(
+          '0.45s cubic-bezier(0.165, 0.84, 0.44, 1)',
+          keyframes([
+            style({ transform: 'scale(0)', offset: 0 }),
+            style({ transform: 'scale(1)', offset: 1 }),
+          ])
+        ),
+      ]),
+      transition('open => close', [
+        style({ transform: 'scale(1)' }),
+        animate(
+          '0.45s cubic-bezier(0.165, 0.84, 0.44, 1)',
+          keyframes([
+            style({ transform: 'scale(1)', opacity: 1, offset: 0 }),
+            style({ transform: 'scale(0)', opacity: 0, offset: 1 }),
+          ])
+        ),
+      ]),
+    ]),
+    trigger('scaleUpDownContent', [
+      transition('close => open', [
+        style({ transform: 'scale(1)', opacity: 1 }),
+        animate(
+          '0.45s cubic-bezier(0.165, 0.84, 0.44, 1)',
+          keyframes([
+            style({ transform: 'scale(1)', opacity: 1, offset: 0 }),
+            style({ transform: 'scale(2)', opacity: 0, offset: 0.99 }),
+            style({ transform: 'scale(0)', offset: 1 }),
+          ])
+        ),
+      ]),
+      transition('open => close', [
+        style({ transform: 'scale(2)', opacity: 0 }),
+        animate(
+          '0.45s cubic-bezier(0.165, 0.84, 0.44, 1)',
+          keyframes([
+            style({ transform: 'scale(2)', opacity: 0, offset: 0 }),
+            style({ transform: 'scale(1)', opacity: 1, offset: 1 }),
+          ])
         ),
       ]),
     ]),
@@ -68,6 +114,7 @@ export class NgxModalComponent implements AfterViewInit, OnChanges {
   @Input() opened: boolean = false;
   @Input() size: SizeType = 'lg';
   @Input() closeable: boolean = false;
+  @Input() animation: 'fade' | 'scale' = 'fade';
   // #endregion Component inputs
 
   // #region Component output
@@ -112,9 +159,7 @@ export class NgxModalComponent implements AfterViewInit, OnChanges {
     }));
   }
 
-  /**
-   * Control or change component local state object
-   */
+  /** @description Control or change component local state object */
   private setState(
     _partial: Partial<StateType> | ((_state: StateType) => StateType)
   ) {

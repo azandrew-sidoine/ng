@@ -1,95 +1,97 @@
 /* Modal (background) */
 .modal {
-    display: none;
-    /* Hidden by default */
-    position: fixed;
-    /* Stay in place */
-    z-index: var(--ngx-modal-z-index, 1050);
-    /* Sit on top */
-    /* Location of the box */
-    left: 0;
-    top: 0;
-    width: 100vw;
-    /* Full width */
-    height: 100vh;
-    /* Full height */
-    overflow: auto;
-    /* Enable scroll if needed */
-    background-color: rgb(0, 0, 0);
-    /* Fallback color */
-    background-color: rgba(0, 0, 0, 0.5);
-    /* Black w/ opacity */
+  display: none;
+  /* Hidden by default */
+  position: fixed;
+  /* Stay in place */
+  z-index: var(--ngx-modal-z-index, 1050);
+  /* Sit on top */
+  /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100vw;
+  /* Full width */
+  height: 100vh;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0);
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Black w/ opacity */
 }
-
 
 /* Modal opened state */
 .modal.opened {
-    display: block;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 16px 0;
+  display: block;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 0;
 }
 
 .modal.full.opened {
-    padding: 0;
+  padding: 0;
 }
 
 .modal .modal-content {
-    height: auto;
-    max-height: calc(100vh - 8px);
+  min-height: var(--search-modal-min-height, 220px) !important;
+  max-height: calc(100vh - 8px);
 }
 
 .modal.sm .modal-content.sm {
-    width: 14.4rem;
-    height: auto;
-    max-height: calc(100vh - 8px);
+  width: 14.4rem;
+
+  min-height: var(--search-modal-min-height, 220px) !important;
+  max-height: calc(100vh - 8px);
 }
 
-
 .modal.lg .modal-content {
-    width: 43.2rem;
-    height: auto;
-    max-height: calc(100vh - 8px);
+  width: 43.2rem;
+  min-height: var(--search-modal-min-height, 220px) !important;
+  max-height: calc(100vh - 8px);
 }
 
 .modal.xl .modal-content {
-    width: 80%;
-    height: auto;
-    max-height: calc(100vh - 8px);
+  width: 80%;
+  height: auto;
+  max-height: calc(100vh - 8px);
 }
 
 .modal.full .modal-content {
-    height: 100vh;
-    max-height: 100vh;
-    width: 100%;
+  height: 100vh;
+  max-height: 100vh;
+  width: 100%;
 }
 
 /* Modal Content */
-.modal-content {
-    display: flex;
-    flex-direction: column;
-    flex-basis: 1;
-    position: relative;
-    z-index: var(--ngx-modal-z-index, 1050);
-    background-color: var(--ngx-modal-content-bg-color, #fefefe);
-    margin: auto;
-    padding: var(--ngx-modal-content-padding, 16px);
+.modal .modal-content {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 1;
+  position: relative;
+  z-index: var(--ngx-modal-z-index, 1050);
+  background-color: var(--ngx-modal-content-bg-color, #fefefe);
+  margin: auto;
+  padding: var(--ngx-modal-content-padding, 16px);
+}
+.modal .modal-content {
+  border-radius: var(--ngx-modal-content-border-radius, 5px);
 }
 
 .modal.full .modal-content {
-    border: 1px solid var(--ngx-modal-content-border-color, #888);
-    border-radius: var(--ngx-modal-content-border-radius, 0.15rem);
-    box-shadow: 0 0.05rem 0rem 0rem var(--ngx-modal-content-box-shadow-color, rgba(0, 0, 0, .1));
+  border: 1px solid var(--ngx-modal-content-border-color, #888);
+  border-radius: var(--ngx-modal-content-border-radius, 0.15rem);
+  box-shadow: 0 0.05rem 0rem 0rem
+    var(--ngx-modal-content-box-shadow-color, rgba(0, 0, 0, 0.1));
 }
-
 /* Modal content*/
 
 /* Modal title */
 :host ::ng-deep .modal-title,
 :host ::ng-deep .ngx-modal-title {
-    flex-grow: 0;
-    padding: 0rem 2rem;
+  flex-grow: 0;
+  padding: 0rem 2rem;
 }
 
 /*! Modal title !*/
@@ -97,75 +99,120 @@
 /* Modal body */
 :host ::ng-deep .modal-body,
 :host ::ng-deep .ngx-modal-body {
-    flex-grow: 3;
+  flex-grow: 3;
 }
 
 :host ::ng-deep .modal-body,
 :host ::ng-deep .ngx-modal-body {
-    display: block;
-    overflow-y: scroll;
-    scrollbar-width: thin;
-    padding: 0.5rem 2rem;
-    margin: 1.5rem 0;
+  display: block;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  padding: 0.5rem 2rem;
+  margin: var(--search-modal-margin, 0) !important;
 }
 
 .modal.full :host ::ng-deep .ngx-modal-body {
-    margin: 0;
+  margin: var(--search-modal-margin, 0) !important;
 }
-
 /*! Modal body !*/
 
 /* Modal footer */
 :host ::ng-deep .modal-footer,
 :host ::ng-deep .ngx-modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    flex-direction: row;
-    padding: var(--ngx-modal-footer-padding, .8rem 0 0 0);
-    flex-grow: 0;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+  padding: var(--ngx-modal-footer-padding, 0.8rem 0 0 0);
+  flex-grow: 0;
 }
 
 /*! Modal footer !*/
 
 /* Close Button */
 .toggle-close {
-    display: inline;
-    color: var(--ngx-modal-icon-color, #aaaaaa);
-    letter-spacing: var(--ngx-modal-icon-letter-spacing, 8px);
-    width: var(--ngx-modal-icon-width, 24px);
-    height: var(--ngx-modal-icon-width, 24px);
+  display: inline;
+  color: var(--ngx-modal-icon-color, #aaaaaa);
+  letter-spacing: var(--ngx-modal-icon-letter-spacing, 8px);
+  width: var(--ngx-modal-icon-width, 24px);
+  height: var(--ngx-modal-icon-width, 24px);
 }
 
 .toggle-close path {
-    color: var(--ngx-modal-icon-color, #aaaaaa);
-    fill: var(--ngx-modal-icon-color, #aaaaaa);
+  color: var(--ngx-modal-icon-color, #aaaaaa);
+  fill: var(--ngx-modal-icon-color, #aaaaaa);
 }
 
 .modal:not(.full) .modal-content .actions {
-    margin-top: var(--ngx-modal-actions-top, 20px);
-    align-self: flex-end;
-    display: flex;
-    justify-content: space-between;
+  margin-top: var(--ngx-modal-actions-top, 20px);
+  align-self: flex-end;
+  display: flex;
+  justify-content: space-between;
 }
 
 .modal.full .modal-content .actions {
-    display: flex;
-    justify-content: space-between;
-    top: var(--ngx-modal-icon-top, 20px);
-    position: fixed;
-    right: var(--ngx-modal-icon-right, 12px);
+  display: flex;
+  justify-content: space-between;
+  top: var(--ngx-modal-icon-top, 20px);
+  position: fixed;
+  right: var(--ngx-modal-icon-right, 12px);
 }
 
 .modal.full .modal-content .user-actions {
-    position: relative;
-    display: inline;
+  position: relative;
+  display: inline;
 }
 
 .toggle-close:hover,
 .toggle-close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 /*! Close Button*/
+
+/* Animation styles */
+@keyframes scaleOut {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes scaleDown {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes contentScaleUp {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  99.9% {
+    transform: scale(2);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
+@keyframes contentScaleDown {
+  0% {
+    transform: scale(2);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+/*! Animation styles */

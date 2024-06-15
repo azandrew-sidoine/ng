@@ -1,11 +1,18 @@
-<form class="search-form">
-    <button (click)="handleClickEvent($event)" type="button" class="search-button">
-        <svg viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">
-            <path
-                d="M16.33,5.05A10.95,10.95,0,1,1,5.39,16,11,11,0,0,1,16.33,5.05m0-2.05a13,13,0,1,0,13,13,13,13,0,0,0-13-13Z">
-            </path>
-            <path d="M35,33.29l-7.37-7.42-1.42,1.41,7.37,7.42A1,1,0,1,0,35,33.29Z"></path>
-        </svg>
-    </button>
-    <input (click)="handleClickEvent($event)" type="search" value="" placeholder="Search" class="search-input">
-</form>
+<ngx-search-input #searchInput (click)="handleSearchClick($event)"></ngx-search-input>
+
+<!-- search modal -->
+<ngx-modal [size]="'lg'" [animation]="'scale'" #modal>
+    <h3 *ngIf="title" class="ngx-modal-title">{{ title }}</h3>
+    <span *ngIf="description" class="ngx-modal-description" [innerHTML]="description | safeHtml"></span>
+    <div class="ngx-modal-body">
+        <!-- Modal body -->
+        <ngx-search-input #modalSearchInput (valueChange)="handleSearchChange($event)"></ngx-search-input>
+        <!-- Search result content -->
+        <ng-content></ng-content>
+    </div>
+    <div class="ngx-modal-footer">
+        <!-- -->
+        <ng-content select="[footer]"></ng-content>
+    </div>
+</ngx-modal>
+<!--\ search modal -->

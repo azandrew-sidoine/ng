@@ -18,8 +18,8 @@
             </svg>
         </ng-container>
     </div>
-    <h3 class="ngx-modal-title">{{title ?? ''}}</h3>
-    <span class="ngx-modal-description" [innerHTML]="description ?? '' | safeHtml"></span>
+    <h3 *ngIf="!!title" class="ngx-modal-title">{{ title }}</h3>
+    <span *ngIf="!!description" class="ngx-modal-description" [innerHTML]="description | safeHtml"></span>
     <div class="ngx-modal-body" *ngIf="form">
         <ngx-smart-form #formRef (ready)="onReady($event)" [no-grid-layout]="noGridLayout" (error)="onError($event)"
             [autoupload]="true" (submit)="onSubmit($event)" [form]="form" [autoSubmit]="false"

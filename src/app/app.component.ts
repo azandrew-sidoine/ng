@@ -16,4 +16,9 @@ export class AppComponent {
   //#region component inputs
   @Input() name: string = environment.name;
   //#endregion component inputs
+
+
+  handleSearchValueChange(e: any) {
+    console.log('Search value changes...', e);
+  }
 }

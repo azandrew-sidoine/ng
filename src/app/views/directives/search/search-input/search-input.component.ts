@@ -27,6 +27,7 @@ type StateType = {
 export class SearchInputComponent {
   //#region Component inputs
   @Input() value: string = '';
+  @Input() placeholder: string = 'Search...';
   //#endregion Component inputs
 
   // #region Component outputs

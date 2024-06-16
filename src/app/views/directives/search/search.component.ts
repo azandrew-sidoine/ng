@@ -30,6 +30,7 @@ export class SearchComponent {
   //#region Component inputs
   @Input() title!: string;
   @Input() description!: string;
+  @Input() placeholder!: string;
   //#endregion Component inputs
 
   // #region Component outputs

@@ -7,6 +7,7 @@
             <path d="M35,33.29l-7.37-7.42-1.42,1.41,7.37,7.42A1,1,0,1,0,35,33.29Z"></path>
         </svg>
     </button>
-    <input #input (change)="handleChangeEvent($event)" (input)="handleChangeEvent($event)" (click)="handleClickEvent($event)"
-        type="search" [value]="value" placeholder="Search" class="search-input">
+    <input #input (change)="handleChangeEvent($event)" (input)="handleChangeEvent($event)"
+        (click)="handleClickEvent($event)" type="search" [value]="value" [attr.placeholder]="placeholder"
+        class="search-input">
 </form>

@@ -1,17 +1,27 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  Provider,
+} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { environment } from '../environments/environment';
 import { TranslateModule } from '@ngx-translate/core';
 import { COMMON_PIPES } from '@azlabsjs/ngx-common';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HttpClientModule, TranslateModule, ...COMMON_PIPES],
+  imports: [
+    RouterOutlet,
+    TranslateModule,
+    ...COMMON_PIPES,
+  ],
+  providers: [provideHttpClient() as unknown as Provider],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
   //#region component inputs

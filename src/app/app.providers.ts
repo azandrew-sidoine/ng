@@ -66,10 +66,7 @@ import {
   TranslateService,
   TranslationChangeEvent,
 } from '@ngx-translate/core';
-import {
-  HttpClient,
-  provideHttpClient as ngProvideHttpClient,
-} from '@angular/common/http';
+import { HttpClient, provideHttpClient as ngProvideHttpClient } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { JSObject } from '@azlabsjs/js-object';
 import { useTranslationsFactory } from './translations';

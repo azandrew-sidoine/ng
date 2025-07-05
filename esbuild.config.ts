@@ -21,8 +21,7 @@ function compileEnv(o: Record<string, any>) {
     }
     return carry;
   }, {} as Record<string, any>);
-  // Provides an environment variables that is accessible
-  // in browser environment
+  // provides an environment variables that is accessible in browser environment
   return { 'process.env': JSON.stringify(e) };
 }
 

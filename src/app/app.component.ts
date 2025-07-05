@@ -11,17 +11,16 @@ import { COMMON_PIPES } from '@azlabsjs/ngx-common';
 import { provideHttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [
-    RouterOutlet,
-    TranslateModule,
-    ...COMMON_PIPES,
-  ],
-  providers: [provideHttpClient() as unknown as Provider],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-root',
+    imports: [
+        RouterOutlet,
+        TranslateModule,
+        ...COMMON_PIPES,
+    ],
+    providers: [provideHttpClient() as unknown as Provider],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
   //#region component inputs

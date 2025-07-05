@@ -34,21 +34,20 @@ import { CLR_SIDENAV_DIRECTIVES } from '../clr-sidenav';
 import { LINK_DIRECTIVE, Link } from '../link';
 
 @Component({
-  imports: [
-    CommonModule,
-    ClarityModule,
-    RouterModule,
-    ...HEADER_ACTIONS_DIRECTIVES,
-    ...MAIN_NAV_DIRECTIVES,
-    ...LINK_DIRECTIVE,
-    ...HEADER_DIRECTIVES,
-    ...CLR_SIDENAV_DIRECTIVES,
-  ],
-  standalone: true,
-  selector: 'ngx-view',
-  templateUrl: './view.component.html',
-  styleUrls: ['./view.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        ClarityModule,
+        RouterModule,
+        ...HEADER_ACTIONS_DIRECTIVES,
+        ...MAIN_NAV_DIRECTIVES,
+        ...LINK_DIRECTIVE,
+        ...HEADER_DIRECTIVES,
+        ...CLR_SIDENAV_DIRECTIVES,
+    ],
+    selector: 'ngx-view',
+    templateUrl: './view.component.html',
+    styleUrls: ['./view.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ViewComponent implements AfterViewInit, OnDestroy {
   // #region Component children

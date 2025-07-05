@@ -13,11 +13,10 @@ import { URLChanges } from '../router';
 import { DROPDOWN_DIRECTIVES } from '@azlabsjs/ngx-dropdown';
 
 @Component({
-  standalone: true,
-  imports: [CommonModule, ...DROPDOWN_DIRECTIVES, ...LINK_DIRECTIVE],
-  selector: 'ngx-nav',
-  templateUrl: './main-nav.component.html',
-  styleUrls: ['./main-nav.component.scss'],
+    imports: [CommonModule, ...DROPDOWN_DIRECTIVES, ...LINK_DIRECTIVE],
+    selector: 'ngx-nav',
+    templateUrl: './main-nav.component.html',
+    styleUrls: ['./main-nav.component.scss']
 })
 export class MainNavComponent implements OnDestroy, AfterViewInit {
   // #region Component inputs

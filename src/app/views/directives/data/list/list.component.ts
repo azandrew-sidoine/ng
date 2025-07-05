@@ -16,12 +16,11 @@ import { CommonModule } from '@angular/common';
 import { PIPES } from './pipes';
 
 @Component({
-  standalone: true,
-  imports: [CommonModule, ...COMMON_PIPES, ...DATAGRID_DIRECTIVES, ...PIPES],
-  selector: 'ngx-data-list',
-  templateUrl: './list.component.html',
-  styleUrls: ['./list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CommonModule, ...COMMON_PIPES, ...DATAGRID_DIRECTIVES, ...PIPES],
+    selector: 'ngx-data-list',
+    templateUrl: './list.component.html',
+    styleUrls: ['./list.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListComponent {
   // #region Component Inputs

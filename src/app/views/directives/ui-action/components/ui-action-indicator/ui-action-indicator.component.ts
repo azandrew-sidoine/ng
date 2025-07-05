@@ -13,12 +13,11 @@ import { CommonModule } from '@angular/common';
 import SPINNER_DIRECTIVES from '../../../spinner';
 
 @Component({
-  standalone: true,
-  imports: [CommonModule, ...SPINNER_DIRECTIVES],
-  selector: 'ngx-action-indicator',
-  templateUrl: './ui-action-indicator.component.html',
-  styleUrls: ['./ui-action-indicator.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CommonModule, ...SPINNER_DIRECTIVES],
+    selector: 'ngx-action-indicator',
+    templateUrl: './ui-action-indicator.component.html',
+    styleUrls: ['./ui-action-indicator.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UIActionIndicatorComponent implements OnDestroy {
   // #region Component properties

@@ -38,12 +38,11 @@ function columns(values: GridDetailColumnType[]) {
 }
 
 @Component({
-  standalone: true,
-  imports: [CommonModule, ...COMMON_PIPES],
-  selector: 'ngx-data-detail',
-  templateUrl: './detail.component.html',
-  styleUrls: ['./detail.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CommonModule, ...COMMON_PIPES],
+    selector: 'ngx-data-detail',
+    templateUrl: './detail.component.html',
+    styleUrls: ['./detail.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DetailComponent {
   // #region Component inputs

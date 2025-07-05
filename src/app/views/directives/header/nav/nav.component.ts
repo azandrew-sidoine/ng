@@ -6,16 +6,15 @@ import { RouterModule } from '@angular/router';
 import { COMMON_PIPES } from '../pipes';
 
 @Component({
-  imports: [
-    HeaderNavLinkComponent,
-    CommonModule,
-    RouterModule,
-    ...COMMON_PIPES,
-  ],
-  standalone: true,
-  selector: 'ngx-header-nav',
-  templateUrl: './nav.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+    imports: [
+        HeaderNavLinkComponent,
+        CommonModule,
+        RouterModule,
+        ...COMMON_PIPES,
+    ],
+    selector: 'ngx-header-nav',
+    templateUrl: './nav.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderNavComponent {
   //#region Component inputs

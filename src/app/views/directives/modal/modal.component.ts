@@ -29,30 +29,23 @@ type StateType = {
 };
 
 @Component({
-  standalone: true,
-  imports: [CommonModule],
-  selector: 'ngx-modal',
-  templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.scss'],
-  animations: [
-    trigger('fadeInOutSlideBottom', [
-      transition('close => open', [
-        style({ transform: 'translateY(1000px)', opacity: 0 }),
-        animate(
-          '200ms ease-in',
-          style({ transform: 'translateY(0)', opacity: 1 })
-        ),
-      ]),
-      transition('open => close', [
-        style({ transform: 'translateY(0)', opacity: 1 }),
-        animate(
-          '200ms ease',
-          style({ transform: 'translateY(1000px)', opacity: 0 })
-        ),
-      ]),
-    ]),
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CommonModule],
+    selector: 'ngx-modal',
+    templateUrl: './modal.component.html',
+    styleUrls: ['./modal.component.scss'],
+    animations: [
+        trigger('fadeInOutSlideBottom', [
+            transition('close => open', [
+                style({ transform: 'translateY(1000px)', opacity: 0 }),
+                animate('200ms ease-in', style({ transform: 'translateY(0)', opacity: 1 })),
+            ]),
+            transition('open => close', [
+                style({ transform: 'translateY(0)', opacity: 1 }),
+                animate('200ms ease', style({ transform: 'translateY(1000px)', opacity: 0 })),
+            ]),
+        ]),
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NgxModalComponent implements AfterViewInit, OnChanges {
   // #region Component internal properties

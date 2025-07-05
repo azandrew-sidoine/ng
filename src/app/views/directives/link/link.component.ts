@@ -15,11 +15,10 @@ import { CommonModule, DOCUMENT } from '@angular/common';
 import { UILink } from './types';
 
 @Component({
-  standalone: true,
-  imports: [CommonModule],
-  selector: 'ngx-link',
-  templateUrl: './link.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CommonModule],
+    selector: 'ngx-link',
+    templateUrl: './link.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LinkComponent {
   // #region Component inputs

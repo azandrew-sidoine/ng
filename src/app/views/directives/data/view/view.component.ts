@@ -53,16 +53,15 @@ type ActionErrorType = {
 };
 
 @Component({
-  standalone: true,
-  imports: [
-    CommonModule,
-    ...COMMON_PIPES,
-    ...VIEW_DIRECTIVES,
-    ...DATA_DIRECTIVES,
-  ],
-  selector: 'ngx-data-view',
-  templateUrl: './view.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        ...COMMON_PIPES,
+        ...VIEW_DIRECTIVES,
+        ...DATA_DIRECTIVES,
+    ],
+    selector: 'ngx-data-view',
+    templateUrl: './view.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ViewComponent
   implements ViewStateComponentType, OnDestroy, AfterViewInit

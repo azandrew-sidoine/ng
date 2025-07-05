@@ -3,10 +3,9 @@ import { Component } from '@angular/core';
 import { VIEW_DIRECTIVES } from '../../directives/view';
 
 @Component({
-  standalone: true,
-  imports: [CommonModule, ...VIEW_DIRECTIVES],
-  selector: 'app-example',
-  templateUrl: './example.component.html',
-  styleUrls: ['./example.component.scss'],
+    imports: [CommonModule, ...VIEW_DIRECTIVES],
+    selector: 'app-example',
+    templateUrl: './example.component.html',
+    styleUrls: ['./example.component.scss']
 })
 export class ExampleComponent {}

@@ -2,12 +2,11 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-  standalone: true,
-  imports: [CommonModule],
-  selector: 'ngx-ui-alert',
-  templateUrl: 'ui-alert.component.html',
-  styleUrls: ['./ui-alert.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    imports: [CommonModule],
+    selector: 'ngx-ui-alert',
+    templateUrl: 'ui-alert.component.html',
+    styleUrls: ['./ui-alert.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UIAlertComponent {
   // #region Component inputs

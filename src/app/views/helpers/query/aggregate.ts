@@ -52,7 +52,7 @@ export class AggregateQuery
 }
 
 /**
- * Aggregation query method factory
+ * aggregation query method factory
  *
  * @param provider
  * @param url
@@ -61,7 +61,7 @@ export function useAggregation<T>(
   provider: QueryProviderType<[string, AggregationQuery, unknown]>,
   url: string
 ) {
-  return (query: AggregationQuery, _default?: unknown) => {
-    return provider.query(url, query, _default) as Observable<T>;
+  return (query: AggregationQuery, y?: unknown) => {
+    return provider.query(url, query, y) as Observable<T>;
   };
 }

@@ -30,15 +30,15 @@ export class HTTPQueryProvider
   implements
     QueryProviderType<[string, RequestMethod, Record<string, any> | undefined]>
 {
-  // Class constructor
+  // class constructor
   constructor(private http: HttpClient) {}
 
-  // Query implementation method
+  // query implementation method
   query(
     url: string,
     method: RequestMethod,
     params?: Record<string, any>,
-    _default?: unknown
+    d?: unknown
   ): Observable<unknown> {
     return this.http
       .request(method, url, {
@@ -49,7 +49,7 @@ export class HTTPQueryProvider
         catchError((err) => {
           // Case a default value is provided as parameter, we return the
           // default value, else we throw an error
-          return _default ? of(_default) : throwError(() => err);
+          return d ? of(d) : throwError(() => err);
         })
       ) as Observable<unknown>;
   }

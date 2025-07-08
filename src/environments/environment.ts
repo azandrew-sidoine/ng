@@ -7,7 +7,7 @@ declare var process: {
  *
  * @param name
  */
-export const env = (name: string, _default: unknown = undefined) => {
+export const env = (name: string, d: unknown = undefined) => {
   const value = process.env[name];
   // When environment variable is not set resolver might return empty string
   // Therefore we fallback to the default value whenever an empty string is returned
@@ -16,8 +16,8 @@ export const env = (name: string, _default: unknown = undefined) => {
   return typeof value !== 'undefined' && value !== null
     ? String(value).trim() !== ''
       ? value
-      : _default
-    : _default;
+      : d
+    : d;
 };
 
 export const environment = {
@@ -48,6 +48,16 @@ export const environment = {
   // TODO: Uncomment the code below to change the view ui layout
   ui: {
     layout: `${env('UI_LAYOUT', 'default')}`,
+    telphone: {
+      countries: {
+        supported: `${env('UI_TEL_SUPPORTED_COUNTRIES', 'tg,bj,gh,ci')}`
+          .split(',')
+          .map((x) => x.trim()),
+        preferred: `${env('UI_TEL_PREFERED_COUNTRIES', 'tg')}`
+          .split(',')
+          .map((x) => x.trim()),
+      },
+    },
   },
 
   // #TODO: Add authentication configuration if required

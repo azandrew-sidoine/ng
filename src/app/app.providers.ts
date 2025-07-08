@@ -47,7 +47,7 @@ import {
 } from '@azlabsjs/ngx-clr-form-control';
 import {
   CommonTextPipe,
-  provideCommonStrings,
+  provideTranslations as provideCommonTranslations,
   providePipes,
 } from '@azlabsjs/ngx-common';
 import {
@@ -63,13 +63,15 @@ import {
 import {
   TranslateLoader,
   TranslateModule,
-  TranslateService,
-  TranslationChangeEvent,
 } from '@ngx-translate/core';
-import { HttpClient, provideHttpClient as ngProvideHttpClient } from '@angular/common/http';
+import {
+  HttpClient,
+  provideHttpClient as ngProvideHttpClient,
+} from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { JSObject } from '@azlabsjs/js-object';
 import { useTranslationsFactory } from './translations';
+import { TranslationsType } from '@azlabsjs/ngx-common/lib/pipes/strings/types';
 // TODO: Uncomment the code below to import query library HTTP client provider
 // import { provideQueryClient } from './views/helpers';
 
@@ -79,6 +81,32 @@ type AuthHandlerType = { signOut: (revoke: boolean) => any };
 export function createTranslateLoader() {
   return new TranslateHttpLoader(inject(HttpClient), './assets/i18n/', '.json');
 }
+
+export const createTranslate = useTranslationsFactory();
+export const createAppTranslator = createTranslate((values) => {
+  return { ...(values['app'] ?? {}), auth: values['auth'] ?? {} };
+});
+
+// uncomment code below to allow filtering based on authenticated user scopes
+// export function createHasScopes(
+//   canAny?: (v: { scopes: string[] }, ...s: string[]) => boolean
+// ) {
+//   return (i: Injector) => {
+//     const auth: any = i.get(AUTH_SERVICE);
+
+//     if (!auth) {
+//       return (() => true) as (scopes: string[]) => boolean;
+//     }
+//     return auth.signInState$.pipe(
+//       map((state: any) => state?.scopes),
+//       map((scopes: string[]) => (s: string[]) => {
+//         s = s ?? [];
+//         const fn = canAny ?? (() => true);
+//         return s.length === 0 ? true : fn({ scopes: scopes ?? [] }, ...s);
+//       })
+//     );
+//   };
+// }
 
 /** Exported list of application level providers */
 export const PROVIDERS = [
@@ -90,7 +118,7 @@ export const PROVIDERS = [
     },
   },
 
-  // Register translation library providers
+  // register translation library providers
   importProvidersFrom(
     TranslateModule.forRoot({
       defaultLanguage: 'fr',
@@ -101,27 +129,40 @@ export const PROVIDERS = [
     })
   ),
 
-  // Provides tokens from Ng HTTP library
+  // provides tokens from Ng HTTP library
   ngProvideHttpClient(),
 
   /** provides injection tokens for navigation handler */
   provideRouterNavigate(),
 
-  // /** Provides injection token for angular router change event */
+  // /** provides injection token for angular router change event */
   provideRouterChanges(),
 
-  // /** Provides intl-tel-input preferred country */
-  providePreferredCountries(['tg']),
+  // /** provides intl-tel-input preferred country */
+  providePreferredCountries(environment.ui.telphone.countries.supported),
 
   // // TODO: update the source code to provide application routing configration
   provideAppLinks({
     links: LINKS,
-    authFactory: null,
-    translationFactory: null,
+    // hasScopes: createHasScopes(),
+    translations: (i) => {
+      const translations$ = createAppTranslator(i);
+      return (p: string | string[]) => {
+        let items = Array.isArray(p) ? p : [p];
+        return translations$.pipe(
+          map((values) =>
+            items.reduce((y, x) => {
+              y[x] = JSObject.getProperty(values, x);
+              return y;
+            }, {} as { [k: string]: any })
+          )
+        );
+      };
+    },
   }),
 
   // /** TODO: update the list to change the list of supported countries */
-  provideSupportedCountries(['tg', 'bj', 'gh', 'ci']),
+  provideSupportedCountries(environment.ui.telphone.countries.supported),
   provideDatagridConfig({
     pagination: { page: 'page', perPage: 'per_page' },
     pageSize: 15,
@@ -221,19 +262,16 @@ export const PROVIDERS = [
   ),
 
   // TODO: Add ngx-common module application texts loader
-  provideCommonStrings(
-    useTranslationsFactory((values) => {
-      return { ...(values['app'] ?? {}), auth: values['auth'] ?? {} };
-    })
-  ),
+  provideCommonTranslations(createAppTranslator),
 
   // TODO: Uncomment the code below to override default input validation message
   provideTranslations(
-    useTranslationsFactory((values) => {
+    createTranslate((values) => {
       return {
-        validation: JSObject.getProperty(values, 'app.validation'),
+        validation: JSObject.getProperty(values, 'app.validation') as any,
         loadingText: JSObject.getProperty(values, 'app.events.loading'),
       };
-    })
+      // type cast to any to avoid typescript errors
+    }) as any
   ),
 ];

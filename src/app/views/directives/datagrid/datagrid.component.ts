@@ -33,7 +33,7 @@ import {
 import { GridDataQueryProvider } from './datagrid.query.service';
 import { defaultPaginateQuery } from './defaults';
 import { DataGridStateType, PipeTransformType, RestQueryType } from './types';
-import { Intercept, NextCallback, usePaginateActionPipeline$ } from './rx';
+import { Intercept, NextCallback, usePaginateAction } from './rx';
 import { DATAGRID_CONFIG } from './tokens';
 import {
   QueryStateType as QueryState,
@@ -212,7 +212,7 @@ export class DatagridComponent implements OnInit, OnDestroy, OnChanges {
         ]),
       })),
       debounceTime(200),
-      usePaginateActionPipeline$(
+      usePaginateAction(
         this.getIntercept(),
         (query) =>
           useQuery(

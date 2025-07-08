@@ -18,6 +18,8 @@ export type RequestMethod =
   | 'OPTION'
   | 'HEAD';
 
+
+/** @deprecated */
 @Injectable({
   providedIn: 'root',
 })
@@ -56,7 +58,7 @@ export class HTTPQueryProvider
 }
 
 /**
- * Provides an HTTP query observable that caches data for optimization
+ * provides an HTTP query observable that caches data for optimization
  * and refetch updates each 30 min
  *
  * @param provider

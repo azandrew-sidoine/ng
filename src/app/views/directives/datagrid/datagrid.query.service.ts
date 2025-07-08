@@ -13,7 +13,7 @@ import { DataGridStateType, RestQueryType } from './types';
 
 @ProvidesQuery({
   observe: 'query',
-  cacheTime: 300000,
+  cacheTime: 300_000,
 })
 @Injectable()
 export class GridDataQueryProvider

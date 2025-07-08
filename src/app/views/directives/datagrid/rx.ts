@@ -15,7 +15,7 @@ export type Intercept<T = unknown, R = unknown> = (
 ) => ReturnType<typeof next$>;
 
 /** @description `actionPipeline` generic operator specification for datagrid pagination */
-export function usePaginateActionPipeline$<T>(
+export function usePaginateAction<T>(
   intercept: Intercept<ProjectPaginateQueryParamType, PaginateResult<T>>,
   next$: (input: ProjectPaginateQueryParamType) => Observable<PaginateResult<T>>
 ) {

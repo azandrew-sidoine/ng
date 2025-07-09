@@ -7,6 +7,8 @@ import { environment } from '../environments/environment';
 import { DataConfigArgType } from './views/directives/data';
 import healthcaresViewConfig from './views/modules/healthcares';
 
+const { name } = environment;
+
 /** @description Application routes definition */
 export const LINKS: AppLinks<DataConfigArgType> = [
   {
@@ -16,9 +18,7 @@ export const LINKS: AppLinks<DataConfigArgType> = [
     routeConfig: {
       implicit: false,
       loadChildren: () => import('./views/modules/dashboard/routes'),
-      data: {
-        name: environment.name,
-      },
+      data: { name },
     },
   },
   // healthcares
@@ -29,14 +29,12 @@ export const LINKS: AppLinks<DataConfigArgType> = [
     routeConfig: {
       implicit: false,
       loadChildren: () => import('./views/modules/example/routes'),
-      data: {
-        name: environment.name,
-      },
+      data: { name },
     },
   },
 
   {
-    label: 'app.links.healthcares',
+    label: 'links.healthcares',
     href: '/dashboard/healthcares',
     cssClass: '',
     routeConfig: {
@@ -76,7 +74,7 @@ export const LINKS: AppLinks<DataConfigArgType> = [
                 ],
                 detail: ['id', 'created_by', 'synchronized', 'usage_count'],
               },
-              name: 'app.name',
+              name,
               module: 'healthcares',
               // search: {
               //   component: MembersSearchComponent,

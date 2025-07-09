@@ -21,7 +21,7 @@
         <div class="data-body__content" @fadeInOut>
           <ng-container
             *ngTemplateOutlet="
-              listRef ?? defaultList;
+              listRef ?? _listRef;
               context: {
                 onRefreshDatagrid: onRefreshDatagrid.bind(this),
                 onCachedQuery: onCachedQuery.bind(this),
@@ -42,7 +42,7 @@
             "
           ></ng-container>
           <ng-template
-            #defaultList
+            #_listRef
             let-onRefreshDatagrid="onRefreshDatagrid"
             let-onCachedQuery="onCachedQuery"
             let-onDgStateChanges="onDgStateChanges"
@@ -202,9 +202,7 @@
         </ng-template>
       </ng-container>
 
-      <!-- dynamic content -->
       <div #componentOutlet></div>
-      <!--\ dynamic content -->
     </ng-container>
   </div>
 </div>

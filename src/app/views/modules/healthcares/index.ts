@@ -18,6 +18,7 @@ export default <T extends Record<string, any> = any>(
       value: createFormConfig(url), // form  // replace `createFormConfig` with `form` to use constant form declaration
     },
     datagrid: {
+      url,
       transformColumnTitle: ['text', 'uppercase'],
       columns: gridColumns,
       query,

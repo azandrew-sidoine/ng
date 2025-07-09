@@ -25,7 +25,7 @@ export const environment = {
   production:
     `${env('APP_ENV', 'production')}`.toLocaleLowerCase() === 'production',
   // Application logo path
-  logo: env('APP_LOGO', '/assets/media/logo.png'),
+  logo: env('APP_LOGO', ''), // /assets/media/logo.png
 
   // Application theme
   theme: env('THEME', 'light'),
@@ -35,7 +35,11 @@ export const environment = {
   api: {
     host: `${env('API_URL')}/api/v2`,
     // HTTP API endpoints environment configuration
-    endpoints: {},
+    endpoints: {
+      healthcares: {
+        url: 'http://127.0.0.1:8000'
+      }
+    },
   },
 
   // TODO: Uncomment the code below to add form configuration values

@@ -68,12 +68,12 @@ type StateType = typeof _defaultState;
 type SetStateParamType<T> = ((state: T) => T) | Partial<T>;
 
 @Component({
-    imports: [CommonModule, ...DIRECTIVES],
-    providers: [GridDataQueryProvider],
-    selector: 'ngx-datagrid',
-    templateUrl: './datagrid.component.html',
-    styles: [
-        `
+  imports: [CommonModule, ...DIRECTIVES],
+  providers: [GridDataQueryProvider],
+  selector: 'ngx-datagrid',
+  templateUrl: './datagrid.component.html',
+  styles: [
+    `
       .dg-header-container {
         margin: 10px 0 0 0;
       }
@@ -81,8 +81,8 @@ type SetStateParamType<T> = ((state: T) => T) | Partial<T>;
         background-color: var(--row-inactive, #cacaca);
       }
     `,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DatagridComponent implements OnInit, OnDestroy, OnChanges {
   // #region Component inputs

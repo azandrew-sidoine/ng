@@ -68,17 +68,17 @@ function snapshot<T>(route: ActivatedRoute, key: string, _default: T) {
 }
 
 @Component({
-    imports: [
-        CommonModule,
-        ...COMMON_PIPES,
-        ...VIEW_DIRECTIVES,
-        ...DATA_DIRECTIVES,
-        ...ROUTER_PIPES,
-    ],
-    selector: 'ngx-data-view',
-    templateUrl: './view.component.html',
-    styleUrls: ['./view.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  imports: [
+    CommonModule,
+    ...COMMON_PIPES,
+    ...VIEW_DIRECTIVES,
+    ...DATA_DIRECTIVES,
+    ...ROUTER_PIPES,
+  ],
+  selector: 'ngx-data-view',
+  templateUrl: './view.component.html',
+  styleUrls: ['./view.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ViewComponent
   implements ViewStateComponentType, OnDestroy, AfterViewInit
@@ -128,11 +128,15 @@ export class ViewComponent
   // Child view reference
   @ViewChild('dataRef', { static: false }) dataViewRef!: DataComponentType;
 
-  // #region Component internal properties
-
+  // #region component internal properties
   private _formValue$ = new BehaviorSubject<Record<string, unknown> | null>(
     null
   );
+  private _state: StateType = { view: 'listView', params: {} };
+  get state() {
+    return this._state;
+  }
+
   private _subscriptions: Subscription[] = [
     this.route.queryParamMap
       .pipe(
@@ -150,21 +154,18 @@ export class ViewComponent
         })
       )
       .subscribe(),
-    this.route.queryParams.subscribe((params) =>
-      this.setState((s) => ({
-        ...s,
-        params,
-        view: (params['view'] ??
-          params['view_mode'] ??
-          s.view) as unknown as ViewStateType,
-      }))
-    ),
+    this.route.queryParams.subscribe((params) => {
+      const { view, view_mode } = params;
+      this.setState((state) => {
+        return {
+          ...state,
+          params,
+          view: (view ?? view_mode ?? state.view) as unknown as ViewStateType,
+        };
+      });
+    }),
   ];
-  private _state: StateType = { view: 'listView', params: {} };
-  get state() {
-    return this._state;
-  }
-  // #endregion Component internal properties
+  // #endregion
 
   // Class constructor
   constructor(
@@ -183,7 +184,9 @@ export class ViewComponent
         .pipe(
           filter((value) => typeof value !== 'undefined' && value !== null),
           distinctUntilChanged(),
-          tap((value) => (this.links = value))
+          tap((value) => {
+            this.links = value;
+          })
         )
         .subscribe();
       this._subscriptions.push(subscription);

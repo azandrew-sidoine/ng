@@ -102,7 +102,7 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    // Case the links input does not have value, we load links from the global application link
+    // case the links input does not have value, we load links from the global application link
     if (this._links$ && !this.links) {
       // Subscribe to the global application links and set the component links
       const subscription = this._links$
@@ -111,7 +111,7 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
           distinctUntilChanged(),
           tap((value) => {
             this.links = value;
-            this.changes?.detectChanges();
+            this.changes?.markForCheck();
           })
         )
         .subscribe();

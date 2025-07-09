@@ -18,7 +18,7 @@ export function data$<T = any>(
   _default: string | null = null
 ): Observable<T | null> {
   return route.data.pipe(
-    map((state) => getObjectProperty(state, prop) ?? _default)
+    map((state) => (getObjectProperty(state, prop) ?? _default) as T | null)
   );
 }
 

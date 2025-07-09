@@ -4,10 +4,10 @@ import { QueryProviderType, ProvidesQuery } from '@azlabsjs/rx-query';
 import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
 import { Injectable } from '@angular/core';
 
-@ProvidesQuery({
-  observe: 'query',
-  cacheTime: 300000,
-})
+// @ProvidesQuery({
+//   observe: 'query',
+//   cacheTime: 300000,
+// })
 @Injectable()
 export class GridDataQueryProvider
   implements QueryProviderType<[string, Record<string, any>]>

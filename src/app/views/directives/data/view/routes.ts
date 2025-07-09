@@ -21,19 +21,19 @@ type ComponentDataType = Data & {
 
 /** Angular routing lazy loading factory function */
 export function createRoutes(
-  config: string | BuiltTypeArgType,
+  c: string | BuiltTypeArgType,
   data?: ComponentDataType
 ) {
+  const resolver =
+    typeof c === 'string'
+      ? provideUrlConfigResolver(c)
+      : provideConfigResolver(c);
+
   return [
     {
       path: '',
       component: ViewComponent,
-      resolve: {
-        config:
-          typeof config === 'string'
-            ? provideUrlConfigResolver(config)
-            : provideConfigResolver(config),
-      },
+      resolve: { config: resolver },
       data,
     },
   ] as Route[];

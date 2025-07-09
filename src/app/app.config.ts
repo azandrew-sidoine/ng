@@ -4,7 +4,8 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { PROVIDERS } from './app.providers';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes), provideClientHydration(), ...PROVIDERS],
+  providers: [provideRouter(routes), provideClientHydration(), provideAnimations(), ...PROVIDERS],
 };

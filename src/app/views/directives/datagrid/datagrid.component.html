@@ -27,7 +27,7 @@
     <!-- Action overflow -->
     <ng-container *ngIf="overflowRef">
       <ng-template #dgActionOverflow let-item>
-        <ng-container *ngTemplateOutlet="overflowRef; context: { item: this.item }"></ng-container>
+        <ng-container *ngTemplateOutlet="overflowRef; context: { item }"></ng-container>
       </ng-template>
     </ng-container>
     <!-- Action overflow -->

@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
-import { Provider, ProviderToken, inject } from '@angular/core';
-import { HTTPClientType, HTTP_QUERY_CLIENT } from './types';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Provider, inject } from '@angular/core';
+import { HTTP_QUERY_CLIENT, HTTPClientType, QUERY_CLIENT } from './types';
 import {
   CacheQueryConfig,
   ObserveKeyType,
@@ -8,75 +8,139 @@ import {
   useDefaultCacheConfig,
 } from '@azlabsjs/rx-query';
 import { BuilderType, QueryResultType } from './builder';
-import { Observable, map } from 'rxjs';
+import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { createQueryResult } from './utils';
+import { RequestMethod } from './http';
 
-/** @internal */
-type CacheConfigType = CacheQueryConfig & {
-  name: string;
-  observe?: ObserveKeyType;
-};
+// @internal
+type _CacheQueryConfig =
+  | boolean
+  | (CacheQueryConfig & {
+      observe?: ObserveKeyType;
+      name: string;
+    });
 
-/** @internal Query client type declaration */
-class Client implements QueryProviderType<[BuilderType]> {
-  get cacheConfig(): CacheConfigType {
-    return this._cacheConfig;
-  }
+/** @internal query client type declaration */
+class _Client implements QueryProviderType<[BuilderType]> {
+  public readonly cacheConfig!: CacheQueryConfig & {
+    name?: string;
+  };
 
-  // Class constructor declaration
+  // class constructor declaration
   constructor(
-    private client: HTTPClientType,
-    private _cacheConfig: CacheConfigType
-  ) {}
+    private http: HTTPClientType,
+    config?: boolean | _CacheQueryConfig
+  ) {
+    if (typeof config === 'boolean' && config === true) {
+      this.cacheConfig = {
+        ...useDefaultCacheConfig(),
+        // name: `query::bindTo[${name}]`,
+      };
+    }
+
+    if (typeof config === 'object' && config !== null) {
+      const { name } = config;
+      this.cacheConfig = {
+        ...config,
+        name: `query::bindTo[${name}]`,
+      };
+    }
+  }
 
   query(
     builder: BuilderType
   ): Observable<QueryResultType<Record<string, unknown>>> {
-    return this.client
+    return this.http
       .request('GET', builder.getPath(), {
-        params: {
-          _query: JSON.stringify(builder.getQuery()),
-          '_columns[]': builder.getColumns(),
-          '_hidden[]': builder.getExcepts(),
-        },
+        params: new HttpParams({
+          fromObject: {
+            _query: JSON.stringify(builder.getQuery()),
+            '_columns[]': builder.getColumns(),
+            '_hidden[]': builder.getExcepts(),
+          },
+        }),
         responseType: 'json',
       })
-      .pipe(map((result) => createQueryResult(result, 'data')));
+      .pipe(map((result) => createQueryResult(result)));
   }
 }
 
-/** @description Creates a cache configuration object from parameters*/
-function createCacheConfig<T extends Record<string, any>>(
-  config: T,
-  name: string
-) {
-  return {
-    ...(typeof config === 'boolean' && config === true
-      ? useDefaultCacheConfig()
-      : config),
-    observe: 'body',
-    name: `query::bindTo[${name}]`,
-  } as T & { name: string; observe: ObserveKeyType };
+/** @internal HTTP query client type declaration */
+class _HTTPClient
+  implements
+    QueryProviderType<
+      [
+        string,
+        RequestMethod | undefined | null,
+        Record<string, any> | undefined | null
+      ]
+    >
+{
+  public readonly cacheConfig!: CacheQueryConfig & {
+    name?: string;
+  };
+
+  // class constructor declaration
+  constructor(
+    private http: HTTPClientType,
+    config?: boolean | _CacheQueryConfig
+  ) {
+    if (typeof config === 'boolean' && config === true) {
+      this.cacheConfig = {
+        ...useDefaultCacheConfig(),
+        // name: `query::bindTo[${name}]`,
+      };
+    }
+
+    if (typeof config === 'object' && config !== null) {
+      const { name } = config;
+      this.cacheConfig = {
+        ...config,
+        name: `query::bindTo[${name}]`,
+      };
+    }
+  }
+
+  // query implementation method
+  query(
+    url: string,
+    method?: RequestMethod | null,
+    params?: Record<string, any> | null,
+    d?: unknown
+  ): Observable<unknown> {
+    return this.http
+      .request(method ?? 'GET', url, {
+        params: new HttpParams({ fromObject: params ?? {} }),
+        responseType: 'json',
+      })
+      .pipe(
+        catchError((err) => {
+          // case a default value is provided as parameter, we return the
+          // default value, else we throw an error
+          return d ? of(d) : throwError(() => err);
+        })
+      ) as Observable<unknown>;
+  }
 }
 
-/** @description Angular provider for HTTP query client sdk */
-export function provideQueryClient(
-  client?: ProviderToken<HTTPClientType>,
-  config?: CacheQueryConfig
-) {
+/** @description angular provider for query builder client sdk */
+export function provideQuery(config: _CacheQueryConfig) {
+  return {
+    provide: QUERY_CLIENT,
+    useFactory: () => {
+      const http = inject(HttpClient) as HTTPClientType;
+      return new _Client(http, config);
+    },
+  } as Provider;
+}
+
+/** @description angular provider for query builder client sdk */
+export function provideHttpQuery(config: _CacheQueryConfig) {
   return {
     provide: HTTP_QUERY_CLIENT,
     useFactory: () => {
-      return new Client(
-        client ? inject(client) : (inject(HttpClient) as HTTPClientType),
-        createCacheConfig(
-          config ?? {
-            refetchInterval: 1800000,
-            cacheTime: 900000,
-          },
-          'QueryClient'
-        )
-      );
+      const http = inject(HttpClient) as HTTPClientType;
+      return new _HTTPClient(http, config);
     },
   } as Provider;
 }

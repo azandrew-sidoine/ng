@@ -35,9 +35,19 @@
 </header>
 
 <ng-template #defaultBrandingRef>
-  <img class="logo" *ngIf="logo" [src]="logo" alt="Application Logo" />
-  <span *ngIf="name" class="title">{{ name }}</span>
-  <span *ngIf="module" class="margin-left-1rem title"> {{ module }}</span>
+  <img
+    class="logo"
+    *ngIf="logo && logo.trim().length !== 0"
+    [src]="logo"
+    alt="Application Logo"
+  />
+  <span *ngIf="name && name.trim().length !== 0" class="title">{{ name }}</span>
+  <span
+    *ngIf="module && module.trim().length !== 0"
+    class="margin-left-1rem title"
+  >
+    {{ module }}</span
+  >
 </ng-template>
 
 <ng-template #defaultNavRef>

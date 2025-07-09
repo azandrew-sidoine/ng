@@ -9,7 +9,7 @@
   >
     <ng-container
       *ngTemplateOutlet="
-        gridViewRef ?? defaultGridViewRef;
+        gridViewRef ?? _gridviewRef;
         context: {
           handleCachedQuery: handleCachedQuery.bind(this),
           handleDgStateChanges: handleDgStateChanges.bind(this),
@@ -27,7 +27,7 @@
 </ng-container>
 
 <ng-template
-  #defaultGridViewRef
+  #_gridviewRef
   let-handleCachedQuery="handleCachedQuery"
   let-handleDgStateChanges="handleDgStateChanges"
   let-handleDetailPaneChange="handleDetailPaneChange"

@@ -14,12 +14,11 @@ import { CommonModule } from '@angular/common';
 import { DROPDOWN_DIRECTIVES } from '@azlabsjs/ngx-dropdown';
 
 @Component({
-  imports: [CommonModule, ...DROPDOWN_DIRECTIVES],
-  standalone: true,
-  selector: 'ngx-header-actions',
-  templateUrl: './actions.component.html',
-  styleUrls: ['./actions.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CommonModule, ...DROPDOWN_DIRECTIVES],
+    selector: 'ngx-header-actions',
+    templateUrl: './actions.component.html',
+    styleUrls: ['./actions.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderActionsComponent {
   // #region Component inputs

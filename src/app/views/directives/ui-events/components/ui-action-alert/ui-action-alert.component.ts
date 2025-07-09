@@ -18,27 +18,23 @@ import { AlertTypePipe } from './pipes';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
-  standalone: true,
-  imports: [CommonModule, UIAlertComponent, AlertTypePipe],
-  selector: 'ngx-action-alert',
-  templateUrl: './ui-action-alert.component.html',
-  styleUrls: ['./ui-action-alert.component.scss'],
-  animations: [
-    trigger('fadeInOutSlide', [
-      transition(':enter', [
-        style({ transform: 'translateX(250px)', opacity: 0 }),
-        animate(
-          '200ms ease-in',
-          style({ transform: 'translateX(0)', opacity: 1 })
-        ),
-      ]),
-      transition(':leave', [
-        style({ transform: 'translateX(0)', opacity: 1 }),
-        animate('200ms', style({ transform: 'translateX(250px)', opacity: 0 })),
-      ]),
-    ]),
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CommonModule, UIAlertComponent, AlertTypePipe],
+    selector: 'ngx-action-alert',
+    templateUrl: './ui-action-alert.component.html',
+    styleUrls: ['./ui-action-alert.component.scss'],
+    animations: [
+        trigger('fadeInOutSlide', [
+            transition(':enter', [
+                style({ transform: 'translateX(250px)', opacity: 0 }),
+                animate('200ms ease-in', style({ transform: 'translateX(0)', opacity: 1 })),
+            ]),
+            transition(':leave', [
+                style({ transform: 'translateX(0)', opacity: 1 }),
+                animate('200ms', style({ transform: 'translateX(250px)', opacity: 0 })),
+            ]),
+        ]),
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UIActionAlertComponent implements OnDestroy {
   @HostBinding('class.action-alert-container') actionAlertContainer = true;

@@ -42,16 +42,15 @@ type Intercept<T = unknown, R = unknown> = (
 ) => ReturnType<typeof next$>;
 
 @Component({
-  standalone: true,
-  imports: [
-    CommonModule,
-    ...COMMON_PIPES,
-    ...FORM_DIRECTIVES,
-    ...CLR_FORM_CONTROL_DIRECTIVES,
-  ],
-  selector: 'ngx-data-form',
-  templateUrl: './form.component.html',
-  styleUrls: ['./form.component.scss'],
+    imports: [
+        CommonModule,
+        ...COMMON_PIPES,
+        ...FORM_DIRECTIVES,
+        ...CLR_FORM_CONTROL_DIRECTIVES,
+    ],
+    selector: 'ngx-data-form',
+    templateUrl: './form.component.html',
+    styleUrls: ['./form.component.scss']
 })
 export class FormComponent
   implements AfterViewInit, OnChanges, ReactiveFormComponentInterface

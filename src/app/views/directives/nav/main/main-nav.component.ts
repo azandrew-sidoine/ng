@@ -14,16 +14,15 @@ import { DROPDOWN_DIRECTIVES } from '@azlabsjs/ngx-dropdown';
 import { COMMON_PIPES } from '@azlabsjs/ngx-common';
 
 @Component({
-  standalone: true,
-  imports: [
-    CommonModule,
-    ...COMMON_PIPES,
-    ...DROPDOWN_DIRECTIVES,
-    ...LINK_DIRECTIVE,
-  ],
-  selector: 'ngx-nav',
-  templateUrl: './main-nav.component.html',
-  styleUrls: ['./main-nav.component.scss'],
+    imports: [
+        CommonModule,
+        ...COMMON_PIPES,
+        ...DROPDOWN_DIRECTIVES,
+        ...LINK_DIRECTIVE,
+    ],
+    selector: 'ngx-nav',
+    templateUrl: './main-nav.component.html',
+    styleUrls: ['./main-nav.component.scss']
 })
 export class MainNavComponent implements OnDestroy, AfterViewInit {
   // #region Component inputs

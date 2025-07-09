@@ -68,18 +68,17 @@ function snapshot<T>(route: ActivatedRoute, key: string, _default: T) {
 }
 
 @Component({
-  standalone: true,
-  imports: [
-    CommonModule,
-    ...COMMON_PIPES,
-    ...VIEW_DIRECTIVES,
-    ...DATA_DIRECTIVES,
-    ...ROUTER_PIPES,
-  ],
-  selector: 'ngx-data-view',
-  templateUrl: './view.component.html',
-  styleUrls: ['./view.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        ...COMMON_PIPES,
+        ...VIEW_DIRECTIVES,
+        ...DATA_DIRECTIVES,
+        ...ROUTER_PIPES,
+    ],
+    selector: 'ngx-data-view',
+    templateUrl: './view.component.html',
+    styleUrls: ['./view.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ViewComponent
   implements ViewStateComponentType, OnDestroy, AfterViewInit

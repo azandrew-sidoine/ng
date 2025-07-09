@@ -111,44 +111,43 @@ type ExceptionsType = string[] | null;
 type ReadyOutputRefType = EntityBaseType | undefined | null;
 
 @Component({
-  standalone: true,
-  imports: [
-    CommonModule,
-    ...COMMON_PIPES,
-    ...FORM_MODAL_DIRECTIVES,
-    ...LIST_DIRECTIVES,
-    ...DETAIL_DIRECTIVES,
-    ...FORM_DIRECTIVES,
-    ...DATA_PIPES,
-    ...PIPES,
-  ],
-  selector: 'ngx-data',
-  templateUrl: './data.component.html',
-  styleUrls: ['./data.component.scss'],
-  providers: [
-    DeleteQueryActionHandler,
-    CreateQueryActionHandler,
-    UpdateQueryActionHandler,
-    DataComponentService,
-    CustomActionHTTPHandler,
-    { provide: REQUEST_CLIENT, useClass: NgHttpRequestClient },
-    { provide: DELETE_ACTION_HANDLER, useClass: DeleteQueryActionHandler },
-    { provide: UPDATE_ACTION_HANDLER, useClass: UpdateQueryActionHandler },
-    { provide: CREATE_ACTION_HANDLER, useClass: CreateQueryActionHandler },
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    trigger('fadeInOut', [
-      transition(':enter', [
-        style({ opacity: 0 }),
-        animate('200ms 50ms ease-in', style({ opacity: 1 })),
-      ]),
-      transition(':leave', [
-        style({ opacity: 0 }),
-        animate('200ms ease-out', style({ opacity: 0 })),
-      ]),
-    ]),
-  ],
+    imports: [
+        CommonModule,
+        ...COMMON_PIPES,
+        ...FORM_MODAL_DIRECTIVES,
+        ...LIST_DIRECTIVES,
+        ...DETAIL_DIRECTIVES,
+        ...FORM_DIRECTIVES,
+        ...DATA_PIPES,
+        ...PIPES,
+    ],
+    selector: 'ngx-data',
+    templateUrl: './data.component.html',
+    styleUrls: ['./data.component.scss'],
+    providers: [
+        DeleteQueryActionHandler,
+        CreateQueryActionHandler,
+        UpdateQueryActionHandler,
+        DataComponentService,
+        CustomActionHTTPHandler,
+        { provide: REQUEST_CLIENT, useClass: NgHttpRequestClient },
+        { provide: DELETE_ACTION_HANDLER, useClass: DeleteQueryActionHandler },
+        { provide: UPDATE_ACTION_HANDLER, useClass: UpdateQueryActionHandler },
+        { provide: CREATE_ACTION_HANDLER, useClass: CreateQueryActionHandler },
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    animations: [
+        trigger('fadeInOut', [
+            transition(':enter', [
+                style({ opacity: 0 }),
+                animate('200ms 50ms ease-in', style({ opacity: 1 })),
+            ]),
+            transition(':leave', [
+                style({ opacity: 0 }),
+                animate('200ms ease-out', style({ opacity: 0 })),
+            ]),
+        ]),
+    ]
 })
 export class DataComponent
   implements OnDestroy, DataComponentType, OnChanges, AfterViewInit

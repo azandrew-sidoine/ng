@@ -13,12 +13,11 @@ import { URLChanges } from '../router';
 import { Subscription, tap } from 'rxjs';
 
 @Component({
-  standalone: true,
-  imports: [CommonModule, ClarityModule, RouterModule, ...LINK_DIRECTIVE],
-  selector: 'ngx-clr-sidenav',
-  templateUrl: './clr-sidenav.component.html',
-  styleUrls: ['./clr-sidenav.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CommonModule, ClarityModule, RouterModule, ...LINK_DIRECTIVE],
+    selector: 'ngx-clr-sidenav',
+    templateUrl: './clr-sidenav.component.html',
+    styleUrls: ['./clr-sidenav.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClrSidenavComponent {
   //#region Component inputs

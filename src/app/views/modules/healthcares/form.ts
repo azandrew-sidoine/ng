@@ -7,11 +7,6 @@ import {
   OptionsInputConfigInterface,
   InputConfigInterface,
 } from '@azlabsjs/smart-form-core';
-import { healthcareMedicalPrescriptionProductsInputConfigs } from '../healthcare-medical-prescription-products';
-// import { healthcareMedicalPrescriptionDeliveriesInputConfigs } from '../healthcare-medical-prescription-deliveries';
-import { healthcareDiseasesInputConfigs } from '../healthcare-diseases';
-import { healthcareMedicalProceduresInputConfigs } from '../healthcare-medical-procedures';
-// import { healthcareMedicalPrescriptionsInputConfigs } from '../healthcare-medical-prescriptions';
 
 /** Exported module form configuration */
 export const form = {
@@ -271,40 +266,6 @@ export const form = {
         max: 45,
       },
     } as TextInput,
-    {
-      label: 'app.modules.healthcares.columns.healthcareDiseases',
-      name: 'healthcareDiseases',
-      type: 'control_group',
-      classes: 'controls-header table',
-      placeholder: '...',
-      value: null,
-      description: '', // TODO: Add input description
-      index: undefined,
-      isRepeatable: true,
-      containerClass: 'input-col-sm-12',
-      children: healthcareDiseasesInputConfigs,
-      constraints: {
-        required: false,
-        disabled: false,
-      },
-    } as InputGroup,
-    {
-      label: 'app.modules.healthcares.columns.healthcareMedicalProcedures',
-      name: 'healthcareMedicalProcedures',
-      type: 'control_group',
-      classes: 'controls-header table',
-      placeholder: '...',
-      value: null,
-      description: '', // TODO: Add input description
-      index: undefined,
-      isRepeatable: true,
-      containerClass: 'input-col-sm-12',
-      children: healthcareMedicalProceduresInputConfigs,
-      constraints: {
-        required: false,
-        disabled: false,
-      },
-    } as InputGroup,
     // {
     //   label: 'app.modules.healthcares.columns.at',
     //   name: 'at',
@@ -321,23 +282,6 @@ export const form = {
     //     disabled: false,
     //   },
     // } as DateInput,
-    {
-      label: 'app.modules.healthcares.columns.prescribedProducts',
-      name: 'prescribedProducts',
-      type: 'control_group',
-      classes: 'controls-header table',
-      placeholder: '...',
-      value: null,
-      description: '', // TODO: Add input description
-      index: undefined,
-      isRepeatable: true,
-      containerClass: 'input-col-sm-12',
-      children: healthcareMedicalPrescriptionProductsInputConfigs,
-      constraints: {
-        required: false,
-        disabled: false,
-      },
-    } as InputGroup,
     // {
     //   label:
     //     'app.modules.healthcares.columns.healthcareMedicalPrescriptionDeliveries',

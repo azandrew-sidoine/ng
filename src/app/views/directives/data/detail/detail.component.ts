@@ -20,19 +20,18 @@ import { PIPES_PROVIDERS } from './pipes.providers';
 import { ResizeDirective } from './resize.directive';
 
 @Component({
-  standalone: true,
-  imports: [
-    CommonModule,
-    DetailColumnViewComponent,
-    ResizeDirective,
-    ...COMMON_PIPES,
-    ...DATA_PIPES,
-  ],
-  selector: 'ngx-data-detail',
-  templateUrl: './detail.component.html',
-  styleUrls: ['./detail.component.scss'],
-  providers: [...PIPES_PROVIDERS],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        DetailColumnViewComponent,
+        ResizeDirective,
+        ...COMMON_PIPES,
+        ...DATA_PIPES,
+    ],
+    selector: 'ngx-data-detail',
+    templateUrl: './detail.component.html',
+    styleUrls: ['./detail.component.scss'],
+    providers: [...PIPES_PROVIDERS],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DetailComponent {
   // #region Component inputs

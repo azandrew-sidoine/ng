@@ -31,75 +31,56 @@ type StateType = {
 };
 
 @Component({
-  standalone: true,
-  imports: [CommonModule, ...NG17_DIRECTIVES, ...PIPES],
-  selector: 'ngx-modal',
-  templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.scss'],
-  animations: [
-    trigger('fadeInOutSlideBottom', [
-      transition('close => open', [
-        style({ transform: 'translateY(-1000)', opacity: 1 }),
-        animate(
-          '0.45s cubic-bezier(0.165, 0.84, 0.44, 1)',
-          style({ transform: 'translateY(0)', opacity: 1 })
-        ),
-      ]),
-      transition('open => close', [
-        style({ transform: 'translateY(0)', opacity: 1 }),
-        animate(
-          '0.45s cubic-bezier(0.165, 0.84, 0.44, 1)',
-          style({ transform: 'translateY(-1000)', opacity: 0 })
-        ),
-      ]),
-    ]),
-    trigger('scaleUpDown', [
-      transition('close => open', [
-        style({ transform: 'scale(0)' }),
-        animate(
-          '0.45s cubic-bezier(0.165, 0.84, 0.44, 1)',
-          keyframes([
-            style({ transform: 'scale(0)', offset: 0 }),
-            style({ transform: 'scale(1)', offset: 1 }),
-          ])
-        ),
-      ]),
-      transition('open => close', [
-        style({ transform: 'scale(1)' }),
-        animate(
-          '0.45s cubic-bezier(0.165, 0.84, 0.44, 1)',
-          keyframes([
-            style({ transform: 'scale(1)', opacity: 1, offset: 0 }),
-            style({ transform: 'scale(0)', opacity: 0, offset: 1 }),
-          ])
-        ),
-      ]),
-    ]),
-    trigger('scaleUpDownContent', [
-      transition('close => open', [
-        style({ transform: 'scale(1)', opacity: 1 }),
-        animate(
-          '0.45s cubic-bezier(0.165, 0.84, 0.44, 1)',
-          keyframes([
-            style({ transform: 'scale(1)', opacity: 1, offset: 0 }),
-            style({ transform: 'scale(2)', opacity: 0, offset: 0.99 }),
-            style({ transform: 'scale(0)', offset: 1 }),
-          ])
-        ),
-      ]),
-      transition('open => close', [
-        style({ transform: 'scale(2)', opacity: 0 }),
-        animate(
-          '0.45s cubic-bezier(0.165, 0.84, 0.44, 1)',
-          keyframes([
-            style({ transform: 'scale(2)', opacity: 0, offset: 0 }),
-            style({ transform: 'scale(1)', opacity: 1, offset: 1 }),
-          ])
-        ),
-      ]),
-    ]),
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CommonModule, ...NG17_DIRECTIVES, ...PIPES],
+    selector: 'ngx-modal',
+    templateUrl: './modal.component.html',
+    styleUrls: ['./modal.component.scss'],
+    animations: [
+        trigger('fadeInOutSlideBottom', [
+            transition('close => open', [
+                style({ transform: 'translateY(-1000)', opacity: 1 }),
+                animate('0.45s cubic-bezier(0.165, 0.84, 0.44, 1)', style({ transform: 'translateY(0)', opacity: 1 })),
+            ]),
+            transition('open => close', [
+                style({ transform: 'translateY(0)', opacity: 1 }),
+                animate('0.45s cubic-bezier(0.165, 0.84, 0.44, 1)', style({ transform: 'translateY(-1000)', opacity: 0 })),
+            ]),
+        ]),
+        trigger('scaleUpDown', [
+            transition('close => open', [
+                style({ transform: 'scale(0)' }),
+                animate('0.45s cubic-bezier(0.165, 0.84, 0.44, 1)', keyframes([
+                    style({ transform: 'scale(0)', offset: 0 }),
+                    style({ transform: 'scale(1)', offset: 1 }),
+                ])),
+            ]),
+            transition('open => close', [
+                style({ transform: 'scale(1)' }),
+                animate('0.45s cubic-bezier(0.165, 0.84, 0.44, 1)', keyframes([
+                    style({ transform: 'scale(1)', opacity: 1, offset: 0 }),
+                    style({ transform: 'scale(0)', opacity: 0, offset: 1 }),
+                ])),
+            ]),
+        ]),
+        trigger('scaleUpDownContent', [
+            transition('close => open', [
+                style({ transform: 'scale(1)', opacity: 1 }),
+                animate('0.45s cubic-bezier(0.165, 0.84, 0.44, 1)', keyframes([
+                    style({ transform: 'scale(1)', opacity: 1, offset: 0 }),
+                    style({ transform: 'scale(2)', opacity: 0, offset: 0.99 }),
+                    style({ transform: 'scale(0)', offset: 1 }),
+                ])),
+            ]),
+            transition('open => close', [
+                style({ transform: 'scale(2)', opacity: 0 }),
+                animate('0.45s cubic-bezier(0.165, 0.84, 0.44, 1)', keyframes([
+                    style({ transform: 'scale(2)', opacity: 0, offset: 0 }),
+                    style({ transform: 'scale(1)', opacity: 1, offset: 1 }),
+                ])),
+            ]),
+        ]),
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NgxModalComponent implements OnChanges {
   // #region Component internal properties

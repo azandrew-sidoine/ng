@@ -8,12 +8,11 @@ import {
 } from '@angular/core';
 
 @Component({
-  standalone: true,
-  imports: [CommonModule],
-  selector: 'ngx-alert',
-  templateUrl: 'alert.component.html',
-  styleUrls: ['./alert.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CommonModule],
+    selector: 'ngx-alert',
+    templateUrl: 'alert.component.html',
+    styleUrls: ['./alert.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UIAlertComponent {
   // #region Component inputs

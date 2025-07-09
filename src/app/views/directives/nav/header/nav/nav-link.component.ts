@@ -23,10 +23,9 @@ function isValidURL(url: string) {
 }
 
 @Component({
-  imports: [CommonModule, ...DROPDOWN_DIRECTIVES, RouterModule],
-  standalone: true,
-  selector: 'ngx-header-nav-link',
-  templateUrl: './nav-link.component.html',
+    imports: [CommonModule, ...DROPDOWN_DIRECTIVES, RouterModule],
+    selector: 'ngx-header-nav-link',
+    templateUrl: './nav-link.component.html'
 })
 export class HeaderNavLinkComponent {
   // #region Component inputs

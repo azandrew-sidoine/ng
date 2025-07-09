@@ -28,29 +28,28 @@ import { DATA_PIPES } from '../pipes';
 import { ProjectPaginateQueryOutputType } from '@azlabsjs/ngx-clr-smart-grid';
 
 @Component({
-  standalone: true,
-  imports: [
-    CommonModule,
-    ...COMMON_PIPES,
-    ...DATAGRID_DIRECTIVES,
-    ...DATA_PIPES,
-    ...PIPES,
-  ],
-  selector: 'ngx-data-list',
-  templateUrl: './list.component.html',
-  styleUrls: ['./list.component.scss'],
-  providers: [
-    UpperCasePipe,
-    LowerCasePipe,
-    CurrencyPipe,
-    DecimalPipe,
-    JsonPipe,
-    PercentPipe,
-    SlicePipe,
-    AsyncPipe,
-    CommonTextPipe,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        ...COMMON_PIPES,
+        ...DATAGRID_DIRECTIVES,
+        ...DATA_PIPES,
+        ...PIPES,
+    ],
+    selector: 'ngx-data-list',
+    templateUrl: './list.component.html',
+    styleUrls: ['./list.component.scss'],
+    providers: [
+        UpperCasePipe,
+        LowerCasePipe,
+        CurrencyPipe,
+        DecimalPipe,
+        JsonPipe,
+        PercentPipe,
+        SlicePipe,
+        AsyncPipe,
+        CommonTextPipe,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListComponent {
   // #region Component Inputs

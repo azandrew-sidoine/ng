@@ -23,17 +23,16 @@ import { COMMON_PIPES } from './pipes';
 // TODO: Move logout dependencies to another component
 
 @Component({
-  standalone: true,
-  imports: [
-    ...HEADER_NAV_DIRECTIVES,
-    ...COMMON_PIPES,
-    CommonModule,
-    RouterModule,
-  ],
-  selector: 'ngx-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        ...HEADER_NAV_DIRECTIVES,
+        ...COMMON_PIPES,
+        CommonModule,
+        RouterModule,
+    ],
+    selector: 'ngx-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent {
   // #region Component projected contents

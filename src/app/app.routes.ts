@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { createAppRoutes } from './views/directives/main-nav';
 import { LINKS } from './routes';
+import { createAppRoutes } from './views/directives/nav';
 
 export const routes: Routes = [
   // Default routes

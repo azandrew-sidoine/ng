@@ -15,13 +15,12 @@ import { PIPES_PROVIDERS } from './pipes.providers';
 type PipeTransformType = string | ((value: any) => any) | undefined;
 
 @Component({
-  standalone: true,
-  imports: [CommonModule, ...COMMON_PIPES, ...DATA_PIPES],
-  selector: 'ngx-data-detail-column',
-  templateUrl: './column-view.component.html',
-  styleUrls: ['./column-view.component.scss'],
-  providers: [...PIPES_PROVIDERS],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CommonModule, ...COMMON_PIPES, ...DATA_PIPES],
+    selector: 'ngx-data-detail-column',
+    templateUrl: './column-view.component.html',
+    styleUrls: ['./column-view.component.scss'],
+    providers: [...PIPES_PROVIDERS],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DetailColumnViewComponent {
   //#region Component inputs

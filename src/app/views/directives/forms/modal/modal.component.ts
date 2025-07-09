@@ -59,19 +59,18 @@ import { COMMON_PIPES } from '@azlabsjs/ngx-common';
 // }
 
 @Component({
-  standalone: true,
-  imports: [
-    CommonModule,
-    ...COMMON_PIPES,
-    ...FORM_DIRECTIVES,
-    ...FORM_CONTROL_DIRECTIVES,
-    ...MODAL_DIRECTIVES,
-    // TypeOfPipe
-  ],
-  selector: 'ngx-form-modal',
-  templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CommonModule,
+        ...COMMON_PIPES,
+        ...FORM_DIRECTIVES,
+        ...FORM_CONTROL_DIRECTIVES,
+        ...MODAL_DIRECTIVES,
+        // TypeOfPipe
+    ],
+    selector: 'ngx-form-modal',
+    templateUrl: './modal.component.html',
+    styleUrls: ['./modal.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ModalComponent
   implements

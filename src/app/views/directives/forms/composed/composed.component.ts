@@ -22,17 +22,16 @@ import { NoDuplicate } from './decorators';
 import { AsArrayPipe } from './pipes';
 
 @Component({
-  standalone: true,
-  imports: [
-    CommonModule,
-    AsArrayPipe,
-    ...COMMON_PIPES,
-    ...FORM_DIRECTIVES,
-    ...CLR_FORM_CONTROL_DIRECTIVES,
-  ],
-  selector: 'ngx-composed-form',
-  templateUrl: './composed.component.html',
-  styleUrls: ['./composed.component.scss'],
+    imports: [
+        CommonModule,
+        AsArrayPipe,
+        ...COMMON_PIPES,
+        ...FORM_DIRECTIVES,
+        ...CLR_FORM_CONTROL_DIRECTIVES,
+    ],
+    selector: 'ngx-composed-form',
+    templateUrl: './composed.component.html',
+    styleUrls: ['./composed.component.scss']
 })
 export class ComposedFormComponent implements OnDestroy {
   //#region Component inputs

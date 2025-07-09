@@ -1,11 +1,11 @@
 import { getObjectProperty } from '@azlabsjs/js-object';
+
+// import { DetailViewComponent } from './views/modules/directives';
+// import { viewColumns as healthCareDetailColumns } from './views/modules/healthcares/columns';
+import { AppLinks } from './views/directives/nav';
 import { environment } from '../environments/environment';
 import { DataConfigArgType } from './views/directives/data';
-import { AppLinks } from './views/directives/main-nav';
 import healthcaresViewConfig from './views/modules/healthcares';
-// import { DetailViewComponent } from './views/modules/directives';
-
-import { viewColumns as healthCareDetailColumns } from './views/modules/healthcares/columns';
 
 /** @description Application routes definition */
 export const LINKS: AppLinks<DataConfigArgType> = [
@@ -18,7 +18,7 @@ export const LINKS: AppLinks<DataConfigArgType> = [
       loadChildren: () => import('./views/modules/dashboard/routes'),
       data: {
         name: environment.name,
-      }
+      },
     },
   },
   // healthcares
@@ -31,7 +31,7 @@ export const LINKS: AppLinks<DataConfigArgType> = [
       loadChildren: () => import('./views/modules/example/routes'),
       data: {
         name: environment.name,
-      }
+      },
     },
   },
 
@@ -45,7 +45,10 @@ export const LINKS: AppLinks<DataConfigArgType> = [
         import('./views/directives/data/view/routes').then((m) =>
           m.createRoutes(
             healthcaresViewConfig(
-              getObjectProperty(environment, 'api.endpoints.healthcares.url') as string,
+              getObjectProperty(
+                environment,
+                'api.endpoints.healthcares.url'
+              ) as string,
               {
                 _query: null,
                 _columns: [
@@ -75,14 +78,14 @@ export const LINKS: AppLinks<DataConfigArgType> = [
               },
               name: 'app.name',
               module: 'healthcares',
-              search: {
-                component: MembersSearchComponent,
-              },
+              // search: {
+              //   component: MembersSearchComponent,
+              // },
             }
           )
         ),
-      canActivateChild: [canActivateChild],
+      // canActivateChild: [canActivateChild],
     },
-    links: SUBLINKS,
-  }
+    links: [],
+  },
 ];

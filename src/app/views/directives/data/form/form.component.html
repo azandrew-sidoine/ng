@@ -1,12 +1,36 @@
 <div class="dat__form__content" *ngIf="form">
     <ngx-smart-form #formRef [no-grid-layout]="noGridLayout" (ready)="handleReady($event)"
         (changes)="handleChanges($event)" (error)="handleError($event)" [submitable]="submitable"
-        [autoupload]="autoupload" (submit)="handleSubmit($event)" [form]="form" [autoSubmit]="false"
-        [template]="controlTemplate">
-        <ng-template #controlTemplate let-config="value" let-control="control">
-            <ngx-clr-form-control class="ngx-smart-form-control" [hidden]="config.hidden" [control]="control"
-                [inputConfig]="config"></ngx-clr-form-control>
+        [autoupload]="autoupload" (submit)="handleSubmit($event)" [form]="form" [autoSubmit]="false" [template]="input"
+        [label]="glabel">
+        <ng-template #input let-config="value" let-control="control" let-describe="describe">
+            <ngx-clr-form-control class="ngx-smart-form-control" [hidden]="config?.hidden" [control]="control"
+                [inputConfig]="config" [error]="error" [label]="label" [describe]="describe ?? true"
+                [textView]="textView">
+                <ng-template #label let-label>
+                    <span>{{ label | text }}</span>
+                </ng-template>
+                <ng-template #error let-touched="touched" let-errors>
+                    <ngx-input-error *ngIf="touched" [errors]="errors" [template]="template">
+                        <ng-template #template let-value let-params="params">
+                            <span>{{ ('validation.errors.[value]' | parseStr:{value} ) | text:params }}</span>
+                        </ng-template>
+                    </ngx-input-error>
+                </ng-template>
+                <ng-template #textView let-config let-value="value">
+                    <ng-container *ngIf="value | text| uppercase  | safeHtml as content">
+                        <div *ngIf="content|notEmpty" [ngClass]="config.classes" [innerHTML]="content"></div>
+                    </ng-container>
+                </ng-template>
+            </ngx-clr-form-control>
         </ng-template>
+        <!-- Group label template -->
+        <ng-template #glabel let-label>
+            <ng-container *ngIf="label | text | uppercase | safeHtml as content">
+                <div *ngIf="content|notEmpty" class="control__group__header" [innerHTML]="content"></div>
+            </ng-container>
+        </ng-template>
+        <!--\ Group label template -->
         <ng-template #submitButton let-handler>
             <button class="btn btn-primary" (click)="handler($event)">
                 {{ submitText }}

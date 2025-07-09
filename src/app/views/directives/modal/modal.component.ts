@@ -1,13 +1,12 @@
 import {
   animate,
-  state,
+  keyframes,
   style,
   transition,
   trigger,
 } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -17,10 +16,13 @@ import {
   Input,
   OnChanges,
   Output,
+  SimpleChange,
   SimpleChanges,
   TemplateRef,
 } from '@angular/core';
-import { SizeType } from './types';
+import { OutletConfig, SizeType } from './types';
+import { PIPES } from './pipes';
+import { NG17_DIRECTIVES } from '../common';
 
 /** @internal */
 type StateType = {
@@ -29,25 +31,77 @@ type StateType = {
 };
 
 @Component({
-    imports: [CommonModule],
-    selector: 'ngx-modal',
-    templateUrl: './modal.component.html',
-    styleUrls: ['./modal.component.scss'],
-    animations: [
-        trigger('fadeInOutSlideBottom', [
-            transition('close => open', [
-                style({ transform: 'translateY(1000px)', opacity: 0 }),
-                animate('200ms ease-in', style({ transform: 'translateY(0)', opacity: 1 })),
-            ]),
-            transition('open => close', [
-                style({ transform: 'translateY(0)', opacity: 1 }),
-                animate('200ms ease', style({ transform: 'translateY(1000px)', opacity: 0 })),
-            ]),
-        ]),
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  standalone: true,
+  imports: [CommonModule, ...NG17_DIRECTIVES, ...PIPES],
+  selector: 'ngx-modal',
+  templateUrl: './modal.component.html',
+  styleUrls: ['./modal.component.scss'],
+  animations: [
+    trigger('fadeInOutSlideBottom', [
+      transition('close => open', [
+        style({ transform: 'translateY(-1000)', opacity: 1 }),
+        animate(
+          '0.45s cubic-bezier(0.165, 0.84, 0.44, 1)',
+          style({ transform: 'translateY(0)', opacity: 1 })
+        ),
+      ]),
+      transition('open => close', [
+        style({ transform: 'translateY(0)', opacity: 1 }),
+        animate(
+          '0.45s cubic-bezier(0.165, 0.84, 0.44, 1)',
+          style({ transform: 'translateY(-1000)', opacity: 0 })
+        ),
+      ]),
+    ]),
+    trigger('scaleUpDown', [
+      transition('close => open', [
+        style({ transform: 'scale(0)' }),
+        animate(
+          '0.45s cubic-bezier(0.165, 0.84, 0.44, 1)',
+          keyframes([
+            style({ transform: 'scale(0)', offset: 0 }),
+            style({ transform: 'scale(1)', offset: 1 }),
+          ])
+        ),
+      ]),
+      transition('open => close', [
+        style({ transform: 'scale(1)' }),
+        animate(
+          '0.45s cubic-bezier(0.165, 0.84, 0.44, 1)',
+          keyframes([
+            style({ transform: 'scale(1)', opacity: 1, offset: 0 }),
+            style({ transform: 'scale(0)', opacity: 0, offset: 1 }),
+          ])
+        ),
+      ]),
+    ]),
+    trigger('scaleUpDownContent', [
+      transition('close => open', [
+        style({ transform: 'scale(1)', opacity: 1 }),
+        animate(
+          '0.45s cubic-bezier(0.165, 0.84, 0.44, 1)',
+          keyframes([
+            style({ transform: 'scale(1)', opacity: 1, offset: 0 }),
+            style({ transform: 'scale(2)', opacity: 0, offset: 0.99 }),
+            style({ transform: 'scale(0)', offset: 1 }),
+          ])
+        ),
+      ]),
+      transition('open => close', [
+        style({ transform: 'scale(2)', opacity: 0 }),
+        animate(
+          '0.45s cubic-bezier(0.165, 0.84, 0.44, 1)',
+          keyframes([
+            style({ transform: 'scale(2)', opacity: 0, offset: 0 }),
+            style({ transform: 'scale(1)', opacity: 1, offset: 1 }),
+          ])
+        ),
+      ]),
+    ]),
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NgxModalComponent implements AfterViewInit, OnChanges {
+export class NgxModalComponent implements OnChanges {
   // #region Component internal properties
   private _state: StateType = {
     opened: false,
@@ -57,10 +111,20 @@ export class NgxModalComponent implements AfterViewInit, OnChanges {
     return this._state;
   }
   // #region Component internal properties
+
   // #region Component inputs
   @Input() opened: boolean = false;
-  @Input() size: SizeType = 'lg';
+  private _size!: SizeType;
+  @Input() set size(value: SizeType) {
+    this._size = value;
+  }
+  get size() {
+    return this._size ?? 'lg';
+  }
   @Input() closeable: boolean = false;
+  @Input() animation: 'fade' | 'scale' = 'fade';
+  @Input() outlet!: OutletConfig | null | undefined;
+  @Input() cssClass!: string | string[];
   // #endregion Component inputs
 
   // #region Component output
@@ -97,17 +161,7 @@ export class NgxModalComponent implements AfterViewInit, OnChanges {
     this.setState(state);
   }
 
-  ngAfterViewInit(): void {
-    this.setState((state) => ({
-      ...state,
-      opened: this.opened,
-      size: this.size,
-    }));
-  }
-
-  /**
-   * Control or change component local state object
-   */
+  /** Control or change component local state object */
   private setState(
     _partial: Partial<StateType> | ((_state: StateType) => StateType)
   ) {
@@ -132,5 +186,20 @@ export class NgxModalComponent implements AfterViewInit, OnChanges {
     this.openedChange.emit(false);
     event?.preventDefault();
     event?.stopPropagation();
+  }
+
+  setProperty(name: keyof typeof this, value: any) {
+    this.setProperties({ [name]: value } as Record<keyof typeof this, any>);
+  }
+
+  setProperties(items: Partial<Record<keyof typeof this, any>>) {
+    const changes: SimpleChanges = {};
+    for (const property of Object.keys(items)) {
+      const prop = property as keyof typeof this;
+      const old = this[prop];
+      this[prop] = items[prop];
+      changes[prop as string] = new SimpleChange(old, items[prop], false);
+    }
+    this.ngOnChanges(changes);
   }
 }

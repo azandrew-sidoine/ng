@@ -1,4 +1,5 @@
 import { DataComponent } from './base';
+import { DetailColumnViewComponent, DetailComponent } from './detail';
 import { FormComponent } from './form';
 import { ListComponent } from './list';
 import { ViewComponent } from './view';
@@ -36,6 +37,7 @@ export {
   BuiltTypeArgType,
   ArgType,
   columsTranslatorFactory,
+  ViewStateType,
 } from './core';
 
 export {
@@ -53,10 +55,16 @@ export {
   createRoutes,
 } from './view';
 
+export { DATA_PIPES } from './pipes';
+
+export { provideProgress, provideSheetsExporter } from './providers';
+
 /** Exported standalone directives */
 export const DIRECTIVES = [
   ListComponent,
   DataComponent,
+  DetailComponent,
+  DetailColumnViewComponent,
   FormComponent,
   ViewComponent,
 ] as const;

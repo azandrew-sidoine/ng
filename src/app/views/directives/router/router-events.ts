@@ -11,7 +11,9 @@ import {
   ResolveEnd,
 } from '@angular/router';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class RouterEventsListener implements OnDestroy {
   // #region Class properties
   _state$ = new BehaviorSubject<{ navigating: boolean; resolving: boolean }>({

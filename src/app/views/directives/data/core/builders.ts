@@ -7,17 +7,21 @@ import {
   ActionUIPositionType,
   AssetFormConfigType,
   ConfigType,
+  DetailViewConfigType,
+  DisabledFnType,
   HTTPMethodsType,
   InjectorFnOr,
   JsFormConfigType,
   NextCallback,
   OrObservable,
   PartialActionConfigType,
+  RemoveFnType,
 } from './types';
 import {
   GridDetailColumnType,
   SearchableGridColumnType,
 } from '@azlabsjs/ngx-clr-smart-grid';
+import { SheetHeaderType } from '../utils';
 
 /** @internal */
 type PipeTransformType = string | ((value: any) => any) | undefined;
@@ -110,6 +114,7 @@ type _ObjectType = _AbstractType<any, any, any> & {
 /** @internal */
 export type ArgType = {
   url: string;
+  /** @deprecated */
   noGridFormLayout?: boolean;
   form?:
     | string
@@ -130,7 +135,19 @@ export type ArgType = {
     detail?: InjectorFnOr<
       OrObservable<(GridDetailColumnType & { editable?: boolean })[]>
     >;
+    export?:
+      | false
+      | {
+          //#TODO: Add title or button text property
+          headers: SheetHeaderType[];
+        };
   };
+  detail?: DetailViewConfigType<
+    {
+      data: any;
+      columns: GridDetailColumnType[];
+    } & Object
+  >;
   defaultStrings?: { [prop in ActionType]: string };
   excludesActions?: ActionType[];
 };
@@ -164,11 +181,15 @@ export function mapInto<T extends _AbstractType<any, any, any> = _ObjectType>(
     ? values
         .map((value) => {
           const _result = _type.safeParse(value);
-          return _result.success ? _thenCallback(_result.data) : undefined;
+          if (_result.success) {
+            return _result.data;
+          }
+          console.error('Error parsing type: ', _result.errors);
+          return undefined;
         })
         .filter((value) => typeof value !== 'undefined' && value !== null)
     : values;
-  return _values;
+  return _thenCallback(values);
 }
 
 /** @description Creates an ngx-data configuration with built-type instance builder aware */
@@ -183,10 +204,14 @@ export function createBuiltTypeDataConfig<
     actions = {},
     noGridFormLayout,
     defaultStrings = {} as { [prop in ActionType]: string },
+    detail,
     excludesActions = excludes,
   } = params;
   const beforeUpdateCallback = <T = unknown, R = any>(traveler: T) =>
     _type.reverseType.safeParse(traveler).data as R;
+
+  /** List builder instance for the current configuration */
+  const listBuilder = (result: Record<string, any>[]) => mapInto(_type, result);
 
   let _defaultActionsTuple: [ActionType, Partial<ActionConfigType>][] = [
     [
@@ -196,11 +221,11 @@ export function createBuiltTypeDataConfig<
           return next$(traveler).pipe(
             map((result) => {
               return Array.isArray(result)
-                ? { data: mapInto(_type, result), total: result.length }
+                ? { data: listBuilder(result), total: result.length }
                 : typeof result === 'object' && result !== null
                 ? {
                     ...result,
-                    data: mapInto(_type, result['data']),
+                    data: listBuilder(result['data']),
                   }
                 : result;
             })
@@ -211,14 +236,29 @@ export function createBuiltTypeDataConfig<
     [
       'create',
       {
-        title: defaultStrings['create'] ?? 'create',
+        title: defaultStrings['create'] ?? 'app.actions.create',
         position: 'action-bar',
+      },
+    ],
+    [
+      'export',
+      {
+        title: defaultStrings['export'] ?? 'export',
+        position: 'action-bar',
+        remove: datagrid
+          ? () =>
+              !(
+                typeof datagrid.export === 'boolean' &&
+                datagrid.export === false
+              )
+          : () => true,
+        cssClass: ['btn btn-outline'],
       },
     ],
     [
       'update',
       {
-        title: defaultStrings['update'] ?? 'update',
+        title: defaultStrings['update'] ?? 'app.actions.update',
         position: 'overflow',
         before: beforeUpdateCallback,
       },
@@ -226,7 +266,7 @@ export function createBuiltTypeDataConfig<
     [
       'delete',
       {
-        title: defaultStrings['delete'] ?? 'delete',
+        title: defaultStrings['delete'] ?? 'app.actions.delete',
         position: 'overflow',
       },
     ],
@@ -254,10 +294,12 @@ export function createBuiltTypeDataConfig<
     form: {
       ..._form,
       url: _form.url ?? url,
-      noGridLayout: noGridFormLayout ?? true,
+      noGridLayout: _form?.noGridLayout ?? noGridFormLayout ?? false,
     },
     actions: { ...actions, ..._defaultActions },
     datagrid,
+    detail,
+    listBuilder,
   } as ConfigType;
 }
 
@@ -275,6 +317,7 @@ export function createDataConfig<T extends ArgType = ArgType>(
     actions = {},
     noGridFormLayout,
     defaultStrings = {} as { [prop in ActionType]: string },
+    detail,
     excludesActions = excludes,
   } = params;
 
@@ -304,14 +347,29 @@ export function createDataConfig<T extends ArgType = ArgType>(
     [
       'create',
       {
-        title: defaultStrings['create'] ?? 'create',
+        title: defaultStrings['create'] ?? 'app.actions.create',
         position: 'action-bar',
+      },
+    ],
+    [
+      'export',
+      {
+        title: defaultStrings['export'] ?? 'export',
+        position: 'action-bar',
+        remove: datagrid
+          ? () =>
+              !(
+                typeof datagrid.export === 'boolean' &&
+                datagrid.export === false
+              )
+          : () => true,
+        cssClass: ['btn btn-outline'],
       },
     ],
     [
       'update',
       {
-        title: defaultStrings['update'] ?? 'update',
+        title: defaultStrings['update'] ?? 'app.actions.update',
         position: 'overflow',
         before: beforeUpdateCallback,
       },
@@ -319,7 +377,7 @@ export function createDataConfig<T extends ArgType = ArgType>(
     [
       'delete',
       {
-        title: defaultStrings['delete'] ?? 'delete',
+        title: defaultStrings['delete'] ?? 'app.actions.delete',
         position: 'overflow',
       },
     ],
@@ -347,10 +405,11 @@ export function createDataConfig<T extends ArgType = ArgType>(
     form: {
       ..._form,
       url: _form.url ?? url,
-      noGridLayout: noGridFormLayout ?? true,
+      noGridLayout: _form?.noGridLayout ?? noGridFormLayout ?? false,
     },
     actions: { ...actions, ..._defaultActions },
     datagrid,
+    detail,
   } as ConfigType;
 }
 
@@ -362,8 +421,8 @@ export function provideOverflowHttpActionHandler(
     traveler: any,
     next$: NextCallback<any, any>
   ) => ReturnType<typeof next$>,
-  removeFn?: (value: any) => boolean,
-  disabled?: (value: any) => boolean,
+  removeFn?: RemoveFnType,
+  disabled?: DisabledFnType,
   cssClass?: string | string[]
 ) {
   return {
@@ -388,8 +447,8 @@ export function provideActionBarHttpActionHandler(
     traveler: any,
     next$: NextCallback<any, any>
   ) => ReturnType<typeof next$>,
-  removeFn?: (value: any) => boolean,
-  disabled?: (value: any) => boolean,
+  removeFn?: RemoveFnType,
+  disabled?: DisabledFnType,
   cssClass?: string | string[]
 ) {
   return {
@@ -410,8 +469,8 @@ export function provideActionBarHttpActionHandler(
 export function provideOverflowActionHandler(
   title: ActionTitleParamType,
   handle: (...args: any) => void | Promise<void>,
-  removeFn?: (value: any) => boolean,
-  disabled?: (value: any) => boolean,
+  removeFn?: RemoveFnType,
+  disabled?: DisabledFnType,
   cssClass?: string | string[]
 ) {
   return {
@@ -428,8 +487,8 @@ export function provideOverflowActionHandler(
 export function provideActionBarActionHandler(
   title: ActionTitleParamType,
   handle: (...args: any) => void | Promise<void>,
-  removeFn?: (value: any) => boolean,
-  disabled?: (value: any) => boolean,
+  removeFn?: RemoveFnType,
+  disabled?: DisabledFnType,
   cssClass?: string | string[]
 ) {
   return {

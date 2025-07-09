@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { DisabledFnType } from '../core/types';
 
 /** @internal */
 type ValueArgType = string | ((item: unknown) => string);
@@ -27,10 +28,7 @@ export class ActionTitlePipe implements PipeTransform {
 })
 export class DisabledActionPipe implements PipeTransform {
   //
-  transform(
-    value: unknown,
-    fn: boolean | undefined | ((value: unknown) => boolean)
-  ) {
+  transform(value: unknown, fn?: DisabledFnType) {
     if (typeof fn === 'undefined' || fn === null) {
       return false;
     }

@@ -8,11 +8,14 @@ import {
   Inject,
   Injector,
   Input,
+  OnChanges,
   OnDestroy,
   Optional,
   Output,
+  SimpleChanges,
   TemplateRef,
   ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import {
   ActionConfigType,
@@ -28,6 +31,8 @@ import {
   UIActionConfigType,
   UIActionEventArgType,
   ViewStateType,
+  ObservableFormBuilder,
+  remove,
 } from '../core';
 import {
   CreateQueryActionHandler,
@@ -46,6 +51,8 @@ import {
   distinctUntilChanged,
   filter,
   lastValueFrom,
+  map,
+  of,
   tap,
 } from 'rxjs';
 
@@ -87,6 +94,9 @@ import { FORM_MODAL_DIRECTIVES } from '../../forms';
 import { LIST_DIRECTIVES } from '../list';
 import { DETAIL_DIRECTIVES } from '../detail';
 import { FORM_DIRECTIVES } from '../form';
+import { DATA_PIPES } from '../pipes';
+import { PIPES } from './pipes';
+import { ProjectPaginateQueryOutputType } from '@azlabsjs/ngx-clr-smart-grid';
 
 /** @internal */
 type ActionErrorArgType = { type: string; err: unknown };
@@ -94,48 +104,57 @@ type ActionErrorArgType = { type: string; err: unknown };
 /** @internal */
 type ActionArgResultType = { type: string; payload: unknown };
 
+/** @internal */
+type ExceptionsType = string[] | null;
+
+/** @internal */
+type ReadyOutputRefType = EntityBaseType | undefined | null;
+
 @Component({
-    imports: [
-        CommonModule,
-        ...COMMON_PIPES,
-        ...FORM_MODAL_DIRECTIVES,
-        ...LIST_DIRECTIVES,
-        ...DETAIL_DIRECTIVES,
-        ...FORM_DIRECTIVES,
-    ],
-    selector: 'ngx-data',
-    templateUrl: './data.component.html',
-    styleUrls: ['./data.component.scss'],
-    providers: [
-        DeleteQueryActionHandler,
-        CreateQueryActionHandler,
-        UpdateQueryActionHandler,
-        DataComponentService,
-        CustomActionHTTPHandler,
-        { provide: REQUEST_CLIENT, useClass: NgHttpRequestClient },
-        { provide: DELETE_ACTION_HANDLER, useClass: DeleteQueryActionHandler },
-        { provide: UPDATE_ACTION_HANDLER, useClass: UpdateQueryActionHandler },
-        { provide: CREATE_ACTION_HANDLER, useClass: CreateQueryActionHandler },
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [
-        trigger('fadeInOut', [
-            transition(':enter', [
-                style({ opacity: 0 }),
-                animate('200ms 50ms ease-in', style({ opacity: 1 })),
-            ]),
-            transition(':leave', [
-                style({ opacity: 0 }),
-                animate('200ms ease-out', style({ opacity: 0 })),
-            ]),
-        ]),
-    ]
+  standalone: true,
+  imports: [
+    CommonModule,
+    ...COMMON_PIPES,
+    ...FORM_MODAL_DIRECTIVES,
+    ...LIST_DIRECTIVES,
+    ...DETAIL_DIRECTIVES,
+    ...FORM_DIRECTIVES,
+    ...DATA_PIPES,
+    ...PIPES,
+  ],
+  selector: 'ngx-data',
+  templateUrl: './data.component.html',
+  styleUrls: ['./data.component.scss'],
+  providers: [
+    DeleteQueryActionHandler,
+    CreateQueryActionHandler,
+    UpdateQueryActionHandler,
+    DataComponentService,
+    CustomActionHTTPHandler,
+    { provide: REQUEST_CLIENT, useClass: NgHttpRequestClient },
+    { provide: DELETE_ACTION_HANDLER, useClass: DeleteQueryActionHandler },
+    { provide: UPDATE_ACTION_HANDLER, useClass: UpdateQueryActionHandler },
+    { provide: CREATE_ACTION_HANDLER, useClass: CreateQueryActionHandler },
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('fadeInOut', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('200ms 50ms ease-in', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [
+        style({ opacity: 0 }),
+        animate('200ms ease-out', style({ opacity: 0 })),
+      ]),
+    ]),
+  ],
 })
 export class DataComponent
-  implements AfterViewInit, OnDestroy, DataComponentType
+  implements OnDestroy, DataComponentType, OnChanges, AfterViewInit
 {
   // #region Component inputs
-  @Input() noModal: boolean = true;
+  @Input() noModal: boolean = false;
   @Input() modalSize: SizeType = 'full';
   @Input() title!: string;
   @Input() description!: string;
@@ -151,23 +170,41 @@ export class DataComponent
       this._uiActions = createActionConfigType(value.actions);
     }
   }
-  @Input('no-padding') noPadding: boolean = true;
   @Input() url!: string;
-  @Input('actions') actions: ActionType[] = defaultActions;
+  @Input() actions: ActionType[] = defaultActions;
+  @Input({ alias: 'no-padding' }) noPadding: boolean = true;
 
   // Customization
-  @Input('refresh-text') refreshText: string = 'refresh';
-  @Input('submit-text') submitText: string = 'submit';
-  @Input('cancel-text') cancelText: string = 'back';
-  @Input('request-error-text') requestErrorText: string = 'Request error!';
-  @Input('request-complete-text') requestCompleteText: string =
+  @Input({ alias: 'refresh-text' }) refreshText: string = 'app.actions.refresh';
+  @Input({ alias: 'submit-text' }) submitText: string = 'app.actions.submit';
+  @Input({ alias: 'cancel-text' }) cancelText: string = 'app.actions.back';
+  @Input({ alias: 'request-error-text' }) requestErrorText: string =
+    'Request error!';
+  @Input({ alias: 'request-complete-text' }) requestCompleteText: string =
     'Request completed successfully!';
-  @Input('update-complete-text') updateCompleteText!: string;
-  @Input('create-complete-text') createCompleteText!: string;
-  @Input('delete-complete-text') deleteCompleteText!: string;
-  @Input('delete-prompt') deletePrompt!: string;
-  @Input('has-detail') hasDetail = false;
+  @Input({ alias: 'update-complete-text' }) updateCompleteText!: string;
+  @Input({ alias: 'create-complete-text' }) createCompleteText!: string;
+  @Input({ alias: 'delete-complete-text' }) deleteCompleteText!: string;
+  @Input({ alias: 'delete-prompt' }) deletePrompt!: string;
+  @Input({ alias: 'has-detail' }) hasDetail = false;
   @Input() detailPane!: TemplateRef<any> | undefined;
+  @Input({ alias: 'except-grid-columns' }) gridColumnsExptions: ExceptionsType =
+    [];
+  @Input({ alias: 'except-detail-columns' })
+  detailColumnsExptions: ExceptionsType = [];
+  // @Input() view: ViewStateType | null | undefined = 'list';
+  @Input() selected!: EntityBaseType | null | undefined | number | string;
+
+  @Input() set view(value: ViewStateType) {
+    this.setView(value);
+  }
+  @Input() set query(value: Record<string, unknown>) {
+    const filters: { property: string; value: unknown }[] = [];
+    for (const property in value) {
+      filters.push({ property, value: value[property] });
+    }
+    this.setState((s) => ({ ...s, filters }));
+  }
   // #endregion Component inputs
 
   // #region List component children
@@ -187,10 +224,9 @@ export class DataComponent
   @Output('performing-action') performingAction = new EventEmitter<boolean>();
   @Output('detail-change') detailPaneChange$ = new EventEmitter<unknown>();
   @Output('form-error') error = new EventEmitter<unknown>();
-  @Output('form-ready') ready = new EventEmitter<
-    EntityBaseType | undefined | null
-  >();
+  @Output('form-ready') ready = new EventEmitter<ReadyOutputRefType>();
   @Output('form-changes') changes = new EventEmitter<unknown>();
+  @Output('form-closed') closed = new EventEmitter<unknown>();
   @Output() stateChange = new EventEmitter<StateType>();
   // #endregion Components outputs
 
@@ -203,7 +239,6 @@ export class DataComponent
   get uiActions() {
     return this._uiActions;
   }
-  private _changes$!: ChangeDetectorRef | null | undefined;
   private subscriptions: Subscription[] = [];
   _searchSubject$ = new Subject<string>();
   search$ = this._searchSubject$.asObservable().pipe(distinctUntilChanged());
@@ -212,18 +247,19 @@ export class DataComponent
   // #region Component children
   @ViewChild('formRef', { static: false })
   form!: ReactiveFormComponentInterface | null;
+  @ViewChild('componentOutlet', { read: ViewContainerRef, static: false })
+  componentOutlet!: ViewContainerRef;
   // #endregion Component children
 
   constructor(
-    private service$: DataComponentService,
-    private customAction$: CustomActionHTTPHandler,
-    @Optional() changes$: ChangeDetectorRef,
+    private service: DataComponentService,
+    private customAction: CustomActionHTTPHandler,
     @Inject(FORM_CLIENT) private client: FormsClient,
     @Inject(DIALOG) private dialog: Dialog,
-    @Optional() private injector: Injector | null,
-    @Inject(DATAGRID_CONFIG) @Optional() gridConfig?: DataGridStateType
+    @Optional() public readonly injector: Injector | null,
+    @Inject(DATAGRID_CONFIG) @Optional() gridConfig?: DataGridStateType,
+    @Optional() private cdRef?: ChangeDetectorRef | null
   ) {
-    this._changes$ = changes$;
     this._state = {
       view: 'listView',
       cachedQueries: [],
@@ -234,41 +270,43 @@ export class DataComponent
           current: 1,
         },
       },
+      query: null,
     };
   }
 
-  // After the view completly initialize
   ngAfterViewInit(): void {
-    if (!this.config.form) {
-      return;
+    if (this._config && !this._state?.formBuilder) {
+      this._state = {
+        ...this._state,
+        formBuilder: this.createBuilder(this._config),
+      };
     }
+  }
 
-    const builderFactory =
-      (f: FormConfigInterface) =>
-      (excluded: string[] = [], notRequired: string[] = []) =>
-        createFormConfig(f, excluded ?? [], notRequired ?? []);
-
+  ngOnChanges(changes: SimpleChanges): void {
+    const { view } = changes;
     if (
-      'id' in this.config.form &&
-      (this.config.form as AssetFormConfigType)?.id
+      view &&
+      this._config &&
+      (view.currentValue === 'create' || view.currentValue === 'createView')
     ) {
-      const { id } = this.config.form as AssetFormConfigType;
-      const subscription = this.client
-        .get(id)
-        .pipe(
-          filter((form) => typeof form !== 'undefined' && form !== null),
-          tap((form) => this.setState({ formBuilder: builderFactory(form) }))
-        )
-        .subscribe();
-      this.subscriptions.push(subscription);
+      let builder = this._config ? this.createBuilder(this._config) : null;
+      this.handleCreate(this._config, builder);
     }
 
     if (
-      'value' in this.config.form &&
-      (this.config.form as JsFormConfigType)?.value
+      view &&
+      this.selected &&
+      this._config &&
+      (view.currentValue === 'editView' || view.currentValue === 'edit')
     ) {
-      const { value } = this.config.form as JsFormConfigType;
-      this.setState({ formBuilder: builderFactory(value) });
+      let builder = this._config ? this.createBuilder(this._config) : null;
+      const _selected =
+        typeof this.selected === 'object'
+          ? (this.selected as EntityBaseType)
+          : ({ id: this.selected } as EntityBaseType);
+
+      this.handleUpdate(_selected, this._config, builder);
     }
   }
 
@@ -276,16 +314,20 @@ export class DataComponent
     this.detailPaneChange$.emit(event);
   }
 
-  /**
-   * Handle resources update events
-   */
-  async handleUpdate(event: unknown, config: ConfigType<'update'>) {
+  /** @description Handle resources update events */
+  async handleUpdate(
+    event: unknown,
+    config: ConfigType<'update'>,
+    builder?: ObservableFormBuilder<FormConfigInterface> | null
+  ) {
     const _event = event as EntityBaseType;
     if (typeof _event.id === 'undefined' || _event.id === null) {
       throw new Error('UI resource `id` property cannot be null');
     }
 
     const { update } = config.actions ?? {};
+    const { excludedInputs: _excluded, notRequiredInput: _required } =
+      update ?? {};
     const updateConfig = update as ActionConfigType | undefined;
 
     // #region Transform selected value
@@ -298,15 +340,19 @@ export class DataComponent
     this.onEndAction();
     // #region Tranform select value
 
-    this.setState((state) => ({
-      ...state,
-      previousView: state.view,
-      view: 'editView',
-      form: state.formBuilder
-        ? state.formBuilder(update?.excludedInputs, update?.notRequiredInput)
-        : state.form,
-      selected: _selected as EntityBaseType,
-    }));
+    this.setState((state) => {
+      const b = builder ?? state.formBuilder;
+      return {
+        ...state,
+        previousView: state.view,
+        view: 'editView',
+        formBuilder: b,
+        form: b
+          ? b.pipe(map((fn) => fn(_excluded ?? [], _required ?? [])))
+          : state.form,
+        selected: _selected as EntityBaseType,
+      };
+    });
   }
 
   async handleDelete(event: unknown, config: ConfigType) {
@@ -327,25 +373,28 @@ export class DataComponent
    * Whenever user interact with the `new` button, this handler changes
    * the view state to a `create view` state
    */
-  handleCreate(_: unknown, config: ConfigType) {
+  handleCreate(
+    config: ConfigType,
+    builder?: ObservableFormBuilder<FormConfigInterface> | null
+  ) {
     let { create } = config.actions ?? {};
-    const createConfig = create as ActionConfigType;
-    this.setState((state) => ({
-      ...state,
-      view: 'createView',
-      previousView: state.view,
-      form: state.formBuilder
-        ? state.formBuilder(
-            createConfig?.excludedInputs ?? [],
-            createConfig?.notRequiredInput ?? []
-          )
-        : state.form,
-    }));
+    const { excludedInputs: excluded, notRequiredInput: notRequired } =
+      create ?? {};
+    this.setState((state) => {
+      const b = builder ?? state.formBuilder;
+      return {
+        ...state,
+        view: 'createView',
+        previousView: state.view,
+        formBuilder: b,
+        form: b
+          ? b.pipe(map((fn) => fn(excluded ?? [], notRequired ?? [])))
+          : state.form,
+      };
+    });
   }
 
-  /**
-   * Handle form ui cancel event
-   */
+  /** @description Handle form ui cancel event */
   handleCancel(event?: Event) {
     this.setState((state) => ({
       ...state,
@@ -357,6 +406,7 @@ export class DataComponent
 
     event?.preventDefault();
     event?.stopPropagation();
+    this.closed.emit();
   }
 
   /**
@@ -402,7 +452,7 @@ export class DataComponent
     // Trigger an action start flow
     this.onStartAction();
     return await lastValueFrom(
-      this.service$
+      this.service
         .create(_url, event, createConfig, (err) => {
           this.onActionError({
             type: 'create',
@@ -446,7 +496,7 @@ export class DataComponent
     }
     this.onStartAction();
     return await lastValueFrom(
-      this.service$
+      this.service
         .update(_url, id, event, updateConfig, (err) => {
           this.onActionError({
             type: 'update',
@@ -495,7 +545,7 @@ export class DataComponent
     // Trigger an action start flow
     this.onStartAction();
     return lastValueFrom(
-      this.service$
+      this.service
         .delete(_url, id, event, deleteConfig, (err) => {
           this.onActionError({
             type: 'delete',
@@ -547,6 +597,10 @@ export class DataComponent
     this.setState({ dgState: event });
   }
 
+  handleQueryChange(query: ProjectPaginateQueryOutputType) {
+    this.setState((s) => ({ ...s, query }));
+  }
+
   /** @description Provides a handler implementation for datagrid refresh events */
   onRefreshDatagrid(event: boolean) {
     if (event) {
@@ -579,7 +633,20 @@ export class DataComponent
               payload,
               config
             )
-          : this.handleCreate.call(this, payload, config),
+          : this.handleCreate.call(this, config),
+      export: () =>
+        _actions &&
+        'export' in _actions &&
+        _actions['export'] &&
+        typeof (_actions['export'] as ActionHandlerType).handle === 'function'
+          ? this.callCustomAction.call(
+              this,
+              _actions['export'],
+              name,
+              payload,
+              config
+            )
+          : this.handleExport.call(this, config),
       update: () =>
         _actions &&
         'update' in _actions &&
@@ -663,6 +730,30 @@ export class DataComponent
   }
   // #endregion Form component event
 
+  // Export handler function
+  handleExport(config: ConfigType) {
+    const query = remove(
+      remove(this.state.query ?? ({} as Record<string, unknown>), 'per_page'),
+      'page'
+    );
+    let { url, actions } = config;
+    if (!url && actions) {
+      url = (actions['export'] as ActionConfigType).url;
+    }
+    url = url ?? this.url;
+    let { headers } = config.datagrid?.export ?? {};
+    if (!headers && Array.isArray(config.datagrid?.columns)) {
+      const gridColumns = config.datagrid?.columns;
+      headers = gridColumns.map((c) => ({
+        name: c.title,
+        property: (c as any).label ?? (c as any).property,
+      }));
+    }
+    if (url && headers) {
+      this.service?.export(url, headers, query, config.listBuilder);
+    }
+  }
+
   // Call custom action provided by the component user
   private callCustomAction(
     _action: ActionConfigType | undefined,
@@ -678,7 +769,12 @@ export class DataComponent
     // Case developper provides a handle method instead of allowing the component to provide
     // action handler, we call developper handle method
     if (typeof (_action as ActionHandlerType).handle === 'function') {
-      return (_action as ActionHandlerType).handle.call(null, payload);
+      return (_action as ActionHandlerType).handle.call(
+        null,
+        payload,
+        this,
+        config
+      );
     }
 
     // Else we assume a configuration url is provided, and we must send
@@ -701,7 +797,7 @@ export class DataComponent
     _url = _url ?? action.url;
     this.onStartAction();
     return await lastValueFrom(
-      this.customAction$
+      this.customAction
         .handle(_url, payload, action, (err) => {
           this.onActionError({ type: 'update', err });
         })
@@ -718,7 +814,7 @@ export class DataComponent
     } else {
       this._state = { ...this.state, ..._partial };
     }
-    this._changes$?.markForCheck();
+    this.cdRef?.markForCheck();
 
     // Emit an event each time the state changes
     this.stateChange.emit(this._state);
@@ -751,9 +847,35 @@ export class DataComponent
     this.performingAction.emit(false);
   }
 
+  private createBuilder(config: ConfigType) {
+    if (!config.form) {
+      return null;
+    }
+
+    const builderFactory =
+      (f: FormConfigInterface) =>
+      (excluded: string[] = [], notRequired: string[] = []) =>
+        createFormConfig(f, excluded ?? [], notRequired ?? []);
+
+    if ('id' in config.form && (config.form as AssetFormConfigType)?.id) {
+      const { id } = config.form as AssetFormConfigType;
+      return this.client.get(id).pipe(
+        filter((form) => typeof form !== 'undefined' && form !== null),
+        map((form) => builderFactory(form))
+      );
+    }
+
+    if ('value' in config.form && (config.form as JsFormConfigType)?.value) {
+      const { value } = config.form as JsFormConfigType;
+      return of(builderFactory(value));
+    }
+
+    return null;
+  }
+
   ngOnDestroy() {
-    if (this._changes$) {
-      this._changes$ = null;
+    if (this.cdRef) {
+      this.cdRef = null;
     }
 
     if (this.subscriptions) {

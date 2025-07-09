@@ -6,6 +6,8 @@ import {
   Input,
 } from '@angular/core';
 import { PercentPipe } from '../pipes';
+import { Position } from './types';
+
 
 @Component({
   standalone: true,
@@ -21,6 +23,7 @@ export class ProgressSnackbarComponent {
   @Input() total!: number | undefined | null;
   @Input() value!: number;
   @Input() autoclose: boolean = true;
+  @Input() position: Position = 'top-center';
   // #endregion Component input
 
   // #region Component properties

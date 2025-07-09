@@ -1,0 +1,9 @@
+<ng-container *ngIf="state$ | async as state">
+  <ngx-progress-snackbar
+    [text]="text"
+    [position]="position"
+    [autoclose]="true"
+    [total]="state.total"
+    [value]="state.value"
+  ></ngx-progress-snackbar>
+</ng-container>

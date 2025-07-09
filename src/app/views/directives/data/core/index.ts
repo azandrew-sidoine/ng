@@ -28,6 +28,7 @@ export {
   RequestClient,
   RequestMethod,
   RequestOptions,
+  ObservableFormBuilder,
 } from './types';
 export {
   buildRessouceUrl,
@@ -43,4 +44,4 @@ export {
   ArgType,
 } from './builders';
 export { actionPipeline$ } from './rx';
-export { columsTranslatorFactory } from './helpers';
+export { columsTranslatorFactory, remove } from './helpers';

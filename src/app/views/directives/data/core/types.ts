@@ -2,11 +2,13 @@ import { Observable, ObservableInput } from 'rxjs';
 import { FormConfigInterface } from '@azlabsjs/smart-form-core';
 import { QueryStateType as QueryState } from '@azlabsjs/rx-query';
 import { ReactiveFormComponentInterface } from '@azlabsjs/ngx-smart-form';
-import { Injector } from '@angular/core';
+import { Injector, Type, ViewContainerRef } from '@angular/core';
 import {
   GridDetailColumnType,
+  ProjectPaginateQueryOutputType,
   SearchableGridColumnType,
 } from '@azlabsjs/ngx-clr-smart-grid';
+import { SheetHeaderType } from '../utils';
 
 /** @internal */
 type RestQueryType = {
@@ -36,28 +38,32 @@ type FormEventType = {
     selected?: EntityBaseType | null
   ) => unknown | Promise<unknown>;
 
-  /**
-   * changes provides a configuration based form changes handler function
-   */
+  /** @descrption provides a configuration based form changes handler function */
   changes: (event: unknown) => unknown;
 
-  /**
-   * changes provides a configuration based form changes handler function
-   */
+  /** @description provides a configuration based form error handler function */
   error: (event: unknown) => unknown;
+};
+
+/** @internal */
+export type FormUIConfigType = {
+  noGridLayout?: boolean;
+  // # TODO: Add subscribers to input changes, form changes, ready event
 };
 
 /** @internal Type declaration for form configuration that is loaded from the project assets */
 export type AssetFormConfigType = {
   id: string | number;
   url: string;
-} & FormEventType;
+} & FormEventType &
+  FormUIConfigType;
 
 /** @internal Type declaration for form configuration */
 export type JsFormConfigType = {
   value: FormConfigInterface;
   url: string;
-} & FormEventType;
+} & FormEventType &
+  FormUIConfigType;
 
 /** @internal */
 export type InjectorFnOr<T> = T | ((injector?: Injector | null) => T);
@@ -98,6 +104,16 @@ export type HTTPMethodsType =
   | 'DELETE'
   | 'delete';
 
+/** @internal */
+export type DisabledFnType =
+  | boolean
+  | ((value: any, injector?: Injector | null) => boolean)
+  | ((value: any, injector?: Injector | null) => Observable<boolean>)
+  | ((value: any, injector?: Injector | null) => Promise<boolean>);
+
+/** @internal */
+export type RemoveFnType = (value: unknown) => boolean;
+
 /**  @internal Action configuration type declaration */
 export type UIActionConfigType = {
   /**
@@ -115,16 +131,17 @@ export type UIActionConfigType = {
     title: string | ((item: unknown) => string);
     cssClass?: string | string[];
   };
+
   /**
    * Case the remove function return true, the action
    * will not be added to the view
    */
-  remove?: (value: unknown) => boolean;
+  remove?: RemoveFnType;
 
   /**
    * Function to disbale the action element based on criteria
    */
-  disabled?: boolean | ((value: unknown) => boolean);
+  disabled?: DisabledFnType;
 };
 
 /** @internal Type declaration for single row action */
@@ -137,7 +154,7 @@ export type UIActionEventArgType<T = unknown> = {
  * Action union type to restrict the list of properties that can be defined
  * as property of `actions` attribute of `ConfigType` instances.
  */
-export type ActionType = 'delete' | 'create' | 'update' | 'list';
+export type ActionType = 'delete' | 'create' | 'update' | 'list' | 'export';
 
 /**
  * Base action configuration type declaration. It defines basic properties to
@@ -145,10 +162,10 @@ export type ActionType = 'delete' | 'create' | 'update' | 'list';
  */
 export type BaseActionConfigType = {
   /** @description Case the remove function return true, the action will not be added to the view */
-  remove?: (value: unknown) => boolean;
+  remove?: RemoveFnType;
 
   /** @description Function to disbale the action element based on criteria */
-  disabled?: boolean | ((value: unknown) => boolean);
+  disabled?: DisabledFnType;
 
   /** @description URL where request are sent to. If not provided, we assume the intercept will handle the /DELETE request on it own */
   url?: string;
@@ -172,12 +189,12 @@ export type ActionUIConfigType = {
    * Case the remove function return true, the action
    * will not be added to the view
    */
-  remove?: (value: unknown) => boolean;
+  remove?: RemoveFnType;
 
   /**
    * Function to disbale the action element based on criteria
    */
-  disabled?: boolean | ((value: unknown) => boolean);
+  disabled?: DisabledFnType;
 
   /**
    * Action label to be used
@@ -236,15 +253,26 @@ export type PartialActionConfigType<TActions extends string = ActionType> =
         [prop: string]: Partial<CustomActionConfigType> | ActionHandlerType;
       }>;
 
+/** @internal */
+export type DetailViewConfigType<T = any> = {
+  /** Component object must support data and columns properties as input */
+  component: Type<T>;
+  inputs?:
+    | Record<string, unknown>
+    | ((injector: Injector) => Record<string, unknown>);
+  module?: Type<any>;
+  injector?: Injector;
+  content?: any[][];
+};
+
 /**
  * Data component configuration type declaration. It allows the data component to
  * be more pluggable and adaptable to business requirements
  */
 export type ConfigType<TActionType extends ActionType = ActionType> = {
   url?: string;
-  form?: (Partial<AssetFormConfigType> | Partial<JsFormConfigType>) & {
-    noGridLayout?: boolean;
-  };
+  form?: (Partial<AssetFormConfigType> | Partial<JsFormConfigType>) &
+    FormUIConfigType;
   actions?: ActionsConfigType<TActionType>;
   datagrid: {
     /**
@@ -291,7 +319,17 @@ export type ConfigType<TActionType extends ActionType = ActionType> = {
     detail?: InjectorFnOr<
       OrObservable<(GridDetailColumnType & { editable?: boolean })[]>
     >;
+    export?: {
+      //#TODO: Add title or button text property
+      headers: SheetHeaderType[];
+    };
   };
+  detail?: DetailViewConfigType;
+
+  /** List builder instance used for the current configuration which must be called
+   * on each chunk fetched from the database
+   */
+  listBuilder?: <T>(values: T[]) => any[];
 };
 
 /** @description REST requests payload base type declaration */
@@ -370,21 +408,34 @@ export interface RequestClient {
 export type EntityBaseType = { id: string | number };
 
 /** @description Data UI view state type */
-export type ViewStateType = 'gridView' | 'listView' | 'createView' | 'editView';
+export type ViewStateType =
+  | 'gridView'
+  | 'grid'
+  | 'listView'
+  | 'list'
+  | 'createView'
+  | 'create'
+  | 'editView'
+  | 'edit';
+
+/** @internal */
+type FormBuilderType<T> = (excluded?: string[], notRequired?: string[]) => T;
+
+/** @internal */
+export type ObservableFormBuilder<T> = Observable<FormBuilderType<T>>;
 
 /** @description Component state type declaration */
 export type StateType = {
   // performingAction: boolean;
   view: ViewStateType;
-  formBuilder?: (
-    excluded?: string[],
-    notRequired?: string[]
-  ) => FormConfigInterface;
-  form?: FormConfigInterface;
-  previousView?: 'gridView' | 'listView' | 'createView' | 'editView';
+  formBuilder?: ObservableFormBuilder<FormConfigInterface> | null;
+  form?: Observable<FormConfigInterface> | null;
+  previousView?: ViewStateType;
   selected?: EntityBaseType;
   cachedQueries: QueryState[];
   dgState: unknown;
+  query: ProjectPaginateQueryOutputType | null;
+  filters?: { property: string; value: unknown }[];
 };
 
 // #region Common strings
@@ -454,28 +505,28 @@ export type DataComponentType = {
    */
   form: ReactiveFormComponentInterface | null;
 
-  /**
-   * Data component state type declaration
+  /** Injector instance of the component */
+  injector: Injector | null;
+
+  /** Reference to dynamic content view container.
+   * It might help to add element/component like modal
+   * to the UI at runtime
    */
+  componentOutlet: ViewContainerRef;
+
+  /** Data component state type declaration */
   state: StateType;
-  /**
-   * Set the UI view state
-   *
-   * @param view
-   */
+
+  /** Set the UI view state */
   setView(view: ViewStateType): void;
-  /**
-   * Handle update action using UI configuration
-   */
+
+  /** Handle update action using UI configuration */
   update: DataUpdateHandler;
-  /**
-   * Handle UI create action
-   */
+
+  /** Handle UI create action */
   create: DataCreateHandler;
 
-  /*
-   * Handles action to remove/delete a resource from the database
-   */
+  /* Handles action to remove/delete a resource from the database */
   delete: DataDeleteHandler;
 };
 // #endregion Data component type declarations

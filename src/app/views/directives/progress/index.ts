@@ -5,7 +5,7 @@ import { ProgressSnackbarComponent } from './snackbar';
 export { ProgressStateType } from './types';
 
 // Exported components
-export { ProgressSnackbarComponent } from './snackbar';
+export * from './snackbar';
 
 /** @description Exported module directives */
 export const PROGRESS_DIRECTIVES = [

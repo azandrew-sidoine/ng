@@ -1,0 +1,37 @@
+<ng-container *ngIf="value|transform: (transform ?? [] ) | pipeResult as result">
+    <ng-container *ngIf="result.value | isAsync; else noAsyncRef">
+        <ng-container
+            *ngTemplateOutlet="template ?? columnPreview; context: {$implicit: result.value | async}"></ng-container>
+    </ng-container>
+    <ng-template #noAsyncRef>
+        <ng-container *ngTemplateOutlet="template ?? columnPreview; context: {$implicit: result.value}"></ng-container>
+    </ng-template>
+</ng-container>
+
+
+<ng-template #columnPreview let-v>
+    <div *ngIf="['document', 'link'].indexOf(type) !== -1; else preview"
+        class="d-flex-sp-arround d-flex-start d-flex d-flex-gap-12">
+        <a *ngIf="type === 'document'" [href]="v" target="_blank" class="btn btn-link">
+            <svg class="icon" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" width="36" height="36">
+                <path d="M31,31H5a1,1,0,0,0,0,2H31a1,1,0,0,0,0-2Z"></path>
+                <path
+                    d="M18,29.48,28.61,18.87a1,1,0,0,0-1.41-1.41L19,25.65V5a1,1,0,0,0-2,0V25.65L8.81,17.46a1,1,0,1,0-1.41,1.41Z">
+                </path>
+            </svg>
+            {{ "app.actions.download" | text | uppercase }}
+        </a>
+
+        <a *ngIf="type === 'document' || type==='link'" (click)="handlePreview($event, v)" class="btn btn-link">
+            <svg class="icon" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg" width="36" height="36">
+                <path
+                    d="M21.89,4H7.83A1.88,1.88,0,0,0,6,5.91V30.09A1.88,1.88,0,0,0,7.83,32H28.17A1.88,1.88,0,0,0,30,30.09V11.92Zm-.3,2.49,6,5.9h-6ZM8,30V6H20v8h8V30Z">
+                </path>
+            </svg>
+            {{ "app.actions.detail" | text | uppercase }}
+        </a>
+    </div>
+    <ng-template #preview>
+        {{ v }}
+    </ng-template>
+</ng-template>

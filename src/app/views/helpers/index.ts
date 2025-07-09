@@ -36,5 +36,16 @@ export function isEmpty(value: Record<string, unknown> | null | undefined) {
   return result;
 }
 
+export function except<T extends { [index: string]: any }>(
+  values: T[],
+  property: string,
+  ...excepts: string[]
+) {
+  return values.filter((v) => {
+    const item = v[property];
+    return !excepts.includes(item);
+  });
+}
+
 export * from './platform';
 export * from './query';

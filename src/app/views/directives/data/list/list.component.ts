@@ -11,28 +11,58 @@ import {
 import { UIActionEventArgType, ConfigType, UIActionConfigType } from '../core';
 import { QueryStateType as QueryState } from '@azlabsjs/rx-query';
 import { DATAGRID_DIRECTIVES } from '../../datagrid';
-import { COMMON_PIPES } from '@azlabsjs/ngx-common';
+import { COMMON_PIPES, CommonTextPipe } from '@azlabsjs/ngx-common';
 import { CommonModule } from '@angular/common';
 import { PIPES } from './pipes';
+import {
+  AsyncPipe,
+  CurrencyPipe,
+  DecimalPipe,
+  JsonPipe,
+  LowerCasePipe,
+  PercentPipe,
+  SlicePipe,
+  UpperCasePipe,
+} from '@angular/common';
+import { DATA_PIPES } from '../pipes';
+import { ProjectPaginateQueryOutputType } from '@azlabsjs/ngx-clr-smart-grid';
 
 @Component({
-    imports: [CommonModule, ...COMMON_PIPES, ...DATAGRID_DIRECTIVES, ...PIPES],
-    selector: 'ngx-data-list',
-    templateUrl: './list.component.html',
-    styleUrls: ['./list.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  standalone: true,
+  imports: [
+    CommonModule,
+    ...COMMON_PIPES,
+    ...DATAGRID_DIRECTIVES,
+    ...DATA_PIPES,
+    ...PIPES,
+  ],
+  selector: 'ngx-data-list',
+  templateUrl: './list.component.html',
+  styleUrls: ['./list.component.scss'],
+  providers: [
+    UpperCasePipe,
+    LowerCasePipe,
+    CurrencyPipe,
+    DecimalPipe,
+    JsonPipe,
+    PercentPipe,
+    SlicePipe,
+    AsyncPipe,
+    CommonTextPipe,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListComponent {
   // #region Component Inputs
-  @Input('refresh-css-class') refreshCssClass = 'btn-warning';
-  @Input('refresh-text') refreshText: string = 'refresh';
-  @Input('gridView') gridViewRef!: TemplateRef<unknown>;
-  @Input('overflow') overflow!: TemplateRef<any>;
-  @Input('action-bar') actionBar!: TemplateRef<any> | undefined;
-  @Input('detail-pane') detailPaneRef!: TemplateRef<any> | undefined;
-  @Input('show-detail-pane') showDetailPane: boolean = false;
-  @Input('no-padding') noPadding: boolean = true;
-  @Input('actions') set actions(values: UIActionConfigType[]) {
+  @Input({ alias: 'refresh-css-class' }) refreshCssClass = 'btn-warning';
+  @Input({ alias: 'refresh-text' }) refreshText: string = 'refresh';
+  @Input({ alias: 'gridView' }) gridViewRef!: TemplateRef<unknown>;
+  @Input({ alias: 'overflow' }) overflow!: TemplateRef<any>;
+  @Input({ alias: 'action-bar' }) actionBar!: TemplateRef<any> | undefined;
+  @Input({ alias: 'detail-pane' }) detailPaneRef!: TemplateRef<any> | undefined;
+  @Input({ alias: 'show-detail-pane' }) showDetailPane: boolean = false;
+  @Input({ alias: 'no-padding' }) noPadding: boolean = true;
+  @Input({ alias: 'actions' }) set actions(values: UIActionConfigType[]) {
     const _actionBarActions: UIActionConfigType[] = [];
     const _overflowActions: UIActionConfigType[] = [];
     if (values) {
@@ -52,16 +82,20 @@ export class ListComponent {
   }
   @Input() config!: ConfigType;
   @Input() url!: string;
-  @Input('dg-state') dgState!: unknown;
-  @Input('search-value') search!: string | null | undefined;
+  @Input({ alias: 'dg-state' }) dgState!: unknown;
+  @Input({ alias: 'search-value' }) search!: string | null | undefined;
+  @Input({ alias: 'except-columns' }) exceptColumns: string[] = [];
+  @Input() filters: { property: string; value: unknown }[] = [];
+  @Input() exporting: boolean = false;
   // #endregion Component Inputs
 
   // #region Component outputs
-  @Output('detail-change') detailPaneChange$ = new EventEmitter<unknown>();
+  @Output('detail-change') detailPaneChange = new EventEmitter<unknown>();
   @Output('cached-query') cachedQuery = new EventEmitter<QueryState>();
   @Output('dg-state-change') dgStateChange = new EventEmitter<unknown>();
   @Output('refresh-grid') refreshGrid = new EventEmitter<boolean>();
   @Output() action = new EventEmitter<UIActionEventArgType>();
+  @Output() queryChange = new EventEmitter<ProjectPaginateQueryOutputType>();
   // #endregion Component outputs
 
   // #region Component properties
@@ -84,7 +118,7 @@ export class ListComponent {
   constructor(@Optional() private changes?: ChangeDetectorRef) {}
 
   handleDetailPaneChange(event: unknown) {
-    this.detailPaneChange$.emit(event);
+    this.detailPaneChange.emit(event);
   }
 
   handleAction(event: Event, item: unknown, action: UIActionConfigType) {
@@ -122,6 +156,10 @@ export class ListComponent {
     if (handler) {
       handler(event);
     }
+  }
+
+  handleQueryChange(query: ProjectPaginateQueryOutputType) {
+    this.queryChange.emit(query);
   }
 
   onPerformingAction(value: boolean) {

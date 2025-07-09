@@ -1,0 +1,43 @@
+:host ::ng-deep .data-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+:host ::ng-deep .data-content .data-body {
+  overflow-y: hidden !important;
+}
+
+:host ::ng-deep ngx-clr-data-list {
+  display: block;
+  min-height: 624px;
+  height: calc(100vh - 200px);
+  overflow-y: scroll;
+}
+
+:host
+  ::ng-deep
+  ngx-clr-data-list.not-closeable
+  ngx-datagrid
+  clr-datagrid
+  .datagrid-detail-pane
+  .datagrid-detail-header
+  .datagrid-detail-pane-close {
+  display: none;
+}
+
+:host ::ng-deep .data-body__content {
+  display: flex;
+  flex-direction: column;
+}
+
+:host ::ng-deep .datagrid-detail-pane {
+  width: 175% !important;
+  overflow-x: clip;
+}
+
+:host ::ng-deep .datagrid-action-bar {
+  margin: var(--ngx-datagrid-action-bar-margin, 4px 0) !important;
+  padding: var(--ngx-datagrid-action-bar-margin, 0) !important;
+}

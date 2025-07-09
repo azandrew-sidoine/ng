@@ -1,0 +1,278 @@
+/* Basic tags styles */
+a {
+  touch-action: manipulation;
+}
+/*! Basic tags styles */
+
+/* Header container styles */
+
+:host ::ng-deep header,
+header,
+:host ::ng-deep .header,
+.header {
+  display: flex;
+  white-space: nowrap;
+  height: var(--header-height, 3rem);
+}
+
+:host ::ng-deep header .nav-link.active,
+header .nav-link.active,
+.header .nav-link.active {
+  font-weight: bold;
+}
+
+:host ::ng-deep header.header-basic,
+:host ::ng-deep header.basic,
+header.header-basic,
+.header.basic,
+:host ::ng-deep .header.header-basic,
+.header.header-basic {
+  background-color: var(--header-basic-bg-color, #00364d);
+}
+
+:host ::ng-deep header.basic .branding .title,
+:host ::ng-deep header.basic .icon,
+:host ::ng-deep header.basic .nav-link,
+:host ::ng-deep header.basic .nav-text,
+header.basic .branding .title,
+header.basic .icon,
+header.basic .nav-link,
+header.basic .nav-text,
+.header.basic .branding .title,
+.header.basic .icon,
+.header.basic .nav-link,
+.header.basic .nav-text {
+  color: var(--header-basic-color, #fff);
+}
+
+:host ::ng-deep header.basic .dropdown__nav-link_item,
+header.basic .dropdown__nav-link_item,
+.header.basic .dropdown__nav-link_item {
+  color: var(--nav-basic-link-color, #000) !important;
+}
+
+:host ::ng-deep header.basic .nav-link.active,
+header.basic .nav-link.active,
+.header.basic .nav-link.active {
+  background: rgba(255, 255, 255, 0.05);
+  opacity: 1;
+}
+
+:host ::ng-deep header.basic .dropdown__nav-link_item:hover,
+header.basic .dropdown__nav-link_item:hover,
+:host ::ng-deep .header.basic .dropdown__nav-link_item:hover,
+.header.basic .dropdown__nav-link_item:hover {
+  border-bottom: none;
+  background-color: var(--nav-basic-link-bg-color, hsl(198, 100%, 24%)) !important;
+  color: var(--nav-basic-link-hover-color, #fff) !important;
+  font-weight: bolder;
+}
+
+:host ::ng-deep header.basic .icon,
+header.basic .icon,
+.header.basic .icon {
+  fill: var(--header-basic-color, #fff) !important;
+}
+
+:host ::ng-deep header.light,
+:host ::ng-deep .header.light,
+header.light,
+.header.light {
+  background: var(--header-light-bg-color, #fff);
+  box-shadow: 0 -0.05rem 0 var(--header-light-box-shadow-color, hsl(198, 0%, 89%)) inset !important;
+}
+
+:host ::ng-deep header.light .branding .title,
+:host ::ng-deep header.light .icon,
+:host ::ng-deep header.light .nav-link,
+:host ::ng-deep header.light .nav-text,
+:host ::ng-deep header.light .dropdown__nav-link_item,
+header.light .branding .title,
+header.light .icon,
+header.light .nav-link,
+header.light .nav-text,
+header.light .dropdown__nav-link_item,
+.header.light .branding .title,
+.header.light .icon,
+.header.light .nav-link,
+.header.light .nav-text,
+.header.light .dropdown__nav-link_item {
+  color: var(--header-light-color, #000) !important;
+}
+
+:host ::ng-deep header.light .nav-link.active,
+header.light .nav-link.active,
+:host ::ng-deep .header.light .nav-link.active,
+.header.light .nav-link.active {
+  background: var(--nav-light-link-bg-color, rgba(185, 185, 185, 0.2));
+  opacity: 1;
+}
+
+:host ::ng-deep header.light .dropdown__nav-link_item,
+header.light .dropdown__nav-link_item,
+.header.light .dropdown__nav-link_item {
+  color: var(--nav-light-link-color, #000) !important;
+}
+
+
+:host ::ng-deep header.light .dropdown__nav-link_item:hover,
+header.light .dropdown__nav-link_item:hover,
+:host ::ng-deep .header.light .dropdown__nav-link_item:hover,
+.header.light .dropdown__nav-link_item:hover {
+  border-bottom: none;
+  background-color: var(--nav-light-link-bg-color, rgba(185, 185, 185, 0.2));
+  color: var(--nav-light-link-hover-color, #000) !important;
+  font-weight: bold;
+}
+
+:host ::ng-deep header.light .icon,
+header.light .icon,
+.header.light .icon {
+  fill: var(--header-light-color, #000) !important;
+}
+/*! Header container styles */
+
+
+.margin-left-1rem {
+  margin-left: 1rem;
+}
+
+.dropdown-toggle {
+  display: inline;
+}
+
+/* Header navigation links */
+:host ::ng-deep .nav-link,
+.nav-link {
+  font-size: 0.8rem !important;
+}
+
+:host ::ng-deep .links__nav-link,
+.links__nav-link {
+  position: relative;
+  padding: 0.9rem 1.2rem;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.links__nav-link,
+:host ::ng-deep .links__nav-link .ngx-azl-dropdown-header {
+  opacity: var(--header-nav-link-opacity, 1);
+}
+
+/*! Header navigation links*/
+
+/* Dropdown menu and dropdown menu items */
+:host ::ng-deep .ngx-azl-dropdown-menu,
+.ngx-azl-dropdown-menu {
+  background: var(--dropdown-nav-bg-color, #fff) !important;
+  border-radius: var(--dropdown-border-radius, 0) !important;
+  margin-top: 0;
+  min-height: 4.2rem;
+  margin-left: -1.2rem;
+}
+
+:host ::ng-deep .ngx-azl-dropdown-text,
+.ngx-azl-dropdown-text {
+  border-bottom: none !important;
+}
+
+.ngx-azl-dropdown-text .icon,
+.ngx-azl-dropdown-text svg {
+  margin-left: 0.5rem;
+}
+
+/*! Dropdown menu and dropdown menu items */
+
+:host ::ng-deep header *[main-nav],
+header *[main-nav] {
+  margin-top: var(---header-icon-margin-top, 0.5rem);
+  margin-left: var(---header-icon-margin-left, 0.5rem);
+}
+
+:host ::ng-deep .ngx-azl-dropdown.menu .ngx-azl-dropdown-menu,
+:host ::ng-deep .ngx-azl-dropdown-menu.right {
+  margin-top: var(---header-icon-dropdown-margin-top, 0.4rem);
+}
+
+:host ::ng-deep .ngx-azl-dropdown-menu.right {
+  right: var(--dropdown-menu-right-offset, 0.5rem) !important;
+  left: auto !important;
+}
+
+:host ::ng-deep .header-action-dropdown .ngx-azl-dropdown-menu {
+  min-width: 7rem;
+  max-width: 18rem;
+  margin-top: var(--header-action-dropdown-menu-margin-top, 0.9rem);
+}
+
+:host ::ng-deep .ngx-azl-dropdown-menu {
+  padding: var(--header-action-dropdown-menu-padding, 0.6rem 0);
+  min-height: auto;
+}
+
+.header-actions-content {
+  display: flex;
+}
+
+.branding {
+  display: flex !important;
+  flex: 0 0 auto !important;
+  min-width: var(--header-branding-min-width, 10.2rem) !important;
+  padding: var(--header-branding-padding, 0 1.2rem) !important;
+  height: var(--header-height, 3rem) !important;
+}
+
+.branding .title {
+  color: var(--header-title-color, hsl(198, 0%, 98%));
+  font-weight: var(--clr-header-title-font-weight, bold);
+  font-family: var(
+    --header-title-font-family,
+    Metropolis,
+    "Avenir Next",
+    "Helvetica Neue",
+    Arial,
+    sans-serif
+  );
+  font-size: var(--header-title-font-size, 0.8rem);
+  letter-spacing: var(--header-title-letter-spacing, 0.01em);
+  line-height: var(--header-title-line-height, 3rem);
+  text-decoration: none;
+}
+
+header .header-nav:before {
+  display: inline-block !important;
+  position: absolute !important;
+  content: "";
+  background-color: var(--header-divider-color, hsl(198, 14%, 36%)) !important;
+  height: var(--header-nav-height, calc(36 * calc((1rem / 20) * 1))) !important;
+  width: var(--header-nav-width, calc(1 * (1rem / 20))) !important;
+  top: var(--header-nav-top, calc(12 * calc((1rem / 20) * 1))) !important;
+  left: 0;
+}
+
+/* Search styles */
+.search {
+  width: 100%;
+}
+:host ::ng-deep .search .main-search .ngx-search-button svg {
+  fill: var(--header-nav-link-font-color, #fff) !important;
+}
+:host ::ng-deep .search .main-search .ngx-search-button,
+:host ::ng-deep .search .main-search .ngx-search-input {
+  color: var(--header-nav-link-font-color, #fff) !important;
+}
+/*! Search styles */
+
+/* Logo styles */
+img.logo {
+  height: var(--header-logo-size, 42px);
+  margin-top: var(---header-logo-margin-top, 0.5rem);
+  margin-right: var(---header-logo-margin-right, 0.7rem);
+}
+
+header .branding,
+.header .branding {
+  padding: var(--header-branding-padding, 0 0.7rem) !important;
+}
+/*! Logo styles */

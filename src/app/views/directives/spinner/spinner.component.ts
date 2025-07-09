@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
-    imports: [CommonModule],
-    selector: 'ngx-spinner',
-    templateUrl: './spinner.component.html',
-    styleUrls: ['./spinner.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  standalone: true,
+  imports: [CommonModule],
+  selector: 'ngx-spinner',
+  templateUrl: './spinner.component.html',
+  styleUrls: ['./spinner.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SpinnerComponent {
   // #region Component inputs

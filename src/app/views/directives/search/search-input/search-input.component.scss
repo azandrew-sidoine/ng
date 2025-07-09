@@ -1,0 +1,157 @@
+$color: var(--item-selected-color, #e24040);
+
+.ngx-search:not(.has-border) {
+  position: relative;
+  display: flex;
+  min-width: var(--search-box-width, 420px);
+  height: var(--search-box-input-height, 50px);
+  transition: border 0.1s linear, background-color 0.1s linear;
+  border: 0;
+  border-bottom: 1px solid inherit;
+  &.focus {
+    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.ngx-search.has-border {
+  display: flex;
+  padding: var(--search-box-padding, 0 24px);
+  width: 100%;
+  line-height: 30px;
+  height: var(--search-box-height, 58px);
+  border: var(--search-box-border-width, 3px) solid
+    var(--search-box-border-color, #c8c7c7);
+  box-shadow: #c8c7c7 0px 0px 2px 0px;
+  border-radius: var(--search-box-border-radius, 8px);
+  background-color: var(--search-box-bg-color, transparent);
+  transition: border 0.1s linear, background-color 0.1s linear;
+  margin: 0 0 0.75rem 0;
+}
+
+.ngx-search > input {
+  font-size: var(--search-box-input-font-size, 16px);
+  font-weight: var(--search-box-input-font-weight, 400);
+  display: inline-block;
+  outline: none;
+  width: 100%;
+  border: none;
+  background: none;
+  color: var(--search-box-color,  rgb(8, 7, 7));
+
+  &::-webkit-search-cancel-button {
+    appearance: none;
+  }
+}
+
+.ngx-search > input {
+  margin: 0 16px;
+}
+.ngx-search > button {
+  margin-top: 10px;
+  margin-left: 16px;
+}
+
+.ngx-search > button {
+  height: 28px;
+  width: 28px;
+  border: none;
+  background: none;
+  outline: none !important;
+  cursor: pointer;
+
+  & svg {
+    width: 28px;
+    height: 28px;
+    fill: var(--search-button-color, #6a6a6a);
+  }
+}
+
+// Search options style
+.search-option {
+  position: absolute;
+  text-align: right;
+  top: 10px;
+  right: 15px;
+
+  div {
+    position: relative;
+    display: inline-block;
+    margin: 0 1px;
+    cursor: pointer;
+
+    input {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0.01;
+      cursor: pointer;
+    }
+
+    span {
+      position: absolute;
+      display: block;
+      text-align: center;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      background: #929aa3;
+      color: #fff;
+      font-size: 9px;
+      letter-spacing: 1px;
+      line-height: 1;
+      text-transform: uppercase;
+      padding: 4px 7px;
+      border-radius: 12px;
+      top: -18px;
+      transition: all 0.2s ease-in-out;
+
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -3px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-top: 4px solid #929aa3;
+        border-left: 4px solid transparent;
+        border-right: 4px solid transparent;
+        transition: all 0.2s ease-in-out;
+      }
+    }
+
+    &:hover span {
+      opacity: 1;
+      top: -21px;
+    }
+
+    label {
+      display: block;
+      cursor: pointer;
+    }
+
+    svg {
+      height: 20px;
+      width: 20px;
+      fill: #5a6674;
+      opacity: 0.6;
+      transition: all 0.2s ease-in-out;
+      pointer-events: none;
+    }
+
+    &:hover svg {
+      opacity: 1;
+    }
+
+    input:checked + label svg {
+      fill: $color;
+      opacity: 0.9;
+    }
+
+    input:checked + label span {
+      background: $color;
+
+      &::after {
+        border-top-color: $color;
+      }
+    }
+  }
+}

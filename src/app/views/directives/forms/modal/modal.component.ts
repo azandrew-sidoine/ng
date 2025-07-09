@@ -9,6 +9,8 @@ import {
   OnChanges,
   OnDestroy,
   Output,
+  Pipe,
+  PipeTransform,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -32,9 +34,9 @@ import {
   tap,
   timer,
 } from 'rxjs';
-import { CLR_FORM_CONTROL_DIRECTIVES } from '@azlabsjs/ngx-clr-form-control';
+import { FORM_CONTROL_DIRECTIVES } from '@azlabsjs/ngx-clr-form-control';
 import { CommonModule } from '@angular/common';
-import { FormModalElement } from '../types';
+import { FormModalElement } from './types';
 import {
   FormGroup,
   AsyncValidatorFn,
@@ -42,18 +44,34 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { ControlsStateMap } from '@azlabsjs/ngx-smart-form/lib/angular/types';
+import { COMMON_PIPES } from '@azlabsjs/ngx-common';
+
+// @Pipe({
+//   name: 'typeOf',
+//   standalone: true,
+//   pure: true,
+// })
+// export class TypeOfPipe implements PipeTransform {
+//   transform(value: any) {
+//     console.log(value, Object.keys(value));
+//     return typeof value;
+//   }
+// }
 
 @Component({
-    imports: [
-        CommonModule,
-        ...FORM_DIRECTIVES,
-        ...CLR_FORM_CONTROL_DIRECTIVES,
-        ...MODAL_DIRECTIVES,
-    ],
-    selector: 'ngx-form-modal',
-    templateUrl: './modal.component.html',
-    styleUrls: ['./modal.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  standalone: true,
+  imports: [
+    CommonModule,
+    ...COMMON_PIPES,
+    ...FORM_DIRECTIVES,
+    ...FORM_CONTROL_DIRECTIVES,
+    ...MODAL_DIRECTIVES,
+    // TypeOfPipe
+  ],
+  selector: 'ngx-form-modal',
+  templateUrl: './modal.component.html',
+  styleUrls: ['./modal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ModalComponent
   implements
@@ -73,7 +91,7 @@ export class ModalComponent
   @Input() form!: FormConfigInterface | null;
   @Input() value!: unknown;
   @Input() disabled: boolean = false;
-  @Input({ alias: 'no-grid-layout' }) noGridLayout!: boolean;
+  @Input({ alias: 'no-grid-layout' }) noGridLayout: boolean = false;
   @Input({ alias: 'form-id' }) formId!: string | number;
   @Input({ alias: 'submit-text' }) submitText!: string;
   @Input({ alias: 'cancel-text' }) cancelText!: string;
@@ -213,7 +231,6 @@ export class ModalComponent
   }
 
   onCancel(event?: Event) {
-    //
     event?.preventDefault();
     event?.stopPropagation();
     this.close();

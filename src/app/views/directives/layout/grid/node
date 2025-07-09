@@ -1,0 +1,8 @@
+# Grid
+
+It's a simple component present it data using a 2 dimensional array or a matrix:
+
+- Each dimension is a 12 grid dimension
+- Each cell of the grid is a placeholder for a component (angular component)
+    - Each component is a component outlet configuration object
+        [component,inputs,injector,[outputs]]

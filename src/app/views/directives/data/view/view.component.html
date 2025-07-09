@@ -1,72 +1,193 @@
-<ngx-view [noHeader]="noHeader" [links]="links" [path]="path" [name]="name" [name]="'name' | text : module">
-    <ngx-data #dataRef [delete-complete-text]="'request.success'|text" [searchable]="searchable"
-        [no-padding]="noPadding" [request-complete-text]="'request.success'|text"
-        [request-error-text]="'request.error' | text" [update-complete-text]="'request.success' | text"
-        [create-complete-text]="'request.success'|text" [title]="'title' | text : module"
-        [description]="'description' | text : module" [config]="config" [actions]="['update', 'delete', 'create']"
-        (action-error)="onActionError($event)" (action-result)="onActionResult($event)"
-        (performing-action)="onPerformingAction($event)" (detail-change)="onDetailChange($event)"
-        (form-error)="onFormError($event)" (form-changes)="onFormChanges($event)" (form-ready)="onFormReady($event)"
-        [delete-prompt]="'promt.delete' | text">
+<ngx-view
+  [noHeader]="noHeader"
+  [links]="links ?? []"
+  [path]="path"
+  [name]="'name' | asyncRouteData | async"
+>
+  <div search>
+    <ng-container *ngIf="'search' | asyncRouteData | async as searchConfig">
+      <ng-container
+        *ngComponentOutlet="
+          searchConfig.component;
+          inputs: searchConfig.inputs;
+          ngModule: searchConfig.module;
+          injector: searchConfig.injector;
+          content: searchConfig.content
+        "
+      ></ng-container>
+    </ng-container>
+  </div>
+  <div customActions>
+    <ng-container *ngIf="'actions' | asyncRouteData | async as actionsConfig">
+      <ng-container
+        *ngComponentOutlet="
+          actionsConfig.component;
+          inputs: actionsConfig.inputs;
+          ngModule: actionsConfig.module;
+          injector: actionsConfig.injector;
+          content: actionsConfig.content
+        "
+      ></ng-container>
+    </ng-container>
+  </div>
+  <ngx-data
+    #dataRef
+    *ngIf="'config' | asyncRouteData | async as config"
+    [view]="state.view"
+    [query]="state.params"
+    [noModal]="noModal"
+    [delete-complete-text]="'app.request.success' | text"
+    [searchable]="('searchable' | asyncRouteData | async) ?? false"
+    [no-padding]="noPadding"
+    [request-complete-text]="'app.request.success' | text"
+    [request-error-text]="'app.request.error' | text"
+    [update-complete-text]="'app.request.success' | text"
+    [create-complete-text]="'app.request.success' | text"
+    [title]="'app.modules.[module].title' | parseStr : { module } | text"
+    [description]="
+      'app.modules.[module].description' | parseStr : { module } | text
+    "
+    [config]="config"
+    [actions]="['update', 'delete', 'create']"
+    (action-error)="onActionError($event)"
+    (action-result)="onActionResult($event)"
+    (performing-action)="onPerformingAction($event)"
+    (detail-change)="onDetailChange($event)"
+    (form-error)="onFormError($event)"
+    (form-changes)="onFormChanges($event)"
+    (form-ready)="onFormReady($event, config)"
+    (form-closed)="onFormClosed()"
+    [except-detail-columns]="'exceptions.detail' | asyncRouteData | async"
+    [except-grid-columns]="'exceptions.grid' | asyncRouteData | async"
+    [delete-prompt]="'app.promt.delete' | text"
+  >
+    <!-- Header template reference -->
+    <ng-container *ngIf="headerRef">
+      <ng-template
+        #header
+        let-title="title"
+        let-description="description"
+        let-config="config"
+        let-state="state"
+      >
+        <ng-container
+          *ngTemplateOutlet="
+            headerRef;
+            context: { title, description, config, state }
+          "
+        ></ng-container>
+      </ng-template>
+    </ng-container>
 
-        <!-- Header template reference -->
-        <ng-container *ngIf="headerRef">
-            <ng-template #header let-title="title" let-description="description" let-config="config" let-state="state">
-                <ng-container
-                    *ngTemplateOutlet="headerRef; context: {title, description, config, state}"></ng-container>
-            </ng-template>
-        </ng-container>
+    <!-- List view ref implementation -->
+    <ng-container *ngIf="listRef">
+      <ng-template
+        #listView
+        let-onRefreshDatagrid="onRefreshDatagrid"
+        let-onCachedQuery="onCachedQuery"
+        let-onDgStateChanges="onDgStateChanges"
+        let-detailPaneChange="detailPaneChange"
+        let-handleQueryChange="handleQueryChange"
+        let-handleAction="handleAction"
+        let-dgState="dgState"
+        let-actions="actions"
+        let-config="config"
+        let-search="search"
+        let-overflow="overflow"
+        let-actionBar="actionBar"
+        let-url="url"
+        let-filters="filters"
+      >
+        <ng-container
+          *ngTemplateOutlet="
+            listRef;
+            context: {
+              onRefreshDatagrid,
+              onCachedQuery,
+              handleAction,
+              onDgStateChanges,
+              detailPaneChange,
+              handleQueryChange,
+              dgState,
+              actions,
+              config,
+              search,
+              overflow,
+              actionBar,
+              url,
+              filters,
+            }
+          "
+        ></ng-container>
+      </ng-template>
+    </ng-container>
 
-        <!-- List view ref implementation -->
-        <ng-container *ngIf="listRef">
-            <ng-template #listView let-onRefreshDatagrid="onRefreshDatagrid" let-onCachedQuery="onCachedQuery"
-                let-onDgStateChanges="onDgStateChanges" let-dgState="dgState" let-actions="actions"
-                let-handleAction="handleAction" let-config="config">
-                <ng-container
-                    *ngTemplateOutlet="listRef; context: {onRefreshDatagrid, onCachedQuery, onDgStateChanges, dgState, actions, handleAction, config}"></ng-container>
-            </ng-template>
-        </ng-container>
+    <!-- Overflow reference -->
+    <ng-container *ngIf="overflowRef">
+      <ng-template
+        #overflow
+        let-item="item"
+        let-actions="actions"
+        let-handleAction="handleAction"
+      >
+        <ng-container
+          *ngTemplateOutlet="
+            overflowRef;
+            context: { $implicit: item, item, actions, handleAction }
+          "
+        ></ng-container>
+      </ng-template>
+    </ng-container>
 
+    <!-- Action bar template -->
+    <ng-container *ngIf="actionBarRef">
+      <ng-template
+        #actionBar
+        let-selected="selected"
+        let-refresh="refresh"
+        let-actions="actions"
+        let-handleAction="handleAction"
+      >
+        <ng-container
+          *ngTemplateOutlet="
+            actionBarRef;
+            context: { $implicit: selected, selected, actions, handleAction }
+          "
+        ></ng-container>
+      </ng-template>
+    </ng-container>
 
-        <!-- Overflow reference -->
-        <ng-container *ngIf="overflowRef">
-            <ng-template #overflow let-item="item" let-actions="actions" let-handleAction="handleAction">
-                <ng-container
-                    *ngTemplateOutlet="overflowRef; context: {$implicit: item, item, actions, handleAction}"></ng-container>
-            </ng-template>
-        </ng-container>
+    <!-- Detail Pane template -->
+    <ng-container *ngIf="detailPaneRef">
+      <ng-template #detailPane let-item>
+        <ng-container
+          *ngTemplateOutlet="detailPaneRef; context: { $implicit: item, item }"
+        ></ng-container>
+      </ng-template>
+    </ng-container>
 
-        <!-- Action bar template -->
-        <ng-container *ngIf="actionBarRef">
-            <ng-template #actionBar let-selected="selected" let-refresh="refresh" let-actions="actions"
-                let-handleAction="handleAction">
-                <ng-container
-                    *ngTemplateOutlet="actionBarRef; context: {$implicit: selected, selected, actions, handleAction}"></ng-container>
-            </ng-template>
-        </ng-container>
+    <!-- Before detail template -->
+    <ng-container *ngIf="beforeDetailRef">
+      <ng-template beforeDetail let-item>
+        <ng-container
+          *ngTemplateOutlet="
+            beforeDetailRef;
+            context: { $implicit: item, item }
+          "
+        ></ng-container>
+      </ng-template>
+    </ng-container>
 
-        <!-- Detail Pane template -->
-        <ng-container *ngIf="detailPaneRef">
-            <ng-template #detailPane let-item>
-                <ng-container *ngTemplateOutlet="detailPaneRef; context: {$implicit: item, item}"></ng-container>
-            </ng-template>
-        </ng-container>
+    <!-- After detail template -->
+    <ng-container *ngIf="afterDetailRef">
+      <ng-template afterDetail let-item>
+        <ng-container
+          *ngTemplateOutlet="afterDetailRef; context: { $implicit: item, item }"
+        ></ng-container>
+      </ng-template>
+    </ng-container>
+  </ngx-data>
 
-        <!-- Before detail template -->
-        <ng-container *ngIf="beforeDetailRef">
-            <ng-template beforeDetail let-item>
-                <ng-container *ngTemplateOutlet="beforeDetailRef; context: {$implicit: item, item}"></ng-container>
-            </ng-template>
-        </ng-container>
-
-        <!-- After detail template -->
-        <ng-container *ngIf="afterDetailRef">
-            <ng-template afterDetail let-item>
-                <ng-container *ngTemplateOutlet="afterDetailRef; context: {$implicit: item, item}"></ng-container>
-            </ng-template>
-        </ng-container>
-    </ngx-data>
-
-    <!-- Place custom components as modals source code on the UI which are previewed to users on actions -->
-    <ng-content></ng-content>
+  <!-- Place custom components as modals source code on the UI which are previewed to users on actions -->
+  <ng-content></ng-content>
 </ngx-view>

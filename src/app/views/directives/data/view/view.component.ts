@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ContentChild,
   EventEmitter,
@@ -12,28 +13,31 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
+import { UIStateControllerType, UI_STATE_CONTROLLER } from '../../ui-events';
 import {
-  ActionType,
-  ConfigType,
-  DataComponentType,
-  StateType,
-  ViewStateComponentType,
-} from '..';
-import { UIStateControllerType, UI_STATE_CONTROLLER } from '../../ui-action';
-import {
+  BehaviorSubject,
   Observable,
   Subscription,
   distinctUntilChanged,
   filter,
+  map,
   tap,
 } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import { APP_LINKS } from '../../main-nav';
+import { ActivatedRoute, Router } from '@angular/router';
+import { APP_LINKS } from '../../nav/main';
 import { CommonModule } from '@angular/common';
 import { VIEW_DIRECTIVES } from '../../view';
-import { Link } from '../../link';
+import { Link } from '../../nav';
 import { DATA_DIRECTIVES } from '../base';
 import { COMMON_PIPES } from '@azlabsjs/ngx-common';
+import { ROUTER_PIPES } from '../../router';
+import {
+  ActionType,
+  DataComponentType,
+  StateType as DataStateType,
+  ViewStateComponentType,
+  ViewStateType,
+} from '../core';
 
 /**  @internal */
 type NullableEntityType = { id: string | number } | undefined | null;
@@ -52,31 +56,54 @@ type ActionErrorType = {
   message?: string;
 };
 
+/** @internal */
+type StateType = {
+  view: ViewStateType;
+  params: Record<string, unknown>;
+};
+
+/** @internal */
+function snapshot<T>(route: ActivatedRoute, key: string, _default: T) {
+  return (route.snapshot.data[key] as any as T) ?? _default;
+}
+
 @Component({
-    imports: [
-        CommonModule,
-        ...COMMON_PIPES,
-        ...VIEW_DIRECTIVES,
-        ...DATA_DIRECTIVES,
-    ],
-    selector: 'ngx-data-view',
-    templateUrl: './view.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  standalone: true,
+  imports: [
+    CommonModule,
+    ...COMMON_PIPES,
+    ...VIEW_DIRECTIVES,
+    ...DATA_DIRECTIVES,
+    ...ROUTER_PIPES,
+  ],
+  selector: 'ngx-data-view',
+  templateUrl: './view.component.html',
+  styleUrls: ['./view.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ViewComponent
   implements ViewStateComponentType, OnDestroy, AfterViewInit
 {
   // #region Component inputs
   @Input() path!: string;
-  @Input() noPadding: boolean = true;
-  @Input() noHeader: boolean = false;
-  @Input() noLogout: boolean = this.route.snapshot.data['noLogout'] ?? false;
-  @Input() searchable: boolean = this.route.snapshot.data['searchable'] ?? true;
-  @Input() name: string = this.route.snapshot.data['name'];
-  @Input() module: string = this.route.snapshot.data['module'];
-  // We resolve pages configuration from router resolve or data
-  @Input() config: ConfigType = this.route.snapshot.data['config'];
-  @Input() links: Link[] = this.route.snapshot.data['links'];
+  @Input({ alias: 'no-modal' }) noModal = snapshot(
+    this.route,
+    'no-modal',
+    false
+  );
+  @Input({ alias: 'no-padding' }) noPadding = snapshot(
+    this.route,
+    'no-padding',
+    true
+  );
+  @Input({ alias: 'no-header' }) noHeader = snapshot(
+    this.route,
+    'no-header',
+    false
+  );
+  @Input() module = snapshot<string | null>(this.route, 'module', null);
+  @Input() links = snapshot<Link[] | null>(this.route, 'links', null);
+  @Input() view!: ViewStateType;
   // #endregion Component inputs
 
   // #region Component children
@@ -96,21 +123,57 @@ export class ViewComponent
   @Output() formError = new EventEmitter<unknown>();
   @Output() formReady = new EventEmitter<NullableEntityType>();
   @Output() formChanges = new EventEmitter<unknown>();
-  @Output() stateChange = new EventEmitter<StateType>();
+  @Output() stateChange = new EventEmitter<DataStateType>();
   // #endregion Components outputs
 
   // Child view reference
   @ViewChild('dataRef', { static: false }) dataViewRef!: DataComponentType;
 
   // #region Component internal properties
-  private _subscriptions: Subscription[] = [];
+
+  private _formValue$ = new BehaviorSubject<Record<string, unknown> | null>(
+    null
+  );
+  private _subscriptions: Subscription[] = [
+    this.route.queryParamMap
+      .pipe(
+        tap((q) => {
+          const queries = q.keys;
+          const state: Record<string, unknown> = {};
+          for (const k of queries) {
+            const value = q.get(k);
+            if (!value) {
+              continue;
+            }
+            state[k] = decodeURIComponent(value);
+          }
+          this._formValue$.next(state);
+        })
+      )
+      .subscribe(),
+    this.route.queryParams.subscribe((params) =>
+      this.setState((s) => ({
+        ...s,
+        params,
+        view: (params['view'] ??
+          params['view_mode'] ??
+          s.view) as unknown as ViewStateType,
+      }))
+    ),
+  ];
+  private _state: StateType = { view: 'listView', params: {} };
+  get state() {
+    return this._state;
+  }
   // #endregion Component internal properties
 
   // Class constructor
   constructor(
+    private route: ActivatedRoute,
+    private router: Router,
     @Inject(UI_STATE_CONTROLLER) private controller: UIStateControllerType,
     @Inject(APP_LINKS) @Optional() private _links$: Observable<Link[]>,
-    private route: ActivatedRoute
+    @Optional() private cdRef: ChangeDetectorRef | null
   ) {}
 
   ngAfterViewInit(): void {
@@ -143,7 +206,17 @@ export class ViewComponent
     this.controller.endAction(action?.message ?? '', 'success');
   }
 
-  onFormReady(selected?: NullableEntityType) {
+  onFormReady(selected?: NullableEntityType, config?: any) {
+    setTimeout(() => {
+      if (!this.dataViewRef) {
+        return;
+      }
+      const state = this._formValue$.getValue();
+      if (state) {
+        this.dataViewRef?.form?.setValue(state);
+      }
+      this._formValue$.next(null);
+    }, 300);
     this.formReady.emit(selected);
   }
 
@@ -156,17 +229,25 @@ export class ViewComponent
   }
 
   onFormChanges(event: unknown) {
-    // TODO: Cache form changes using a cache class
     this.formChanges.emit(event);
   }
 
-  onStateChanges(event: StateType) {
+  onStateChanges(event: DataStateType) {
     this.stateChange.emit(event);
+  }
+
+  onFormClosed() {
+    this.router.navigate([]);
   }
 
   ngOnDestroy(): void {
     for (const subscription of this._subscriptions) {
       subscription?.unsubscribe();
     }
+  }
+
+  private setState(fn: (s: StateType) => StateType) {
+    this._state = fn(this._state);
+    this.cdRef?.markForCheck();
   }
 }

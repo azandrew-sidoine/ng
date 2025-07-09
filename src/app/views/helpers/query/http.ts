@@ -18,8 +18,6 @@ export type RequestMethod =
   | 'OPTION'
   | 'HEAD';
 
-
-/** @deprecated */
 @Injectable({
   providedIn: 'root',
 })
@@ -32,15 +30,15 @@ export class HTTPQueryProvider
   implements
     QueryProviderType<[string, RequestMethod, Record<string, any> | undefined]>
 {
-  // class constructor
+  // Class constructor
   constructor(private http: HttpClient) {}
 
-  // query implementation method
+  // Query implementation method
   query(
     url: string,
     method: RequestMethod,
     params?: Record<string, any>,
-    d?: unknown
+    _default?: unknown
   ): Observable<unknown> {
     return this.http
       .request(method, url, {
@@ -51,14 +49,14 @@ export class HTTPQueryProvider
         catchError((err) => {
           // Case a default value is provided as parameter, we return the
           // default value, else we throw an error
-          return d ? of(d) : throwError(() => err);
+          return _default ? of(_default) : throwError(() => err);
         })
       ) as Observable<unknown>;
   }
 }
 
 /**
- * provides an HTTP query observable that caches data for optimization
+ * Provides an HTTP query observable that caches data for optimization
  * and refetch updates each 30 min
  *
  * @param provider

@@ -16,6 +16,7 @@ import {
 import {
   DIRECTIVES,
   PaginateResult,
+  ProjectPaginateQueryOutputType,
   ProjectPaginateQueryParamType,
   SearchableGridColumnType,
 } from '@azlabsjs/ngx-clr-smart-grid';
@@ -33,14 +34,20 @@ import {
 import { GridDataQueryProvider } from './datagrid.query.service';
 import { defaultPaginateQuery } from './defaults';
 import { DataGridStateType, PipeTransformType, RestQueryType } from './types';
-import { Intercept, NextCallback, usePaginateAction } from './rx';
+import { Intercept, NextCallback, usePaginatePipeline } from './rx';
 import { DATAGRID_CONFIG } from './tokens';
 import {
   QueryStateType as QueryState,
   queryResult,
   useQuery,
 } from '@azlabsjs/rx-query';
-import { remove, parseSearchDateValue, replace } from './helpers';
+import {
+  remove,
+  parseSearchDateValue,
+  replace,
+  projectPaginateQuery,
+  createDateQueryParamPipe,
+} from './helpers';
 import { CommonModule } from '@angular/common';
 
 /** @internal */
@@ -61,12 +68,13 @@ type StateType = typeof _defaultState;
 type SetStateParamType<T> = ((state: T) => T) | Partial<T>;
 
 @Component({
-    imports: [CommonModule, ...DIRECTIVES],
-    providers: [GridDataQueryProvider],
-    selector: 'ngx-datagrid',
-    templateUrl: './datagrid.component.html',
-    styles: [
-        `
+  standalone: true,
+  imports: [CommonModule, ...DIRECTIVES],
+  providers: [GridDataQueryProvider],
+  selector: 'ngx-datagrid',
+  templateUrl: './datagrid.component.html',
+  styles: [
+    `
       .dg-header-container {
         margin: 10px 0 0 0;
       }
@@ -74,8 +82,8 @@ type SetStateParamType<T> = ((state: T) => T) | Partial<T>;
         background-color: var(--row-inactive, #cacaca);
       }
     `,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DatagridComponent implements OnInit, OnDestroy, OnChanges {
   // #region Component inputs
@@ -93,18 +101,19 @@ export class DatagridComponent implements OnInit, OnDestroy, OnChanges {
   @Input() query: RestQueryType | undefined;
   @Input() filters: { property: string; value: unknown }[] = [];
   @Input() intercept!:
-    | Intercept<ProjectPaginateQueryParamType, PaginateResult<unknown>>
+    | Intercept<ProjectPaginateQueryOutputType, PaginateResult<unknown>>
     | undefined;
   @Input() loading!: boolean;
-  @Input({alias: 'state'}) dgState: ProjectPaginateQueryParamType = defaultPaginateQuery;
-  @Input({alias: 'search-value'}) search!: string | null | undefined;
-  @Input({alias: 'column-title-transform'}) transformColumnTitle!:
+  @Input({ alias: 'state' }) dgState: ProjectPaginateQueryParamType =
+    defaultPaginateQuery;
+  @Input({ alias: 'search-value' }) search!: string | null | undefined;
+  @Input({ alias: 'column-title-transform' }) transformColumnTitle!:
     | PipeTransformType
     | PipeTransformType[];
   @Input() selectable!: boolean;
-  @Input({alias: 'class'}) cssClass?: string;
-  @Input({alias: 'single-selection'}) singleSelection!: boolean;
-  @Input({alias: 'row-class'}) rowClass!: string | ((element: any) => string);
+  @Input({ alias: 'class' }) cssClass?: string;
+  @Input({ alias: 'single-selection' }) singleSelection!: boolean;
+  @Input({ alias: 'row-class' }) rowClass!: string | ((element: any) => string);
   // #endregion Component inputs
 
   // #region Component outputs
@@ -115,6 +124,7 @@ export class DatagridComponent implements OnInit, OnDestroy, OnChanges {
   @Output() dgStateChange = new EventEmitter<ProjectPaginateQueryParamType>();
   @Output() dgItemClick = new EventEmitter<unknown>();
   @Output() performingAction = new EventEmitter<boolean>();
+  @Output() queryChange = new EventEmitter<ProjectPaginateQueryOutputType>();
   // #endregion Component outputs
 
   // #region Component properties / states
@@ -142,6 +152,10 @@ export class DatagridComponent implements OnInit, OnDestroy, OnChanges {
   get state() {
     return this._state;
   }
+  private _gridConfig!: DataGridStateType;
+  get gridConfig() {
+    return this._gridConfig;
+  }
   // #endregion Component properties / states
 
   /**
@@ -150,8 +164,15 @@ export class DatagridComponent implements OnInit, OnDestroy, OnChanges {
   constructor(
     private queryProvider: GridDataQueryProvider,
     private changesRef: ChangeDetectorRef,
-    @Inject(DATAGRID_CONFIG) @Optional() private gridConfig?: DataGridStateType
+    @Inject(DATAGRID_CONFIG) @Optional() gridConfig?: DataGridStateType
   ) {
+    // Initialize grid config with default values
+    this._gridConfig = gridConfig ?? {
+      pagination: { page: 'page', perPage: 'per_page' },
+      pageSizeOptions: [10, 20, 50, 100],
+      sort: { order: 'order', by: 'by', ascending: '1', descending: '-1' },
+      pageSize: 10,
+    };
     // #region Handle search query
     const subscription = this._search$
       .asObservable()
@@ -203,45 +224,67 @@ export class DatagridComponent implements OnInit, OnDestroy, OnChanges {
           placeholder: this.loadingtext,
         }));
       }),
-      map((query) => ({
-        ...query,
-        filters: this.prepareSearchFilters([
-          ...(this.query?._filters ?? []),
-          ...this.filters,
-          ...(query?.filters ?? []),
-        ]),
-      })),
+      map((query) => {
+        let f = (this.filters ?? [])
+          .concat(this.query?._filters ?? [])
+          .concat(query?.filters ?? []);
+        const columns = this.columns.map(
+          // Because current implementation support Legacy and new Datagrid column
+          // we try to load property field value or fallback to label field value
+          (c) => c['field'] ?? (c as any)['property'] ?? (c as any)['label']
+        );
+        f = f.filter((value) => columns.includes(value['property']));
+
+        const output = {
+          ...query,
+          filters: this.prepareSearchFilters(f),
+        };
+
+        return output;
+      }),
       debounceTime(200),
-      usePaginateAction(
+      map((project) => {
+        const params = replace(
+          replace(
+            replace(
+              remove(this.query ?? {}, '_filters'),
+              '_excepts',
+              '_hidden[]',
+              (value) => value ?? []
+            ),
+            '_columns',
+            '_columns[]',
+            (value) => value ?? ['*']
+          ),
+          '_query',
+          '_query',
+          (value) => JSON.stringify(value ?? {})
+        );
+        let query = projectPaginateQuery(
+          [],
+          createDateQueryParamPipe(),
+          this._gridConfig
+        )(project);
+
+        // We append the column and hidden query parameters to the request params
+        if (params) {
+          query = { ...query, ...params };
+        }
+        return query;
+      }),
+      usePaginatePipeline(
         this.getIntercept(),
         (query) =>
-          useQuery(
-            this.queryProvider,
-            this.url,
-            query,
-            [],
-            replace(
-              replace(
-                replace(
-                  remove(this.query ?? {}, '_filters'),
-                  '_excepts',
-                  '_hidden[]',
-                  (value) => value ?? []
-                ),
-                '_columns',
-                '_columns[]',
-                (value) => value ?? ['*']
-              ),
-              '_query',
-              '_query',
-              (value) => JSON.stringify(value ?? {})
+          useQuery(this.queryProvider, this.url, query)
+            .pipe(
+              tap((value: QueryState) =>
+                this.cachedQuery.emit(value)
+              ) as OperatorFunction<unknown, QueryState>,
+              queryResult()
             )
-          ).pipe(
-            tap((value: QueryState) =>
-              this.cachedQuery.emit(value)
-            ) as OperatorFunction<unknown, QueryState>,
-            queryResult()
-          ) as Observable<PaginateResult<unknown>>
+            .pipe(tap((result) => {}) as any) as Observable<
+            PaginateResult<unknown>
+          >
       ),
       map((result) => {
         result = result ?? { data: [], total: 0 };
@@ -290,6 +333,21 @@ export class DatagridComponent implements OnInit, OnDestroy, OnChanges {
       this.search !== null
     ) {
       this._search$.next(this.search);
+    }
+
+    // Refresh the datagrid whenever the filters input changes
+    if ('filters' in changes && !!changes['filters'].currentValue) {
+      const filters = changes['filters'].currentValue;
+      this.dgRefreshListener({
+        ...(this.dgState ?? {}),
+        filters: Object.keys(filters).reduce((carr, curr) => {
+          carr.push({
+            property: curr,
+            value: encodeURI(filters[curr]),
+          });
+          return carr;
+        }, [] as { property: string; value: unknown }[]),
+      });
     }
   }
 

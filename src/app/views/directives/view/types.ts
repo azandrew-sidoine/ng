@@ -1,30 +1,26 @@
 import { InjectionToken } from '@angular/core';
 
-/**
- * View layout type declaration
- */
+/** view layout type declaration */
 export type ViewLayout = 'sidenav' | 'default';
 
-/**
- * View Layout injected token
- */
+/** @internal */
+export type Theme = 'basic'| 'light';
+
+/** View Layout injected token */
 export const VIEW_LAYOUT = new InjectionToken<ViewLayout>(
   'View Layout injected token'
 );
 
-/**
- * Application metadata type declaration
- */
+/** application metadata type declaration */
 export type AppMetadataType = {
   logo?: string;
   primaryColor?: string;
   name?: string;
   version?: string;
+  theme: Theme
 };
 
-/**
- * Application Medatadata injection token
- */
+/** application Medatadata injection token */
 export const APP_METADATA = new InjectionToken<AppMetadataType>(
   'Application Medatadata injection token'
 );

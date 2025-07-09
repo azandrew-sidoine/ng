@@ -1,0 +1,9 @@
+.f-list-item {
+  padding: 0.5rem 2rem;
+  color: var(--f-list-item-bg-color, inherit);
+  background-color: var(--f-list-item-bg-color, initial);
+}
+
+.f-list-item:hover {
+  background-color: var(--f-list-item-hover-bg-color, darkgrey);
+}

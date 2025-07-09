@@ -1,9 +1,9 @@
 import { QueryResultType } from './builder';
 
 /** @description Query result factory function type definition */
-export function createQueryResult(result: any) {
+export function createQueryResult(response: any, k?: string) {
   const _items =
-    'data' in result ? result['data'] : (result as Record<string, unknown>[]);
+    k && k in response ? response[k] : (response as Record<string, unknown>[]);
   return {
     items: _items,
     all: () => _items,

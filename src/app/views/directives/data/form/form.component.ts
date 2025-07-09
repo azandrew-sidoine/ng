@@ -42,29 +42,30 @@ type Intercept<T = unknown, R = unknown> = (
 ) => ReturnType<typeof next$>;
 
 @Component({
-    imports: [
-        CommonModule,
-        ...COMMON_PIPES,
-        ...FORM_DIRECTIVES,
-        ...CLR_FORM_CONTROL_DIRECTIVES,
-    ],
-    selector: 'ngx-data-form',
-    templateUrl: './form.component.html',
-    styleUrls: ['./form.component.scss']
+  standalone: true,
+  imports: [
+    CommonModule,
+    ...COMMON_PIPES,
+    ...FORM_DIRECTIVES,
+    ...CLR_FORM_CONTROL_DIRECTIVES,
+  ],
+  selector: 'ngx-data-form',
+  templateUrl: './form.component.html',
+  styleUrls: ['./form.component.scss'],
 })
 export class FormComponent
   implements AfterViewInit, OnChanges, ReactiveFormComponentInterface
 {
   // #region Component inputs
-  @Input() form!: FormConfigInterface;
-  @Input() submitable: boolean = true;
   @Input({ alias: 'no-grid-layout' }) noGridLayout = false;
-  @Input() intercept: Intercept<any, any> | undefined;
   @Input({ alias: 'submit-text' }) submitText: string = 'SUBMIT';
   @Input({ alias: 'cancel-text' }) cancelText: string = 'BACK';
   @Input({ alias: 'edit-text' }) editText: string = 'UPDATE';
+  @Input() autoupload = true;
+  @Input() submitable = true;
   @Input() value!: unknown;
-  @Input() autoupload: boolean = true;
+  @Input() form!: FormConfigInterface;
+  @Input() intercept: Intercept<any, any> | undefined;
   // #endregion Component inputs
 
   // #region Component outputs

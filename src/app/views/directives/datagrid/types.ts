@@ -1,7 +1,14 @@
 import { SearchableGridColumnType } from '@azlabsjs/ngx-clr-smart-grid';
+import { CacheQueryConfig, ObserveKeyType } from '@azlabsjs/rx-query';
 
 /** @internal */
 export type PipeTransformType = string | ((value: any) => any) | undefined;
+
+/** @internal */
+export type CacheConfigType = CacheQueryConfig & {
+  name: string;
+  observe?: ObserveKeyType;
+};
 
 /** @description Pagination parameter configuration type declaration */
 export type PagingConfig = {
@@ -41,4 +48,9 @@ export type GridConfigType<T extends Function> = {
     query: RestQueryType;
   };
   project: T;
+};
+
+/** @internal */
+export type ProvideDatagridConfigType = DataGridStateType & {
+  cache?: CacheQueryConfig;
 };

@@ -1,0 +1,26 @@
+<ngx-search-input class="main-search" [placeholder]="placeholder" #searchInput
+    (click)="handleSearchClick($event)"></ngx-search-input>
+
+<!-- search modal -->
+<ngx-modal [size]="'md'" [animation]="'scale'" #modal>
+    <!-- TODO: uncomment the code below whenever element are styled properly -->
+    <!-- <div class="ngx-modal-title"> -->
+    <!-- <span class="ngx-modal-title__main" *ngIf="title">{{ title }}</span> -->
+    <!-- <span *ngIf="description" class="ngx-modal-description" [innerHTML]="description | safeHtml"></span> -->
+    <!-- </div> -->
+    <div class="ngx-modal-body">
+        <!-- Modal body -->
+        <ngx-search-input [bordered]="true" [placeholder]="placeholder" #modalSearchInput
+            (valueChange)="handleSearchChange($event)"></ngx-search-input>
+        <!-- Search result content -->
+        <div class="search-result">
+            <ng-content></ng-content>
+        </div>
+    </div>
+    <div class="ngx-modal-footer">
+        <span>Powered by Liksoft</span>
+        <!-- -->
+        <ng-content select="[footer]"></ng-content>
+    </div>
+</ngx-modal>
+<!--\ search modal -->

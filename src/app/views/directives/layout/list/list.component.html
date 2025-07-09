@@ -1,0 +1,17 @@
+<cdk-virtual-scroll-viewport [ngStyle]="{'min-height': minHeight, height, width}" [attr.width]="width"
+    [attr.height]="height" appendOnly [itemSize]="itemSize" class="f-list-viewport">
+    <ng-container *cdkVirtualFor="
+    let item of items;
+    let index = index;
+    let count = count;
+    let first = first;
+    let last = last;
+    let even = even;
+    let odd = odd;">
+        <ng-container
+            *ngTemplateOutlet="template ?? defaultTemplate; context: {$implicit: item, item, count, index, first, last, odd, even}"></ng-container>
+    </ng-container>
+</cdk-virtual-scroll-viewport>
+<ng-template #defaultTemplate let-item>
+    <div class="f-list-item">{{item}}</div>
+</ng-template>

@@ -14,7 +14,7 @@ export type BuilderType = {
 type SubQueryReturnType = string | ((_b: Builder) => Builder);
 
 /** @description Query result type declaration */
-export type QueryResultType<T> = {
+export type QueryResultType<T = any> = {
   items: T[];
   all: () => T[];
   first: () => T | null | undefined;
@@ -27,19 +27,13 @@ function createSubquery(
   builder: Builder<Record<string, unknown>>
 ) {
   return {
-    /**
-     * return the query method used bind to the parameters list
-     */
+    /** @description return the query method used bind to the parameters list */
     getMethod: () => method,
 
-    /**
-     * return list of parameters of the subquery
-     */
+    /** @description return list of parameters of the subquery */
     getParams: () => builder,
 
-    /**
-     * Return the json encoded value of the
-     */
+    /** @description return the json encoded value of the subquery */
     getJson: () => ({
       method,
       params: builder.getQuery(),
@@ -94,10 +88,12 @@ class Builder<T extends Record<string, any> = Record<string, any>>
     return and ? this.and(column, '>=', value) : this.or(column, '>=', value);
   }
 
-  like(column: string, value: string, and: boolean = true) {
-    return and
-      ? this.and(column, 'like', value)
-      : this.or(column, 'like', value);
+  like(column: string, value: string) {
+    return this.and(column, 'like', value.indexOf('%') !== -1 ? value : `%${value}%`);
+  }
+
+  orLike(column: string, value: string) {
+    return this.or(column, 'like', value.indexOf('%') !== -1 ? value : `%${value}%`);
   }
 
   and(column: (_b: Builder) => Builder): Builder;

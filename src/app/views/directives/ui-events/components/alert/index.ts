@@ -1,0 +1,1 @@
+export { UIAlertComponent } from './alert.component';

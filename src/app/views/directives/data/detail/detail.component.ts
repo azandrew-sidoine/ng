@@ -1,70 +1,80 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
+  EventEmitter,
+  HostListener,
   Input,
+  Optional,
+  Output,
   TemplateRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { COMMON_PIPES } from '@azlabsjs/ngx-common';
+import { columns } from './helpers';
+import { ColumnType } from './types';
 import { GridDetailColumnType } from '@azlabsjs/ngx-clr-smart-grid';
-
-/** @internal */
-type ColumnType = Omit<GridDetailColumnType, 'style'> & {
-  styles?: Record<string, boolean>;
-  cssClass?: string;
-};
-
-/** @internal Create list of columns from the provides list of columns */
-function columns(values: GridDetailColumnType[]) {
-  return values.map((column) => ({
-    title: column.title,
-    titleTransform: column.titleTransform,
-    property: column.property || '',
-    style: column.style
-      ? {
-          cssClass: Array.isArray(column.style.cssClass)
-            ? column.style.cssClass.join(' ')
-            : column.style.cssClass ?? '',
-          styles: Array.isArray(column.style.styles)
-            ? column.style.styles.reduce((carry, curr) => {
-                carry[curr] = true;
-                return carry;
-              }, {} as Record<string, boolean>)
-            : column.style.styles ?? {},
-        }
-      : { cssClass: '', styles: '' },
-    transform: column.transform ?? 'default',
-  }));
-}
+import { DATA_PIPES } from '../pipes';
+import { DetailColumnViewComponent } from './column-view.component';
+import { PIPES_PROVIDERS } from './pipes.providers';
+import { ResizeDirective } from './resize.directive';
 
 @Component({
-    imports: [CommonModule, ...COMMON_PIPES],
-    selector: 'ngx-data-detail',
-    templateUrl: './detail.component.html',
-    styleUrls: ['./detail.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  standalone: true,
+  imports: [
+    CommonModule,
+    DetailColumnViewComponent,
+    ResizeDirective,
+    ...COMMON_PIPES,
+    ...DATA_PIPES,
+  ],
+  selector: 'ngx-data-detail',
+  templateUrl: './detail.component.html',
+  styleUrls: ['./detail.component.scss'],
+  providers: [...PIPES_PROVIDERS],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailComponent {
   // #region Component inputs
-  private _data!: Record<string, any>[];
-  @Input({ alias: 'data' }) set setData(
-    value: Record<string, any> | Record<string, any>[]
-  ) {
-    this._data = Array.isArray(value) ? value : [value];
-  }
-  get data() {
-    return this._data;
-  }
+  @Input({
+    transform: (value: Record<string, unknown> | Record<string, unknown>[]) => {
+      return Array.isArray(value) ? value : value ? [value] : [];
+    },
+  })
+  data!: Record<string, undefined>[];
   @Input() layout: 'v' | 'vertical' | 'h' | 'horizontal' = 'vertical';
-  @Input({ alias: 'before-detail' }) beforeDetailRef!: TemplateRef<unknown>;
-  @Input({ alias: 'after-detail' }) afterDetailRef!: TemplateRef<unknown>;
-  private _columns!: ColumnType[];
-  @Input() set columns(values: GridDetailColumnType[]) {
-    this._columns = columns(values ?? []);
-  }
-  get columns() {
-    return this._columns;
-  }
+  @Input('before-detail') beforeDetailRef!: TemplateRef<unknown>;
+  @Input('after-detail') afterDetailRef!: TemplateRef<unknown>;
+  @Input({
+    transform: (values: GridDetailColumnType[]) => columns(values ?? []),
+  })
+  columns!: ColumnType[];
   @Input() preview!: TemplateRef<any> | null;
+  @Input() clickable: boolean = false;
+  @Input() title!: string | null | undefined;
   // #endregion Component inputs
+
+  // #region Component outputs
+  @Output() pressed = new EventEmitter<any>();
+  @Output() openPreview = new EventEmitter<string>();
+  // #endregion Component outputs
+
+  @HostListener('window.resize', ['$event']) resizeEevent() {
+    this.cdRef?.markForCheck();
+  }
+
+  // Component constructor function
+  constructor(@Optional() private cdRef?: ChangeDetectorRef | null) {}
+
+  handlePressedEvent(e: Event, item: any) {
+    e.preventDefault();
+    if (!this.clickable) {
+      return;
+    }
+    this.pressed.emit(item);
+  }
+
+  handlePreview(content: string) {
+    this.openPreview.emit(content);
+  }
 }

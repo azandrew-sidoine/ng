@@ -1,9 +1,9 @@
 import { Provider } from '@angular/core';
-import { DataGridStateType } from './types';
+import { ProvideDatagridConfigType } from './types';
 import { DATAGRID_CONFIG } from './tokens';
 
 /** @description Datagrid configuration angular provider */
-export function provideDatagridConfig(gridConfig: DataGridStateType) {
+export function provideDatagridConfig(gridConfig: ProvideDatagridConfigType) {
   return {
     provide: DATAGRID_CONFIG,
     useFactory: () => {

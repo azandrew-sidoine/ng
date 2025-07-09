@@ -41,9 +41,48 @@
         },
         "links": {
             "dashboard": "Tableau de bord",
+            "healthcares": "Prestation de Soins",
             "examples": "Examples"
         },
-        "modules": {},
+        "modules": {
+            "healthcares": {
+                "title": "Feuilles de soins",
+                "description": "Gestion des feuilles de soins",
+                "columns": {
+                    "id": "ID",
+                    "reference": "Réf.",
+                    "pat_ipn": "No. AMU",
+                    "pat_firstname": "Nom",
+                    "pat_lastname": "Prénoms",
+                    "pat_type_id": "Type Bénéficiaire",
+                    "pat_birthdate": "Date Naiss.",
+                    "pat_sex": "Sexe",
+                    "pat_right_holder_type_id": "Type bénéficiaire",
+                    "pat_phone_number": "Tel. Patient",
+                    "company_encoding": "Code Prestataire",
+                    "company_phone_number": "Tel. Prescripteur",
+                    "prescriber_encoding": "Code Prescripteur",
+                    "consult_reason_id": "Motif de consultation",
+                    "prescribedProducts": "Ordonnance",
+                    "healthcareDiseases": "Affections",
+                    "healthcareMedicalProcedures": "Examens Médicaux",
+                    "otherHealthcareMedicalProcedures": "Examens Médicaux Complémentaires",
+                    "at": "Date demande",
+                    "status": "Statut",
+                    "synchronized": "Synchronizer",
+                    "created_at": "Date Création",
+                    "updated_at": "Date Mise à Jour.",
+                    "created_by": "ID Utilisateur"
+                },
+                "form": {
+                    "headers": {
+                        "patient": "Patient",
+                        "company": "Prescripteur",
+                        "prescription": "Ordonnance"
+                    }
+                }
+            }
+        },
         "events": {
             "loading": "Chargement en cours...",
             "error": "Une erreur est survenue lors de l'exécution de la requête. Veuillez consulter les logs pour en savoir plus.",

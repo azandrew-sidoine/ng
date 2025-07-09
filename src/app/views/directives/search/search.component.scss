@@ -1,0 +1,55 @@
+:host ::ng-deep .ngx-modal-body .search-form,
+.ngx-modal-body {
+  width: 100%;
+}
+
+.ngx-modal-body, :host ::ng-deep .ngx-modal-body {
+  // h-offset  v-offset  blur  spread  color | inset
+  border-bottom: 2px solid #e3e3e3;
+  border-radius: 2px;
+  display: block;
+  // Make the modal body not overflow in order to make search result
+  // scrollable in it container
+  overflow-y: hidden !important;
+  padding: 0 !important;
+}
+
+.ngx-modal-title {
+  color: var(--search-box-title-color, #181818) !important;
+  margin: var(--seach-box-title-margin, 0 0 8px 0);
+}
+
+.ngx-modal-title__main {
+  display: block;
+  font-size: var(--search-box-title-font-size, 1.2rem);
+  font-weight: (--search-box-font-weight, 400);
+}
+
+.ngx-modal-description {
+  font-size: var(--search-box-description-font-size, 0.7rem);
+  font-weight: (--search-box-font-weight, 400);
+  margin-top: 0.5rem;
+  display: inline-block;
+  // line-height: var(--search-box-description-line-height, 1.2rem);
+}
+
+.search-result {
+  margin: var(--search-result-margin, 0 auto);
+  padding: var(--search-result-padding, 12px 0);
+  width: 100%;
+}
+
+
+.ngx-modal-footer {
+  display: flex;
+}
+
+.ngx-modal-footer span {
+  display: inline-block;
+  font-size: .468rem;
+  color: var(--ngx-modal-footer-color, rgb(142, 142, 142));
+}
+
+.ngx-modal-footer {
+  padding: var(--ngx-modal-footer-padding, 0 .2rem) !important;
+}

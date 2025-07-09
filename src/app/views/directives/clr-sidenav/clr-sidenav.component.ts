@@ -8,16 +8,17 @@ import {
 } from '@angular/core';
 import { ClarityModule } from '@clr/angular';
 import { RouterModule } from '@angular/router';
-import { LINK_DIRECTIVE, Link, UILink } from '../link';
+import { LINK_DIRECTIVE, Link, UILink } from '../nav';
 import { URLChanges } from '../router';
 import { Subscription, tap } from 'rxjs';
 
 @Component({
-    imports: [CommonModule, ClarityModule, RouterModule, ...LINK_DIRECTIVE],
-    selector: 'ngx-clr-sidenav',
-    templateUrl: './clr-sidenav.component.html',
-    styleUrls: ['./clr-sidenav.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  standalone: true,
+  imports: [CommonModule, ClarityModule, RouterModule, ...LINK_DIRECTIVE],
+  selector: 'ngx-clr-sidenav',
+  templateUrl: './clr-sidenav.component.html',
+  styleUrls: ['./clr-sidenav.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ClrSidenavComponent {
   //#region Component inputs
@@ -41,6 +42,7 @@ export class ClrSidenavComponent {
   currentUrl!: string;
   // #endregion Component internal properties
 
+  //
   constructor(private urlChanges: URLChanges) {}
 
   //

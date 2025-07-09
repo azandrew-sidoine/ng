@@ -25,3 +25,19 @@ export function columsTranslatorFactory(
     };
   };
 }
+
+/**
+ * Removed provided key from the list of object properties
+ *
+ * @internal
+ *
+ * @param _object
+ * @param key
+ */
+export function remove<T extends Record<string, unknown>>(
+  _object: T,
+  key: keyof T
+) {
+  const { [key]: _, ...values } = _object;
+  return values as T & Omit<T, keyof T>;
+}

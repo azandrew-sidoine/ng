@@ -1,0 +1,13 @@
+<ng-container *ngIf="config">
+    <div *ngFor="let value of config" class="clr-row">
+        <div *ngFor="let item of value" class="clr-col-sm-12"
+            [class]="'clr-col-md-[size]'|parseStr:{size: item.growth ?? 12}">
+            <ng-container *ngxComponentOutlet="item.component; 
+                inputs: item.inputs|inputs; 
+                outputs: item.outputs
+                ngModule: item.module;
+                injector: item.injector; 
+                content: item.content;"></ng-container>
+        </div>
+    </div>
+</ng-container>

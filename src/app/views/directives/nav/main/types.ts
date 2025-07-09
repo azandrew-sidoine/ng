@@ -40,14 +40,22 @@ export type AppLink<T = { [prop: string]: unknown }> = {
 /** @description Type declaration for header links */
 export type AppLinks<T = { [prop: string]: unknown }> = AppLink<T>[];
 
-/** @internal */
+/** @internal @deprecated */
 export type AuthFactory = (injector: Injector) => {
   signInState$: Observable<{
     scopes: string[];
   }>;
 };
 
+// @internal
+type ObservableOr<T> = T | Observable<T>;
+
 /** @internal */
-export type TranslationFactory = (injector: Injector) => {
-  get: (p: string | string[]) => Observable<{ [prop: string]: any }>;
-};
+export type HasScopeFactory = (
+  injector: Injector
+) => ObservableOr<(scopes: string[]) => boolean>;
+
+/** @internal */
+export type TranslationFactory = (
+  injector: Injector
+) => (p: string | string[]) => Observable<{ [prop: string]: any }>;

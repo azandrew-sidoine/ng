@@ -4,7 +4,6 @@ import {
   importProvidersFrom,
   inject,
 } from '@angular/core';
-import { provideHeaderActions } from './views/directives/header';
 import { DIALOG, provideDialog } from './views/directives/dialog';
 import { Router } from '@angular/router';
 import {
@@ -31,7 +30,6 @@ import {
   provideRouterChanges,
   provideRouterNavigate,
 } from './views/directives/router';
-import { provideAppLinks } from './views/directives/main-nav';
 import { DOCUMENT } from '@angular/common';
 import { environment } from '../environments/environment';
 import {
@@ -71,7 +69,7 @@ import {
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { JSObject } from '@azlabsjs/js-object';
 import { useTranslationsFactory } from './translations';
-import { TranslationsType } from '@azlabsjs/ngx-common/lib/pipes/strings/types';
+import { provideAppLinks, provideHeaderActions } from './views/directives/nav';
 // TODO: Uncomment the code below to import query library HTTP client provider
 // import { provideQueryClient } from './views/helpers';
 

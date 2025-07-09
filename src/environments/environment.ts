@@ -27,6 +27,9 @@ export const environment = {
   // Application logo path
   logo: env('APP_LOGO', '/assets/media/logo.png'),
 
+  // Application theme
+  theme: env('THEME', 'light'),
+
   // Application name environment value
   name: env('APP_NAME', 'Angular App'),
   api: {

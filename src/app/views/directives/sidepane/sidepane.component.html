@@ -1,0 +1,32 @@
+<div class="pane-overlay" [class.visible]="opened" (click)="onClickOverlay($event)">
+  <div
+    class="pane"
+    [@animate]="{
+      value: opened,
+      params: {
+        true_translation: position === 'right' ? '0' : '0',
+        false_translation: position === 'right' ? '100%' : '-100%'
+      }
+    }"
+    [class]="position"
+
+    (click)="onClickPane($event)"
+  >
+    <ng-container *ngTemplateOutlet="closeRef"></ng-container>
+    <ng-content></ng-content>
+  </div>
+</div>
+<ng-template #closeRef>
+  <div class="actions">
+    <svg
+      (click)="onClose($event)"
+      class="sidepane-close icon"
+      viewBox="0 0 36 36"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M19.41,18l7.29-7.29a1,1,0,0,0-1.41-1.41L18,16.59,10.71,9.29a1,1,0,0,0-1.41,1.41L16.59,18,9.29,25.29a1,1,0,1,0,1.41,1.41L18,19.41l7.29,7.29a1,1,0,0,0,1.41-1.41Z"
+      ></path>
+    </svg>
+  </div>
+</ng-template>

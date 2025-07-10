@@ -62,9 +62,6 @@ export function useTranslationsFactory<T extends { [k: string]: any }>() {
               .pipe(map((lang) => c(lang.translations)))
               .subscribe({
                 next: subscriber.next.bind(subscriber),
-                // error: (e) => {
-                //   console.log(e);
-                // },
                 complete: () => {
                   completed = true;
                 },
@@ -72,7 +69,6 @@ export function useTranslationsFactory<T extends { [k: string]: any }>() {
           }
 
           return () => {
-            console.log('cleaning up translation observable resources...');
             if (completed && subscription) {
               subscription.unsubscribe();
             }

@@ -53,7 +53,7 @@
         | except : 'property' : exceptColumns
     "
     [query]="config.datagrid.query"
-    [action-bar]="actionBar ? actionBarTpl : defaultActionBar"
+    [action-bar]="actionBar ? actionBarTpl : _actionbarRef"
     [state]="dgState"
     [overflow]="
       overflow
@@ -110,9 +110,7 @@
       class="action-item"
       (click)="handleAction($event, item, action)"
     >
-      {{
-        action.metadata.title | actionTitle : item | commonString | uppercase
-      }}
+      {{ action.metadata.title | actionTitle : item | text | uppercase }}
     </button>
   </ng-container>
 </ng-template>
@@ -135,7 +133,7 @@
 
 <!-- Default action bar template -->
 <ng-template
-  #defaultActionBar
+  #_actionbarRef
   let-selected="selected"
   let-refresh="refresh"
   let-exporting="exporting"
@@ -173,12 +171,7 @@
         [ngClass]="action?.metadata?.cssClass ?? ['btn', 'btn-primary']"
         (click)="handleAction($event, selected, action)"
       >
-        {{
-          action.metadata.title
-            | actionTitle : selected
-            | commonString
-            | uppercase
-        }}
+        {{ action.metadata.title | actionTitle : selected | text | uppercase }}
       </button>
     </ng-container>
     <ng-container *ngIf="performingAction">

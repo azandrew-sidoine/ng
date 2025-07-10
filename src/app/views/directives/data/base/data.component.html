@@ -1,5 +1,5 @@
 <div class="data-content">
-  <!-- Data component template header-->
+  <!-- data component template header-->
   <ng-container
     *ngTemplateOutlet="
       headerRef ?? defaultHeaderRef;
@@ -11,196 +11,173 @@
     [ngClass]="{ data__no_padding: noPadding, data__padding: !noPadding }"
   >
     <ng-container *ngIf="config">
-      <ng-container
-        *ngIf="
-          !noModal ||
-          (!!config.datagrid &&
-            (state.view === 'listView' || state.view === 'list'))
-        "
-      >
-        <div class="data-body__content" @fadeInOut>
-          <ng-container
-            *ngTemplateOutlet="
-              listRef ?? _listRef;
-              context: {
-                onRefreshDatagrid: onRefreshDatagrid.bind(this),
-                onCachedQuery: onCachedQuery.bind(this),
-                onDgStateChanges: onDgStateChanges.bind(this),
-                detailPaneChange: detailPaneChange.bind(this),
-                handleAction: handleAction.bind(this),
-                handleQueryChange: handleQueryChange.bind(this),
-                dgState: state.dgState,
-                actions: uiActions,
-                config,
-                search: search$ | async,
-                detailPane: detailPane,
-                overflow: overflowRef,
-                actionBar: actionBarRef,
-                url,
-                filters: state.filters
-              }
-            "
-          ></ng-container>
-          <ng-template
-            #_listRef
-            let-onRefreshDatagrid="onRefreshDatagrid"
-            let-onCachedQuery="onCachedQuery"
-            let-onDgStateChanges="onDgStateChanges"
-            let-detailPaneChange="detailPaneChange"
-            let-handleQueryChange="handleQueryChange"
-            let-handleAction="handleAction"
-            let-dgState="dgState"
-            let-actions="actions"
-            let-config="config"
-            let-search="search"
-            let-overflow="overflow"
-            let-actionBar="actionBar"
-            let-url="url"
-            let-filters="filters"
-          >
-            <ngx-data-list
-              [show-detail-pane]="
-                hasDetail ||
-                (!!config.datagrid.detail && config.datagrid.detail.length > 0)
-              "
-              [dg-state]="dgState"
-              [url]="url"
-              [config]="config"
-              [refresh-text]="refreshText | commonString"
-              [actions]="actions"
-              [overflow]="overflow"
-              [action-bar]="actionBar"
-              [detail-pane]="detailPane ?? defaultDetailPane"
-              [no-padding]="noPadding"
-              [search-value]="search"
-              [except-columns]="gridColumnsExptions ?? []"
-              [filters]="filters"
-              (refresh-grid)="onRefreshDatagrid($event)"
-              (cached-query)="onCachedQuery($event)"
-              (dgStateChange)="onDgStateChanges($event)"
-              (action)="handleAction($event, config)"
-              (queryChange)="handleQueryChange($event)"
-              (detail-change)="detailPaneChange($event)"
-            ></ngx-data-list>
-          </ng-template>
-
-          <!-- Detail Pane template -->
-          <ng-template #defaultDetailPane let-item>
-            <ng-container *ngIf="config.detail; else myDetail">
-              <ng-container
-                *ngComponentOutlet="
-                  config.detail.component;
-                  inputs: config.detail.inputs
-                    | inputs
-                      : item
-                      : (config.datagrid.detail ?? [] | asObservable | async);
-                  ngModule: config.detail.module;
-                  injector: config.detail.injector;
-                  content: config.detail.content
-                "
-              >
-              </ng-container>
-            </ng-container>
-            <ng-template #myDetail>
-              <ng-container
-                *ngIf="
-                  config.datagrid.detail ?? []
-                    | asObservable
-                    | async as detailColumns
-                "
-              >
-                <ngx-data-detail
-                  [after-detail]="afterDetailRef"
-                  [before-detail]="beforeDetailRef"
-                  [data]="item"
-                  [columns]="
-                    detailColumns
-                      | asAny
-                      | except : 'property' : detailColumnsExptions ?? []
-                  "
-                ></ngx-data-detail>
-              </ng-container>
-            </ng-template>
-          </ng-template>
-        </div>
-      </ng-container>
-      <!-- Add form container implementation -->
-      <ng-container
-        *ngIf="
-          state.view === 'createView' ||
-          state.view === 'editView' ||
-          state.view === 'create' ||
-          state.view === 'edit'
-        "
-      >
+      <!-- <ng-container *ngIf="state.view | islistview;"> -->
+      <div *ngIf="!!config.datagrid" class="data-body__content" @fadeInOut>
         <ng-container
           *ngTemplateOutlet="
-            formTemplateRef;
+            listRef ?? _listRef;
             context: {
-              cancel: handleCancel.bind(this),
-              form: (state.form | isAsync) ? (state.form | async) : state.form,
-              selected: state.selected,
-              formTitle,
-              modalSize
+              onRefreshDatagrid: onRefreshDatagrid.bind(this),
+              onCachedQuery: onCachedQuery.bind(this),
+              onDgStateChanges: onDgStateChanges.bind(this),
+              detailPaneChange: detailPaneChange.bind(this),
+              handleAction: handleAction.bind(this),
+              handleQueryChange: handleQueryChange.bind(this),
+              dgState: state.dgState,
+              actions: uiActions,
+              config,
+              search: search$ | async,
+              detailPane: detailPane,
+              overflow: overflowRef,
+              actionBar: actionBarRef,
+              url,
+              filters: state.filters
             }
           "
         ></ng-container>
         <ng-template
-          #formTemplateRef
-          let-cancel="cancel"
-          let-form="form"
-          let-selected="selected"
-          let-formTitle="formTitle"
-          let-modalSize="modalSize"
+          #_listRef
+          let-onRefreshDatagrid="onRefreshDatagrid"
+          let-onCachedQuery="onCachedQuery"
+          let-onDgStateChanges="onDgStateChanges"
+          let-detailPaneChange="detailPaneChange"
+          let-handleQueryChange="handleQueryChange"
+          let-handleAction="handleAction"
+          let-dgState="dgState"
+          let-actions="actions"
+          let-config="config"
+          let-search="search"
+          let-overflow="overflow"
+          let-actionBar="actionBar"
+          let-url="url"
+          let-filters="filters"
         >
-          <div
-            class="data-form-container"
-            *ngIf="noModal; else modalTemplateRef"
-          >
-            <div @fadeInOut>
-              <ngx-data-form
-                #formRef
-                [value]="selected"
-                [form]="form"
-                [no-grid-layout]="config.form?.noGridLayout ?? false"
-                (changes)="handleFormChanges($event)"
-                (error)="handleFormError($event)"
-                (ready)="handleFormReady($event)"
-                (cancel)="cancel($event)"
-                (submit)="handleSubmit($event, config, state)"
-                [submit-text]="submitText | text"
-                [cancel-text]="cancelText | text"
-                [edit-text]="submitText | text"
-              ></ngx-data-form>
-            </div>
-          </div>
-          <ng-template #modalTemplateRef>
-            <ngx-form-modal
-              #formRef
-              [value]="selected"
-              [size]="modalSize"
-              [form]="form"
-              [title]="formTitle"
-              [opened]="
-                state.view === 'createView' ||
-                state.view === 'editView' ||
-                state.view === 'create' ||
-                state.view === 'edit'
+          <ngx-data-list
+            [show-detail-pane]="
+              hasDetail ||
+              (!!config.datagrid.detail && config.datagrid.detail.length > 0)
+            "
+            [dg-state]="dgState"
+            [url]="url"
+            [config]="config"
+            [refresh-text]="refreshText | commonString"
+            [actions]="actions"
+            [overflow]="overflow"
+            [action-bar]="actionBar"
+            [detail-pane]="detailPane ?? _detailPaneRef"
+            [no-padding]="noPadding"
+            [search-value]="search"
+            [except-columns]="gridColumnsExptions ?? []"
+            [filters]="filters"
+            (refresh-grid)="onRefreshDatagrid($event)"
+            (cached-query)="onCachedQuery($event)"
+            (dgStateChange)="onDgStateChanges($event)"
+            (action)="handleAction($event, config)"
+            (queryChange)="handleQueryChange($event)"
+            (detail-change)="detailPaneChange($event)"
+          ></ngx-data-list>
+        </ng-template>
+
+        <!-- detail pane template -->
+        <ng-template #_detailPaneRef let-item>
+          <ng-container *ngIf="config.detail; else myDetail">
+            <ng-container
+              *ngComponentOutlet="
+                config.detail.component;
+                inputs: config.detail.inputs
+                  | inputs
+                    : item
+                    : (config.datagrid.detail ?? [] | asObservable | async);
+                ngModule: config.detail.module;
+                injector: config.detail.injector;
+                content: config.detail.content
               "
-              [no-grid-layout]="config.form?.noGridLayout ?? false"
-              [closeable]="true"
-              (changes)="handleFormChanges($event)"
-              (error)="handleFormError($event)"
-              (ready)="handleFormReady($event)"
-              (closed)="cancel($event)"
-              (submit)="handleSubmit($event, config, state)"
-              [cancel-text]="cancelText | text"
-              [submit-text]="submitText | text"
             >
-            </ngx-form-modal>
+            </ng-container>
+          </ng-container>
+          <ng-template #myDetail>
+            <ng-container
+              *ngIf="
+                config.datagrid.detail ?? []
+                  | asObservable
+                  | async as detailColumns
+              "
+            >
+              <ngx-data-detail
+                [after-detail]="afterDetailRef"
+                [before-detail]="beforeDetailRef"
+                [data]="item"
+                [columns]="
+                  detailColumns
+                    | asAny
+                    | except : 'property' : detailColumnsExptions ?? []
+                "
+              ></ngx-data-detail>
+            </ng-container>
           </ng-template>
         </ng-template>
-      </ng-container>
+      </div>
+      <!-- </ng-container> -->
+      <!-- add form container implementation -->
+      <!-- <ng-template #_editViewRef> -->
+      <ng-container
+        *ngTemplateOutlet="
+          _formRef;
+          context: {
+            cancel: handleCancel.bind(this),
+            form: (state.form | isAsync) ? (state.form | async) : state.form,
+            selected: state.selected,
+            formTitle,
+            modalSize
+          }
+        "
+      ></ng-container>
+      <ng-template
+        #_formRef
+        let-cancel="cancel"
+        let-form="form"
+        let-selected="selected"
+        let-formTitle="formTitle"
+        let-modalSize="modalSize"
+      >
+        <ngx-sidepane
+          [opened]="(state.view | iseditview) && layout === 'pane'"
+          (openedChange)="handleSidepaneOpenedChange($event, cancel)"
+        >
+          <ngx-data-form
+            #formRef
+            [value]="selected"
+            [form]="form"
+            [no-grid-layout]="config.form?.noGridLayout ?? false"
+            (changes)="handleFormChanges($event)"
+            (error)="handleFormError($event)"
+            (ready)="handleFormReady($event)"
+            (cancel)="cancel($event)"
+            (submit)="handleSubmit($event, config, state)"
+            [submit-text]="submitText | text"
+            [cancel-text]="cancelText | text"
+            [edit-text]="submitText | text"
+          ></ngx-data-form>
+        </ngx-sidepane>
+        <ngx-form-modal
+          #formRef
+          [value]="selected"
+          [size]="modalSize"
+          [form]="form"
+          [title]="formTitle"
+          [opened]="(state.view | iseditview) && layout === 'modal'"
+          [no-grid-layout]="config.form?.noGridLayout ?? false"
+          [closeable]="true"
+          (changes)="handleFormChanges($event)"
+          (error)="handleFormError($event)"
+          (ready)="handleFormReady($event)"
+          (closed)="cancel($event)"
+          (submit)="handleSubmit($event, config, state)"
+          [cancel-text]="cancelText | text"
+          [submit-text]="submitText | text"
+        >
+        </ngx-form-modal>
+      </ng-template>
 
       <div #componentOutlet></div>
     </ng-container>
@@ -213,7 +190,7 @@
   let-config="config"
   let-state="state"
 >
-  <!-- TODO: Add a flex box with row alignment to add the possibility to switch View layout -->
+  <!-- TODO: add a flex box with row alignment to add the possibility to switch view layout -->
   <ng-container *ngIf="config">
     <div
       class="data__header data-header"

@@ -44,6 +44,7 @@ import {
   useOptionsInterceptor,
 } from '@azlabsjs/ngx-clr-form-control';
 import {
+  AsyncTextPipe,
   CommonTextPipe,
   provideTranslations as provideCommonTranslations,
   providePipes,
@@ -58,10 +59,7 @@ import {
   provideCacheConfig,
   provideQueryClient,
 } from '@azlabsjs/ngx-options-input';
-import {
-  TranslateLoader,
-  TranslateModule,
-} from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule, TranslatePipe } from '@ngx-translate/core';
 import {
   HttpClient,
   provideHttpClient as ngProvideHttpClient,
@@ -73,6 +71,9 @@ import { provideAppLinks, provideHeaderActions } from './views/directives/nav';
 // TODO: Uncomment the code below to import query library HTTP client provider
 // import { provideQueryClient } from './views/helpers';
 
+import '@angular/common/locales/fr';
+import '@angular/common/locales/en';
+
 /** @internal */
 type AuthHandlerType = { signOut: (revoke: boolean) => any };
 
@@ -82,7 +83,8 @@ export function createTranslateLoader() {
 
 export const createTranslate = useTranslationsFactory();
 export const createAppTranslator = createTranslate((values) => {
-  return { ...(values['app'] ?? {}), auth: values['auth'] ?? {} };
+  const result = { ...(values['app'] ?? {}), auth: values['auth'] ?? {} };
+  return result;
 });
 
 // uncomment code below to allow filtering based on authenticated user scopes
@@ -218,6 +220,8 @@ export const PROVIDERS = [
   providePipes({
     pipes: {
       text: CommonTextPipe,
+      translate: TranslatePipe,
+      asyncText: AsyncTextPipe,
     },
   }),
 

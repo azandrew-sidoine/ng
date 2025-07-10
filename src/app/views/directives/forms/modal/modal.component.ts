@@ -9,8 +9,6 @@ import {
   OnChanges,
   OnDestroy,
   Output,
-  Pipe,
-  PipeTransform,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -46,18 +44,6 @@ import {
 import { ControlsStateMap } from '@azlabsjs/ngx-smart-form/lib/angular/types';
 import { COMMON_PIPES } from '@azlabsjs/ngx-common';
 
-// @Pipe({
-//   name: 'typeOf',
-//   standalone: true,
-//   pure: true,
-// })
-// export class TypeOfPipe implements PipeTransform {
-//   transform(value: any) {
-//     console.log(value, Object.keys(value));
-//     return typeof value;
-//   }
-// }
-
 @Component({
     imports: [
         CommonModule,
@@ -65,7 +51,6 @@ import { COMMON_PIPES } from '@azlabsjs/ngx-common';
         ...FORM_DIRECTIVES,
         ...FORM_CONTROL_DIRECTIVES,
         ...MODAL_DIRECTIVES,
-        // TypeOfPipe
     ],
     selector: 'ngx-form-modal',
     templateUrl: './modal.component.html',
@@ -80,7 +65,7 @@ export class ModalComponent
     FormModalElement,
     ReactiveFormComponentInterface
 {
-  // #region Component inputs
+  // #region component inputs
   @Input() title!: string | undefined | null;
   @Input() description!: string | undefined | null;
   @Input() opened: boolean = false;
@@ -94,28 +79,27 @@ export class ModalComponent
   @Input({ alias: 'form-id' }) formId!: string | number;
   @Input({ alias: 'submit-text' }) submitText!: string;
   @Input({ alias: 'cancel-text' }) cancelText!: string;
-  // #enregion Component inputs
+  // #enregion
 
   @ViewChild('modal', { static: false }) modalRef!: ModalElement | null;
   @ViewChild('formRef', { static: false })
   formRef!: ReactiveFormComponentInterface | null;
 
-  // #region Component properties
+  // #region component properties
   private _subscriptions: Subscription[] = [];
   get formGroup() {
     return this.formRef?.formGroup as FormGroup<any>;
   }
-  // #endregion Component properties
+  // #endregion
 
-  // #region Component output
-  //
+  // #region component outputs
   @Output() viewInit = new EventEmitter<unknown>();
   @Output() changes = new EventEmitter<unknown>();
   @Output() submit = new EventEmitter<unknown>();
   @Output() ready = new EventEmitter<unknown>();
   @Output() error = new EventEmitter<unknown>();
   @Output() closed = new EventEmitter();
-  // #endregion Component output
+  // #endregion
 
   // Class constructor
   constructor(

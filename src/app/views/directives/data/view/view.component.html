@@ -30,23 +30,23 @@
       ></ng-container>
     </ng-container>
   </div>
-  
+
   <ngx-data
     #dataRef
     *ngIf="'config' | asyncRouteData | async as config"
     [view]="state.view"
     [query]="state.params"
     [noModal]="noModal"
-    [delete-complete-text]="'app.request.success' | text"
+    [delete-complete-text]="'request.success' | text"
     [searchable]="('searchable' | asyncRouteData | async) ?? false"
     [no-padding]="noPadding"
-    [request-complete-text]="'app.request.success' | text"
-    [request-error-text]="'app.request.error' | text"
-    [update-complete-text]="'app.request.success' | text"
-    [create-complete-text]="'app.request.success' | text"
-    [title]="'app.modules.[module].title' | parseStr : { module } | text"
+    [request-complete-text]="'request.success' | text"
+    [request-error-text]="'request.error' | text"
+    [update-complete-text]="'request.success' | text"
+    [create-complete-text]="'request.success' | text"
+    [title]="'modules.[module].title' | parseStr : { module } | text"
     [description]="
-      'app.modules.[module].description' | parseStr : { module } | text
+      'modules.[module].description' | parseStr : { module } | text
     "
     [config]="config"
     [actions]="['update', 'delete', 'create']"
@@ -60,7 +60,7 @@
     (form-closed)="onFormClosed()"
     [except-detail-columns]="'exceptions.detail' | asyncRouteData | async"
     [except-grid-columns]="'exceptions.grid' | asyncRouteData | async"
-    [delete-prompt]="'app.promt.delete' | text"
+    [delete-prompt]="'promt.delete' | text"
   >
     <!-- Header template reference -->
     <ng-container *ngIf="headerRef">

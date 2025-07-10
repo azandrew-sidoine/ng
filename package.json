@@ -28,7 +28,7 @@
     "@azlabsjs/js-object": "^0.2.10",
     "@azlabsjs/ngx-clr-form-control": "^0.17.30",
     "@azlabsjs/ngx-clr-smart-grid": "^0.17.30",
-    "@azlabsjs/ngx-common": "^0.17.30",
+    "@azlabsjs/ngx-common": "^0.17.32",
     "@azlabsjs/ngx-dropdown": "^0.17.30",
     "@azlabsjs/ngx-file-input": "^0.17.30",
     "@azlabsjs/ngx-intl-tel-input": "^0.17.30",

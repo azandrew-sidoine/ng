@@ -42,7 +42,9 @@
         "links": {
             "dashboard": "Tableau de bord",
             "healthcares": "Prestation de Soins",
-            "examples": "Examples"
+            "examples": "Examples",
+            "sublink2": "Sublink2",
+            "sublink3": "Sublink3"
         },
         "modules": {
             "healthcares": {

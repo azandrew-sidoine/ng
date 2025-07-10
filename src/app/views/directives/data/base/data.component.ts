@@ -78,7 +78,6 @@ import {
   updateCachedQueries,
 } from './helpers';
 import { DataGridStateType, DATAGRID_CONFIG } from '../../datagrid';
-import {} from '../../datagrid';
 import { SizeType } from '../../modal';
 import { FormConfigInterface } from '@azlabsjs/smart-form-core';
 import {
@@ -97,6 +96,7 @@ import { FORM_DIRECTIVES } from '../form';
 import { DATA_PIPES } from '../pipes';
 import { PIPES } from './pipes';
 import { ProjectPaginateQueryOutputType } from '@azlabsjs/ngx-clr-smart-grid';
+import { DIRECTIVES as SIDEPANE_DIRECTIVES } from '../../sidepane';
 
 /** @internal */
 type ActionErrorArgType = { type: string; err: unknown };
@@ -111,54 +111,49 @@ type ExceptionsType = string[] | null;
 type ReadyOutputRefType = EntityBaseType | undefined | null;
 
 @Component({
-    imports: [
-        CommonModule,
-        ...COMMON_PIPES,
-        ...FORM_MODAL_DIRECTIVES,
-        ...LIST_DIRECTIVES,
-        ...DETAIL_DIRECTIVES,
-        ...FORM_DIRECTIVES,
-        ...DATA_PIPES,
-        ...PIPES,
-    ],
-    selector: 'ngx-data',
-    templateUrl: './data.component.html',
-    styleUrls: ['./data.component.scss'],
-    providers: [
-        DeleteQueryActionHandler,
-        CreateQueryActionHandler,
-        UpdateQueryActionHandler,
-        DataComponentService,
-        CustomActionHTTPHandler,
-        { provide: REQUEST_CLIENT, useClass: NgHttpRequestClient },
-        { provide: DELETE_ACTION_HANDLER, useClass: DeleteQueryActionHandler },
-        { provide: UPDATE_ACTION_HANDLER, useClass: UpdateQueryActionHandler },
-        { provide: CREATE_ACTION_HANDLER, useClass: CreateQueryActionHandler },
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    animations: [
-        trigger('fadeInOut', [
-            transition(':enter', [
-                style({ opacity: 0 }),
-                animate('200ms 50ms ease-in', style({ opacity: 1 })),
-            ]),
-            transition(':leave', [
-                style({ opacity: 0 }),
-                animate('200ms ease-out', style({ opacity: 0 })),
-            ]),
-        ]),
-    ]
+  imports: [
+    CommonModule,
+    ...COMMON_PIPES,
+    ...FORM_MODAL_DIRECTIVES,
+    ...LIST_DIRECTIVES,
+    ...DETAIL_DIRECTIVES,
+    ...FORM_DIRECTIVES,
+    ...DATA_PIPES,
+    ...PIPES,
+    ...SIDEPANE_DIRECTIVES,
+  ],
+  selector: 'ngx-data',
+  templateUrl: './data.component.html',
+  styleUrls: ['./data.component.scss'],
+  providers: [
+    DeleteQueryActionHandler,
+    CreateQueryActionHandler,
+    UpdateQueryActionHandler,
+    DataComponentService,
+    CustomActionHTTPHandler,
+    { provide: REQUEST_CLIENT, useClass: NgHttpRequestClient },
+    { provide: DELETE_ACTION_HANDLER, useClass: DeleteQueryActionHandler },
+    { provide: UPDATE_ACTION_HANDLER, useClass: UpdateQueryActionHandler },
+    { provide: CREATE_ACTION_HANDLER, useClass: CreateQueryActionHandler },
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('fadeInOut', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('200ms 50ms ease-in', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [
+        style({ opacity: 0 }),
+        animate('200ms ease-out', style({ opacity: 0 })),
+      ]),
+    ]),
+  ],
 })
 export class DataComponent
   implements OnDestroy, DataComponentType, OnChanges, AfterViewInit
 {
-  // #region Component inputs
-  @Input() noModal: boolean = false;
-  @Input() modalSize: SizeType = 'full';
-  @Input() title!: string;
-  @Input() description!: string;
-  @Input('form-title') formTitle!: string;
-  @Input() searchable: boolean = true;
+  // #region component inputs
   private _config!: ConfigType;
   get config() {
     return this._config;
@@ -170,13 +165,21 @@ export class DataComponent
     }
   }
   @Input() url!: string;
+  @Input() layout: 'pane' | 'modal' = 'pane';
+  /** @deprecated */
+  @Input() noModal: boolean = false;
+  @Input({ alias: 'modal-size' }) modalSize: SizeType = 'full';
+  @Input() title!: string;
+  @Input() description!: string;
+  @Input('form-title') formTitle!: string;
+  @Input() searchable: boolean = true;
   @Input() actions: ActionType[] = defaultActions;
   @Input({ alias: 'no-padding' }) noPadding: boolean = true;
 
-  // Customization
-  @Input({ alias: 'refresh-text' }) refreshText: string = 'app.actions.refresh';
-  @Input({ alias: 'submit-text' }) submitText: string = 'app.actions.submit';
-  @Input({ alias: 'cancel-text' }) cancelText: string = 'app.actions.back';
+  // customization
+  @Input({ alias: 'refresh-text' }) refreshText: string = 'actions.refresh';
+  @Input({ alias: 'submit-text' }) submitText: string = 'actions.submit';
+  @Input({ alias: 'cancel-text' }) cancelText: string = 'actions.back';
   @Input({ alias: 'request-error-text' }) requestErrorText: string =
     'Request error!';
   @Input({ alias: 'request-complete-text' }) requestCompleteText: string =
@@ -191,7 +194,6 @@ export class DataComponent
     [];
   @Input({ alias: 'except-detail-columns' })
   detailColumnsExptions: ExceptionsType = [];
-  // @Input() view: ViewStateType | null | undefined = 'list';
   @Input() selected!: EntityBaseType | null | undefined | number | string;
 
   @Input() set view(value: ViewStateType) {
@@ -204,9 +206,9 @@ export class DataComponent
     }
     this.setState((s) => ({ ...s, filters }));
   }
-  // #endregion Component inputs
+  // #endregion
 
-  // #region List component children
+  // #region component children
   @ContentChild('header') headerRef!: TemplateRef<unknown>;
   @ContentChild('listView') listRef!: TemplateRef<unknown>;
   @ContentChild('gridView') gridRef!: TemplateRef<unknown>;
@@ -214,9 +216,9 @@ export class DataComponent
   @ContentChild('actionBar') actionBarRef!: TemplateRef<any>;
   @ContentChild('beforeDetail') beforeDetailRef!: TemplateRef<unknown>;
   @ContentChild('afterDetail') afterDetailRef!: TemplateRef<unknown>;
-  // #endregion List component children
+  // #endregion component children
 
-  // #region Component outputs
+  // #region component outputs
   @Output('action-error') actionError = new EventEmitter<ActionErrorArgType>();
   @Output('action-result') actionResult =
     new EventEmitter<ActionArgResultType>();
@@ -227,9 +229,9 @@ export class DataComponent
   @Output('form-changes') changes = new EventEmitter<unknown>();
   @Output('form-closed') closed = new EventEmitter<unknown>();
   @Output() stateChange = new EventEmitter<StateType>();
-  // #endregion Components outputs
+  // #endregion
 
-  // #region Component properties
+  // #region component properties
   private _state!: StateType;
   get state() {
     return this._state;
@@ -241,14 +243,14 @@ export class DataComponent
   private subscriptions: Subscription[] = [];
   _searchSubject$ = new Subject<string>();
   search$ = this._searchSubject$.asObservable().pipe(distinctUntilChanged());
-  // #endregion Component properties
+  // #endregion
 
-  // #region Component children
+  // #region component children
   @ViewChild('formRef', { static: false })
   form!: ReactiveFormComponentInterface | null;
   @ViewChild('componentOutlet', { read: ViewContainerRef, static: false })
   componentOutlet!: ViewContainerRef;
-  // #endregion Component children
+  // #endregion
 
   constructor(
     private service: DataComponentService,
@@ -406,6 +408,12 @@ export class DataComponent
     event?.preventDefault();
     event?.stopPropagation();
     this.closed.emit();
+  }
+
+  handleSidepaneOpenedChange(e: boolean, cancel: (e?: Event) => void) {
+    if (e === false) {
+      cancel();
+    }
   }
 
   /**

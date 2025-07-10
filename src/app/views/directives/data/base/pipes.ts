@@ -27,5 +27,30 @@ export class DetailInputPipe implements PipeTransform {
   }
 }
 
+@Pipe({
+  name: 'islistview',
+  standalone: true,
+})
+export class IsListViewPipe implements PipeTransform {
+  transform(view: string): boolean {
+    return view === 'listView' || view === 'list';
+  }
+}
+
+@Pipe({
+  name: 'iseditview',
+  standalone: true,
+})
+export class IsEditViewPipe implements PipeTransform {
+  transform(view: string): boolean {
+    return (
+      view === 'createView' ||
+      view === 'editView' ||
+      view === 'create' ||
+      view === 'edit'
+    );
+  }
+}
+
 /** Exported standalone pipes */
-export const PIPES = [DetailInputPipe] as const;
+export const PIPES = [DetailInputPipe, IsEditViewPipe, IsListViewPipe] as const;

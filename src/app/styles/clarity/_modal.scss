@@ -1,0 +1,72 @@
+.modal-title-wrapper {
+    padding: 0.4rem 0.5rem;
+  box-shadow: var(--clr-card-box-shadow);
+
+  h3{
+      font-size: 0.7rem;
+  }
+}
+
+.modal-header, .modal-header--accessible {
+  border-bottom: none;
+  padding: 0.5rem 0.7rem;
+}
+
+.modal-header .modal-title:not([cds-text]),
+.modal-header--accessible .modal-title:not([cds-text]){
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.table.writing-table th {
+    width: 30%;
+    text-align: left;
+}
+
+.table.writing-table td {
+    text-align: center;
+    font-weight: 600;
+    color: #000;
+}
+
+.table.writing-table td span {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: inline-block;
+    padding: 0.3rem 0.75rem;
+    width: 50%;
+}
+
+.table.writing-table .piece-row td span {
+    color: rgb(246, 16, 45);
+    background: #ffe7e7;
+}
+
+.table.writing-table .operation-row td span {
+    color: rgb(15, 142, 89);
+    background: #f4fcf2;
+}
+
+.table.writing-table .date-row td {
+    font-weight: 400;
+}
+
+.table.writing-table .user-row td {
+    font-weight: 400;
+}
+
+.modal-dialog .modal-content {
+    padding: 0;
+}
+.modal-body {
+    padding: 0.5rem 01rem;
+    background: #f4f4f4;
+}
+.modal-header--accessible{
+    padding-bottom: 0;
+}
+
+.modal-footer{
+    background: #fff;
+    padding: 0.4rem 1rem;
+}

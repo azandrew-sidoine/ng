@@ -1,0 +1,212 @@
+/**
+* Forms
+*/
+app-dynamic-inputs {
+  display: inline-block;
+  margin-bottom: 0.2rem;
+  width: 100%;
+}
+
+app-dynamic-select-input,
+app-dynamic-date-input,
+app-dynamic-text-input {
+  position: relative;
+}
+
+.clr-control-container {
+  position: relative;
+}
+
+.clr-control-container {
+  display: inline-block;
+  width: 100%;
+}
+
+.clr-form-control {
+  margin-top: 0;
+  margin-bottom: 0.6rem;
+}
+
+.clr-input,
+.clr-input-group .clr-input {
+  appearance: none;
+  background-clip: padding-box;
+  // border: 1px solid var(--field-border-color);
+  // border-radius: var(--field-border-radius);
+  color: #495057;
+  display: block;
+  font-size: var(--default-field-font-size);
+  font-weight: 600;
+  line-height: 1.5;
+  padding: 0.3rem 0.85rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  width: 100%;
+  max-height: var(--field-height);
+  height: var(--field-height);
+  box-shadow: var(--clr-card-box-shadow);
+  background-color: var(--field-bg);
+
+  &:not([readonly]) {
+    background-color: var(--field-bg);
+
+    &:focus,
+    .clr-focus {
+      border-bottom-color: #0072a3;
+      border-bottom-color: var(--clr-forms-focused-color, #0072a3);
+      background-size: 100% 104%;
+    }
+  }
+}
+
+.clr-input-group {
+  align-items: stretch;
+  display: flex;
+  flex-wrap: nowrap;
+  position: relative;
+  width: 100%;
+  height: var(--field-height);
+  // border: 1px solid var(--field-border-color);
+
+  .clr-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    position: relative;
+    width: 90%;
+    box-shadow: var(--clr-card-box-shadow);
+    border: none;
+  }
+
+  .clr-input-group-icon-action {
+    width: 10%;
+    background-color: var(--form-group-button-bg);
+  }
+}
+
+.ng-dropdown-panel {
+  box-sizing: border-box;
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  z-index: 1050;
+  -webkit-overflow-scrolling: touch;
+  background: var(--select-option-bg-color);
+  left: 0;
+  padding: 10px 15px;
+  box-shadow: var(--clr-card-box-shadow);
+  border: 1px solid var(--row-border-color);
+  border-radius: 0 0 5px 5px;
+}
+
+// Text Area
+.clr-textarea-wrapper {
+  margin-top: 0rem;
+
+  textarea,
+  .clr-input {
+    min-height: 100px;
+  }
+}
+
+ng-select,
+select {
+  -moz-padding-start: calc(0.85rem - 3px);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: var(--field-bg);
+  border: 1px solid var(--field-border-color);
+  background-clip: padding-box;
+  background-repeat: no-repeat;
+  border-radius: var(--field-border-radius);
+  color: #495057;
+  display: block;
+  font-weight: 600;
+  font-size: var(--default-field-font-size);
+  height: var(--field-height);
+  line-height: 1;
+  padding: 0.4rem 0.35rem;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  width: 100%;
+
+  .ng-option {
+    padding: 0.3rem 0;
+    border-bottom: 1px solid #ced4da;
+  }
+
+  .ng-option-marked {
+    background: #ddd;
+  }
+
+  .ng-clear-wrapper {
+    width: 10px;
+  }
+
+  .ng-placeholder {
+    font-size: 0.7rem;
+    color: #999998;
+  }
+  .ng-has-value {
+    .ng-placeholder {
+      display: none;
+    }
+  }
+}
+
+label.clr-control-label {
+  font-size: 0.5rem;
+  font-weight: 600;
+  color: var(--label-font-color);
+}
+
+.clr-input-wrapper {
+  max-height: 2rem;
+}
+
+.form-row {
+  padding: 0;
+  border-bottom: 1px solid var(--row-border-color);
+  width: 100%;
+  margin: 0;
+  box-shadow: var(--clr-card-box-shadow);
+
+  &:nth-of-type(1) {
+    border-top: 2px solid var(--field-border-color);
+  }
+
+  &:nth-of-type(odd) {
+    background-color: var(--row-odd-bg);
+  }
+  &:nth-of-type(even) {
+    background-color: var(--row-even-bg);
+  }
+}
+
+.form-actions {
+  margin-top: 1rem;
+}
+
+.form-help {
+  border-left: 3px solid var(--clr-primary-color);
+  padding: 5px 15px;
+  background: #f5f8fc;
+
+  .help-container {
+    font-size: 0.6rem;
+    line-height: 1.4;
+    font-weight: 400;
+    color: var(--clr-primary-color);
+  }
+}
+
+// azl-dropdown styles
+.ngx-azl-dropdown.intl-tel-input__dropdown {
+  padding-top: var(--intl-tel-input-dropdown-padding-top, 1rem) !important;
+}
+// azl-dropdown styles
+
+// Error Text margin
+span.input__error_text,
+.input__error_text {
+  margin-top: var(--input-error-text-margin-top, 1rem) !important;
+}
+//! Error Text styles

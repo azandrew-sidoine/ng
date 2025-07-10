@@ -236,7 +236,7 @@ export function createBuiltTypeDataConfig<
     [
       'create',
       {
-        title: defaultStrings['create'] ?? 'app.actions.create',
+        title: defaultStrings['create'] ?? 'actions.create',
         position: 'action-bar',
       },
     ],
@@ -258,7 +258,7 @@ export function createBuiltTypeDataConfig<
     [
       'update',
       {
-        title: defaultStrings['update'] ?? 'app.actions.update',
+        title: defaultStrings['update'] ?? 'actions.update',
         position: 'overflow',
         before: beforeUpdateCallback,
       },
@@ -266,7 +266,7 @@ export function createBuiltTypeDataConfig<
     [
       'delete',
       {
-        title: defaultStrings['delete'] ?? 'app.actions.delete',
+        title: defaultStrings['delete'] ?? 'actions.delete',
         position: 'overflow',
       },
     ],
@@ -347,7 +347,7 @@ export function createDataConfig<T extends ArgType = ArgType>(
     [
       'create',
       {
-        title: defaultStrings['create'] ?? 'app.actions.create',
+        title: defaultStrings['create'] ?? 'actions.create',
         position: 'action-bar',
       },
     ],
@@ -369,7 +369,7 @@ export function createDataConfig<T extends ArgType = ArgType>(
     [
       'update',
       {
-        title: defaultStrings['update'] ?? 'app.actions.update',
+        title: defaultStrings['update'] ?? 'actions.update',
         position: 'overflow',
         before: beforeUpdateCallback,
       },
@@ -377,7 +377,7 @@ export function createDataConfig<T extends ArgType = ArgType>(
     [
       'delete',
       {
-        title: defaultStrings['delete'] ?? 'app.actions.delete',
+        title: defaultStrings['delete'] ?? 'actions.delete',
         position: 'overflow',
       },
     ],

@@ -1,0 +1,105 @@
+:host {
+  position: relative;
+}
+
+.pane-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100vw; // set width value accordingly
+  height: 100vh; // set height value accordingly
+  -webkit-perspective: 1200px;
+  -moz-perspective: 1200px;
+  perspective: 1200px;
+  background-color: var(--sidepane-bg-color, rgba(92, 91, 91, 0.3));
+  overflow: hidden;
+  visibility: hidden;
+  transition: visibility 420ms ease;
+  z-index: var(--ngx-sidepane-overlay-z-index, 1050);
+}
+
+.pane-overlay.visible {
+  visibility: visible;
+}
+
+.pane {
+  height: 100vh;
+  max-width: var(--ngx-sidepane-max-width, 50%);
+  min-width: var(--ngx-sidepane-min-width, 30%);
+  width: var(--ngx-sidepane-width, 30%);
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  background-color: var(--sidepane-forground-color, rgba(255, 255, 255, 1));
+  overflow: scroll;
+
+  padding: var(--sidepane-padding, 16px 32px);
+  z-index: var(--ngx-sidepane-z-index, 1051);
+
+  display: flex;
+  flex-direction: column;
+}
+
+.pane.right {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.pane.left {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.sidepane-close {
+  display: inline;
+  color: var(--ngx-sidepane-icon-color, #aaaaaa);
+  letter-spacing: var(--ngx-sidepane-icon-letter-spacing, 2px);
+  width: var(--ngx-sidepane-icon-width, 24px);
+  height: var(--ngx-sidepane-icon-width, 24px);
+  font-weight: 700;
+}
+
+.sidepane-close path {
+  color: var(--ngx-sidepane-icon-color, #aaaaaa);
+  fill: var(--ngx-sidepane-icon-color, #aaaaaa);
+}
+
+.pane:not(.full) .modal-content .actions {
+  margin-top: var(--ngx-sidepane-icon-margin-top, 20px);
+  align-self: flex-end;
+  display: flex;
+  justify-content: space-between;
+}
+
+.pane .actions {
+  display: flex;
+  justify-content: space-between;
+  top: var(--ngx-sidepane-icon-top, 20px);
+  right: var(--ngx-sidepane-icon-right, 42px);
+  position: fixed;
+}
+
+.pane .actions:hover {
+  padding: 2px;
+  background-color: var(--sidepane-icon-hover-bg-color, rgba(92, 91, 91, 0.2));
+  border-radius: 5px;
+  color: #000;
+}
+
+.pane .actions:hover .sidepane-close path {
+  color: var(--ngx-sidepane-icon-hover-color, #000);
+  fill: var(--ngx-sidepane-icon-hover-color, #000);
+}
+
+.sidepane-close:hover,
+.sidepane-close:focus {
+  // color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}

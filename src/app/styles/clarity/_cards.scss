@@ -1,0 +1,26 @@
+/**
+* Cards styles
+*/
+.card {
+  border: none;
+  border-radius: none;
+  box-shadow: var(--clr-card-box-shadow);
+  margin-top: 0;
+  margin-bottom: 1rem;
+
+  .card-header{
+    border: none;
+    box-shadow: var(--clr-card-box-shadow);
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--clr-primary-color);
+  }
+
+  .card-block{
+    border: none;
+  }
+
+  .card-footer{
+    border: none;
+  }
+}
